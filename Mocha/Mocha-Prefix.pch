@@ -1,0 +1,7 @@
+//
+// Prefix header for all source files of the 'Mocha' target in the 'Mocha' project
+//
+
+#ifdef __OBJC__
+    #import <Cocoa/Cocoa.h>
+#endif
