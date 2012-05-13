@@ -59,6 +59,11 @@
 
 - (void)finalizeForMochaScript;
 
+@end
+
+
+@interface NSObject (MochaObjectSubscripting)
+
 // Indexed subscripts
 - (id)objectForIndexedSubscript:(NSUInteger)index;
 - (void)setObject:(id)object forIndexedSubscript:(NSUInteger)index;
