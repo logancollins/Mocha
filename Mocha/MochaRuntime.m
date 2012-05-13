@@ -939,8 +939,6 @@ static void MOObject_finalize(JSObjectRef object) {
 static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS) {
 	NSString *propertyName = [(NSString *)JSStringCopyCFString(NULL, propertyNameJS) autorelease];
 	
-	//Mocha *mocha = [Mocha runtimeWithContext:ctx];
-	
 	id private = JSObjectGetPrivate(objectJS);
 	id object = [private representedObject];
 	Class objectClass = [object class];
@@ -968,19 +966,13 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
         NSScanner *scanner = [NSScanner scannerWithString:propertyName];
         NSInteger integerValue;
         if ([scanner scanInteger:&integerValue]) {
-            id value = [object objectForIndexedSubscript:integerValue];
-            if (value != nil) {
-                return YES;
-            }
+            return YES;
         }
     }
     
     // Keyed subscript
     if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
-        id value = [object objectForKeyedSubscript:propertyName];
-        if (value != nil) {
-            return YES;
-        }
+        return YES;
     }
 	
 	return NO;
@@ -989,7 +981,7 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
 	NSString *propertyName = [(NSString *)JSStringCopyCFString(NULL, propertyNameJS) autorelease];
 	
-	Mocha *mocha = [Mocha runtimeWithContext:ctx];
+	Mocha *runtime = [Mocha runtimeWithContext:ctx];
 	
 	id private = JSObjectGetPrivate(objectJS);
 	id object = [private representedObject];
@@ -1003,36 +995,45 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
     //    return value;
 	//}
 	
-	// Association object
-	id value = objc_getAssociatedObject(object, propertyName);
-	if (value != nil) {
-		return [mocha JSValueForObject:value];
-	}
-	
-	// Method
-    SEL selector = MOSelectorFromPropertyName(propertyName);
-    if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
-        MOFunction *function = [MOFunction functionWithTarget:object selector:selector];
-        return [mocha JSValueForObject:function];
-	}
-    
-    // Indexed subscript
-    if ([object respondsToSelector:@selector(objectForIndexedSubscript:)]) {
-        NSScanner *scanner = [NSScanner scannerWithString:propertyName];
-        NSInteger integerValue;
-        if ([scanner scanInteger:&integerValue]) {
-            id value = [object objectForIndexedSubscript:integerValue];
+    // Perform the lookup
+    @try {
+        // Association object
+        id value = objc_getAssociatedObject(object, propertyName);
+        if (value != nil) {
+            return [runtime JSValueForObject:value];
+        }
+        
+        // Method
+        SEL selector = MOSelectorFromPropertyName(propertyName);
+        if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
+            MOFunction *function = [MOFunction functionWithTarget:object selector:selector];
+            return [runtime JSValueForObject:function];
+        }
+        
+        // Indexed subscript
+        if ([object respondsToSelector:@selector(objectForIndexedSubscript:)]) {
+            NSScanner *scanner = [NSScanner scannerWithString:propertyName];
+            NSInteger integerValue;
+            if ([scanner scanInteger:&integerValue]) {
+                id value = [object objectForIndexedSubscript:integerValue];
+                if (value != nil) {
+                    return [runtime JSValueForObject:value];
+                }
+            }
+        }
+        
+        // Keyed subscript
+        if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+            id value = [object objectForKeyedSubscript:propertyName];
             if (value != nil) {
-                return [mocha JSValueForObject:value];
+                return [runtime JSValueForObject:value];
             }
         }
     }
-    
-    // Keyed subscript
-    if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
-        id value = [object objectForKeyedSubscript:propertyName];
-        if (value != nil) {
-            return [mocha JSValueForObject:value];
+    @catch (NSException *e) {
+        // Catch ObjC exceptions and propogate them up as JS exceptions
+        if (exception != NULL) {
+            *exception = [runtime JSValueForObject:e];
         }
     }
 	
@@ -1070,19 +1071,33 @@ static JSObjectRef MOBoxedObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 }
 
 static JSValueRef MOBoxedObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef *exception) {
+    Mocha *runtime = [Mocha runtimeWithContext:ctx];
     if (type == kJSTypeString) {
         MOBox *privateObject = JSObjectGetPrivate(object);
         id representedObject = [privateObject representedObject];
-        NSString *description = [representedObject description];
-        JSStringRef string = JSStringCreateWithCFString((CFStringRef)description);
-        JSValueRef value = JSValueMakeString(ctx, string);
-        JSStringRelease(string);
+        JSValueRef value = NULL;
+        
+        // Use the object's description for string conversions
+        @try {
+            NSString *description = [representedObject description];
+            JSStringRef string = JSStringCreateWithCFString((CFStringRef)description);
+            value = JSValueMakeString(ctx, string);
+            JSStringRelease(string);
+        }
+        @catch (NSException *e) {
+            // Catch ObjC exceptions and propogate them up as JS exceptions
+            if (exception != nil) {
+                *exception = [runtime JSValueForObject:e];
+            }
+        }
+        
         return value;
     }
 	return NULL;
 }
 
 static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception) {
+    Mocha *runtime = [Mocha runtimeWithContext:ctx];
 	MOBox *privateObject = JSObjectGetPrivate(constructor);
     id representedObject = [privateObject representedObject];
     
@@ -1097,9 +1112,19 @@ static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
 	MOBox *instancePrivateObj = JSObjectGetPrivate(instanceObj);
     id instanceRepresentedObj = [instancePrivateObj representedObject];
     
-    if (representedObject == [instanceRepresentedObj class]) {
-        return true;
+    // Check to see if the object's class matches the passed-in class
+    @try {
+        if (representedObject == [instanceRepresentedObj class]) {
+            return true;
+        }
     }
+    @catch (NSException *e) {
+        // Catch ObjC exceptions and propogate them up as JS exceptions
+        if (exception != nil) {
+            *exception = [runtime JSValueForObject:e];
+        }
+    }
+    
     return false;
 }
 
@@ -1108,23 +1133,24 @@ static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
 #pragma mark Mocha Functions
 
 static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functionJS, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
+    Mocha *runtime = [Mocha runtimeWithContext:ctx];
 	MOBox *private = JSObjectGetPrivate(functionJS);
     MOFunction *function = private.representedObject;
     id target = [function target];
     SEL selector = [function selector];
-    JSValueRef value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
-    return value;
-}
-
-
-#pragma mark -
-#pragma mark Mocha Info
-
-static JSValueRef MOInfo_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef *exception) {
-    return NULL;
-}
-
-static void MOInfo_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames) {
+    JSValueRef value = NULL;
     
+    // Perform the invocation
+    @try {
+        value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
+    }
+    @catch (NSException *e) {
+        // Catch ObjC exceptions and propogate them up as JS exceptions
+        if (exception != nil) {
+            *exception = [runtime JSValueForObject:e];
+        }
+    }
+    
+    return value;
 }
 
