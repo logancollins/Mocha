@@ -11,7 +11,7 @@
 
 @interface MOMethod : MOObject
 
-+ (MOMethod *)functionWithTarget:(id)target selector:(SEL)selector;
++ (MOMethod *)methodWithTarget:(id)target selector:(SEL)selector;
 
 @property (readonly) id target;
 @property (readonly) SEL selector;
