@@ -164,6 +164,8 @@
 		}
 		symbol.inlineFunction = [[attributeDict objectForKey:@"inline"] isEqualToString:@"true"];
 		[_library setSymbol:symbol forName:symbol.name];
+		
+		[_symbolStack addObject:symbol];
 	}
 	else if ([elementName isEqualToString:@"function_alias"]) {
 		// Function alias
@@ -233,6 +235,9 @@
 		if ([currentSymbol isKindOfClass:[MOBridgeSupportMethod class]]) {
 			[(MOBridgeSupportMethod *)currentSymbol addArgument:argument];
 		}
+        else if ([currentSymbol isKindOfClass:[MOBridgeSupportFunction class]]) {
+			[(MOBridgeSupportFunction *)currentSymbol addArgument:argument];
+		}
 	}
 	else if ([elementName isEqualToString:@"retval"]) {
 		// Return value
@@ -255,6 +260,9 @@
 		MOBridgeSupportSymbol *currentSymbol = [_symbolStack lastObject];
 		if ([currentSymbol isKindOfClass:[MOBridgeSupportMethod class]]) {
 			[(MOBridgeSupportMethod *)currentSymbol setReturnValue:argument];
+		}
+        else if ([currentSymbol isKindOfClass:[MOBridgeSupportFunction class]]) {
+			[(MOBridgeSupportFunction *)currentSymbol setReturnValue:argument];
 		}
 	}
 }

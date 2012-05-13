@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 
+@class MOBridgeSupportArgument;
+
+
 /*!
  * @class MOBridgeSupportSymbol
  * @abstract Abstract superclass of all symbols
@@ -115,6 +118,12 @@
 @property (copy) NSNumber *sentinel;
 @property (getter=isInlineFunction) BOOL inlineFunction;
 
+@property (copy) NSArray *arguments;
+- (void)addArgument:(MOBridgeSupportArgument *)argument;
+- (void)removeArgument:(MOBridgeSupportArgument *)argument;
+
+@property (strong) MOBridgeSupportArgument *returnValue;
+
 @end
 
 
@@ -155,9 +164,6 @@
 - (void)removeMethod:(MOBridgeSupportMethod *)method;
 
 @end
-
-
-@class MOBridgeSupportArgument;
 
 /*!
  * @class MOBridgeSupportMethod

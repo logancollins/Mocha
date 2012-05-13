@@ -62,12 +62,22 @@ static const char interactivePrompt[] = "> ";
         NSString *string = [NSString stringWithCString:(const char *)line encoding:NSUTF8StringEncoding];
         
         if ([string length] > 0) {
-            JSValueRef value = [runtime evalJSString:string];
-            if (value != NULL) {
-                JSStringRef string = JSValueToStringCopy([runtime context], value, NULL);
-                NSString *description = [(NSString *)JSStringCopyCFString(NULL, string) autorelease];
-                JSStringRelease(string);
-                printf("%s\n", [description UTF8String]);
+            @try {
+                JSValueRef value = [runtime evalJSString:string];
+                if (value != NULL) {
+                    JSStringRef string = JSValueToStringCopy([runtime context], value, NULL);
+                    NSString *description = [(NSString *)JSStringCopyCFString(NULL, string) autorelease];
+                    JSStringRelease(string);
+                    printf("%s\n", [description UTF8String]);
+                }
+            }
+            @catch (NSException *e) {
+                if ([e userInfo] != nil) {
+                    printf("%s: %s\n%s\n", [[e name] UTF8String], [[e reason] UTF8String], [[[e userInfo] description] UTF8String]);
+                }
+                else {
+                    printf("%s: %s\n", [[e name] UTF8String], [[e reason] UTF8String]);
+                }
             }
         }
     }
@@ -75,10 +85,6 @@ static const char interactivePrompt[] = "> ";
 
 - (void)exit {
     exit(0);
-}
-
-- (void)mochaRuntime:(Mocha *)aRuntime didEncounterUncaughtException:(MOException *)exception {
-    printf("%s\n", [[exception error] UTF8String]);
 }
 
 @end

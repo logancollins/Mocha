@@ -10,12 +10,12 @@
 
 #import "MochaRuntime_Private.h"
 
-#import "MOFunction_Private.h"
 #import "MOBridgeSupportObject.h"
 
 #import "MOBox.h"
 
 #import <ffi/ffi.h>
+#import <dlfcn.h>
 
 
 #pragma mark -
@@ -238,9 +238,26 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
 }
 
 
-JSValueRef MOFunctionInvoke(MOBridgeSupportFunction *function, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
+JSValueRef MOFunctionInvoke(MOBridgeSupportFunction *function, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exceptionJS) {
+    Mocha *runtime = [Mocha runtimeWithContext:ctx];
     NSString *name = [function name];
+    void *callAddress = dlsym(RTLD_DEFAULT, [name UTF8String]);
     
+    JSValueRef value = NULL;
+    
+    // If the function cannot be found, raise an exception (instead of crashing)
+    if (callAddress == NULL) {
+        if (exceptionJS != NULL) {
+            NSException *exception = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to find function name: %@", name] userInfo:nil];
+            *exceptionJS = [runtime JSValueForObject:exception];
+        }
+        return NULL;
+    }
+    
+    
+    
+    
+    return value;
 }
 
 

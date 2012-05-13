@@ -75,3 +75,4 @@
 
 
 MOCHA_EXTERN NSString * const MORuntimeException;
+MOCHA_EXTERN NSString * const MOJavaScriptException;

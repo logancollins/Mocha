@@ -22,7 +22,6 @@
 #import "NSDictionary+MochaAdditions.h"
 
 #import <objc/runtime.h>
-#import <ffi/ffi.h>
 #import <dlfcn.h>
 
 
@@ -53,6 +52,7 @@ static JSValueRef	MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functi
 
 
 NSString * const MORuntimeException = @"MORuntimeException";
+NSString * const MOJavaScriptException = @"MOJavaScriptException";
 
 
 #pragma mark -
@@ -620,7 +620,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     JSStringRelease(resultStringJS);
     
     if (JSValueGetType(ctx, exception) != kJSTypeObject) {
-        NSException *mochaException = [NSException exceptionWithName:MORuntimeException reason:error userInfo:nil];
+        NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:nil];
         return mochaException;
     }
     else {
@@ -645,7 +645,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
         
         JSPropertyNameArrayRelease(jsNames);
         
-        NSException *mochaException = [NSException exceptionWithName:MORuntimeException reason:error userInfo:userInfo];
+        NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:userInfo];
         return mochaException;
     }
 }

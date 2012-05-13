@@ -118,15 +118,53 @@
 @end
 
 
-@implementation MOBridgeSupportFunction
+@implementation MOBridgeSupportFunction {
+    NSMutableArray *_arguments;
+}
 
 @synthesize variadic=_variadic;
 @synthesize sentinel=_sentinel;
 @synthesize inlineFunction=_inlineFunction;
 
+@synthesize returnValue=_returnValue;
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        _arguments = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 - (void)dealloc {
 	[_sentinel release];
+    [_arguments release];
+    [_returnValue release];
 	[super dealloc];
+}
+
+
+#pragma mark -
+#pragma mark Arguments
+
+- (NSArray *)arguments {
+	return [[_arguments copy] autorelease];
+}
+
+- (void)setArguments:(NSArray *)arguments {
+	[_arguments setArray:arguments];
+}
+
+- (void)addArgument:(MOBridgeSupportArgument *)argument {
+	if (![_arguments containsObject:argument]) {
+		[_arguments addObject:argument];
+	}
+}
+
+- (void)removeArgument:(MOBridgeSupportArgument *)argument {
+	if ([_arguments containsObject:argument]) {
+		[_arguments removeObject:argument];
+	}
 }
 
 @end
