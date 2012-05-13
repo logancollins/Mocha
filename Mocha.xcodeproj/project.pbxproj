@@ -26,9 +26,6 @@
 		EAA45E24155CE57600F93E40 /* MochaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E22155CE57600F93E40 /* MochaRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA45E25155CE57600F93E40 /* MochaRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E23155CE57600F93E40 /* MochaRuntime.m */; };
 		EAA45E27155CE66600F93E40 /* MochaRuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAA45E30155CF26C00F93E40 /* MOException.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E2E155CF26B00F93E40 /* MOException.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAA45E31155CF26C00F93E40 /* MOException.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E2F155CF26C00F93E40 /* MOException.m */; };
-		EAA45E33155CF2FD00F93E40 /* MOException_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E32155CF2FD00F93E40 /* MOException_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA45E3A155D09A700F93E40 /* MOObject.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E38155D09A700F93E40 /* MOObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA45E3B155D09A700F93E40 /* MOObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E39155D09A700F93E40 /* MOObject.m */; };
 		EAA45E73155EE5AF00F93E40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E0B155CE44B00F93E40 /* Foundation.framework */; };
@@ -95,9 +92,6 @@
 		EAA45E22155CE57600F93E40 /* MochaRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime.h; sourceTree = "<group>"; };
 		EAA45E23155CE57600F93E40 /* MochaRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochaRuntime.m; sourceTree = "<group>"; };
 		EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime_Private.h; sourceTree = "<group>"; };
-		EAA45E2E155CF26B00F93E40 /* MOException.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOException.h; sourceTree = "<group>"; };
-		EAA45E2F155CF26C00F93E40 /* MOException.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOException.m; sourceTree = "<group>"; };
-		EAA45E32155CF2FD00F93E40 /* MOException_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOException_Private.h; sourceTree = "<group>"; };
 		EAA45E38155D09A700F93E40 /* MOObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOObject.h; sourceTree = "<group>"; };
 		EAA45E39155D09A700F93E40 /* MOObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOObject.m; sourceTree = "<group>"; };
 		EAA45E49155E5DB100F93E40 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -147,16 +141,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		0211231E155D7BAE00415471 /* Exceptions */ = {
-			isa = PBXGroup;
-			children = (
-				EAA45E2E155CF26B00F93E40 /* MOException.h */,
-				EAA45E32155CF2FD00F93E40 /* MOException_Private.h */,
-				EAA45E2F155CF26C00F93E40 /* MOException.m */,
-			);
-			path = Exceptions;
-			sourceTree = "<group>";
-		};
 		02112329155D99CA00415471 /* BridgeSupport */ = {
 			isa = PBXGroup;
 			children = (
@@ -213,7 +197,6 @@
 				EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */,
 				EAA45E23155CE57600F93E40 /* MochaRuntime.m */,
 				EAA45E3C155D09AA00F93E40 /* Objects */,
-				0211231E155D7BAE00415471 /* Exceptions */,
 				02112329155D99CA00415471 /* BridgeSupport */,
 				EAA45E68155E5E2200F93E40 /* Utilities */,
 				EAC8BFCB155F42D3003653BA /* Categories */,
@@ -308,8 +291,6 @@
 				EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */,
 				EAA45E24155CE57600F93E40 /* MochaRuntime.h in Headers */,
 				EAA45E27155CE66600F93E40 /* MochaRuntime_Private.h in Headers */,
-				EAA45E30155CF26C00F93E40 /* MOException.h in Headers */,
-				EAA45E33155CF2FD00F93E40 /* MOException_Private.h in Headers */,
 				EAA45E3A155D09A700F93E40 /* MOObject.h in Headers */,
 				02112323155D7BD000415471 /* MOUtilities.h in Headers */,
 				02112327155D973100415471 /* MOBridgeSupportController.h in Headers */,
@@ -409,7 +390,6 @@
 			files = (
 				EAA45E15155CE44B00F93E40 /* Mocha.m in Sources */,
 				EAA45E25155CE57600F93E40 /* MochaRuntime.m in Sources */,
-				EAA45E31155CF26C00F93E40 /* MOException.m in Sources */,
 				EAA45E3B155D09A700F93E40 /* MOObject.m in Sources */,
 				02112324155D7BD000415471 /* MOUtilities.m in Sources */,
 				02112328155D973100415471 /* MOBridgeSupportController.m in Sources */,

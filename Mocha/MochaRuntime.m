@@ -10,7 +10,6 @@
 #import "MochaRuntime_Private.h"
 
 #import "MOFunction_Private.h"
-#import "MOException_Private.h"
 #import "MOBridgeSupportObject.h"
 
 #import "MOBox.h"
@@ -51,6 +50,9 @@ static JSValueRef   MOBoxedObject_convertToType(JSContextRef ctx, JSObjectRef ob
 static bool         MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception);
 
 static JSValueRef	MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef function, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
+
+
+NSString * const MORuntimeException = @"MORuntimeException";
 
 
 #pragma mark -
@@ -428,10 +430,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     JSStringRelease(jsName);
     
     if (exception != NULL) {
-        MOException *mochaException = [Mocha exceptionWithJSException:exception context:_ctx];
-        if ([[self delegate] respondsToSelector:@selector(mochaRuntime:didEncounterUncaughtException:)]) {
-            [[self delegate] mochaRuntime:self didEncounterUncaughtException:mochaException];
-        }
+        [self throwJSException:exception];
         return NULL;
     }
     
@@ -452,10 +451,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     JSStringRelease(jsName);
     
     if (exception != NULL) {
-        MOException *mochaException = [Mocha exceptionWithJSException:exception context:_ctx];
-        if ([[self delegate] respondsToSelector:@selector(mochaRuntime:didEncounterUncaughtException:)]) {
-            [[self delegate] mochaRuntime:self didEncounterUncaughtException:mochaException];
-        }
+        [self throwJSException:exception];
         return NULL;
     }
     
@@ -471,10 +467,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     JSStringRelease(jsName);
     
     if (exception != NULL) {
-        MOException *mochaException = [Mocha exceptionWithJSException:exception context:_ctx];
-        if ([[self delegate] respondsToSelector:@selector(mochaRuntime:didEncounterUncaughtException:)]) {
-            [[self delegate] mochaRuntime:self didEncounterUncaughtException:mochaException];
-        }
+        [self throwJSException:exception];
         return NO;
     }
     
@@ -513,10 +506,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     }
     
     if (exception != NULL) {
-        MOException *mochaException = [Mocha exceptionWithJSException:exception context:_ctx];
-        if ([[self delegate] respondsToSelector:@selector(mochaRuntime:didEncounterUncaughtException:)]) {
-            [[self delegate] mochaRuntime:self didEncounterUncaughtException:mochaException];
-        }
+        [self throwJSException:exception];
         return NULL;
     }
     
@@ -558,10 +548,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     JSStringRelease(jsFunctionName);
     
     if (exception != NULL) {
-        MOException *mochaException = [Mocha exceptionWithJSException:exception context:_ctx];
-        if ([[self delegate] respondsToSelector:@selector(mochaRuntime:didEncounterUncaughtException:)]) {
-            [[self delegate] mochaRuntime:self didEncounterUncaughtException:mochaException];
-        }
+        [self throwJSException:exception];
         return NULL;
     }
     
@@ -596,10 +583,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     }
     
     if (exception != NULL) {
-        MOException *mochaException = [Mocha exceptionWithJSException:exception context:_ctx];
-        if ([[self delegate] respondsToSelector:@selector(mochaRuntime:didEncounterUncaughtException:)]) {
-            [[self delegate] mochaRuntime:self didEncounterUncaughtException:mochaException];
-        }
+        [self throwJSException:exception];
         return NULL;
     }
     
@@ -620,10 +604,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     }
     
     if (exception != NULL) {
-        MOException *mochaException = [Mocha exceptionWithJSException:exception context:_ctx];
-        if ([[self delegate] respondsToSelector:@selector(mochaRuntime:didEncounterUncaughtException:)]) {
-            [[self delegate] mochaRuntime:self didEncounterUncaughtException:mochaException];
-        }
+        [self throwJSException:exception];
     }
     
     return success;
@@ -633,22 +614,24 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 #pragma mark -
 #pragma mark Exceptions
 
-+ (MOException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx {
++ (NSException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx {
     JSStringRef resultStringJS = JSValueToStringCopy(ctx, exception, NULL);
     NSString *error = [(NSString *)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS) autorelease];
     JSStringRelease(resultStringJS);
     
     if (JSValueGetType(ctx, exception) != kJSTypeObject) {
-        MOException *mochaException = [MOException exceptionWithError:error lineNumber:0 sourceURL:nil];
+        NSException *mochaException = [NSException exceptionWithName:MORuntimeException reason:error userInfo:nil];
         return mochaException;
     }
     else {
         // Iterate over all properties of the exception
         JSObjectRef jsObject = JSValueToObject(ctx, exception, NULL);
         JSPropertyNameArrayRef jsNames = JSObjectCopyPropertyNames(ctx, jsObject);
-        id line = nil, sourceURL = nil;
+        size_t count = JSPropertyNameArrayGetCount(jsNames);
         
-        for (size_t i = 0; i < JSPropertyNameArrayGetCount(jsNames); i++) {
+        NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithCapacity:count];
+        
+        for (size_t i = 0; i < count; i++) {
             JSStringRef jsName = JSPropertyNameArrayGetNameAtIndex(jsNames, i);
             NSString *name = [(NSString *)JSStringCopyCFString(kCFAllocatorDefault, jsName) autorelease];
             
@@ -657,23 +640,33 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
             NSString *value = [(NSString *)JSStringCopyCFString(kCFAllocatorDefault, valueJS) autorelease];
             JSStringRelease(valueJS);
             
-            if ([name isEqualToString:@"line"]) {
-                line = value;
-            }
-            if ([name isEqualToString:@"sourceURL"]) {
-                sourceURL = [NSURL URLWithString:value];
-            }
+            [userInfo setObject:value forKey:name];
         }
         
         JSPropertyNameArrayRelease(jsNames);
         
-        MOException *mochaException = [MOException exceptionWithError:error lineNumber:[line integerValue] sourceURL:sourceURL];
+        NSException *mochaException = [NSException exceptionWithName:MORuntimeException reason:error userInfo:userInfo];
         return mochaException;
     }
 }
 
-- (MOException *)exceptionWithJSException:(JSValueRef)exception {
+- (NSException *)exceptionWithJSException:(JSValueRef)exception {
     return [Mocha exceptionWithJSException:exception context:_ctx];
+}
+
+- (void)throwJSException:(JSValueRef)exceptionJS {
+    id object = [self objectForJSValue:exceptionJS];
+    if ([object isKindOfClass:[NSException class]]) {
+        // Rethrow ObjC exceptions that were boxed within the runtime
+        @throw object;
+    }
+    else {
+        // Throw all other types of exceptions as an NSException
+        NSException *exception = [self exceptionWithJSException:exceptionJS];
+        if (exception != nil) {
+            @throw exception;
+        }
+    }
 }
 
 

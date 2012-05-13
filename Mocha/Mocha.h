@@ -8,6 +8,5 @@
 
 #import <Mocha/MochaDefines.h>
 #import <Mocha/MochaRuntime.h>
-#import <Mocha/MOException.h>
 #import <Mocha/MOFunction.h>
 #import <Mocha/MOObject.h>

@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
+#import <Mocha/MochaDefines.h>
 
 
 @class MOException;
@@ -48,8 +49,6 @@
 
 @optional
 
-- (void)mochaRuntime:(Mocha *)aRuntime didEncounterUncaughtException:(MOException *)exception;
-
 @end
 
 
@@ -73,3 +72,6 @@
 - (void)setObject:(id)object forKeyedSubscript:(NSString *)key;
 
 @end
+
+
+MOCHA_EXTERN NSString * const MORuntimeException;

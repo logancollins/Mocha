@@ -47,8 +47,9 @@
 - (JSValueRef)callJSFunction:(JSObjectRef)jsFunction withArgumentsInArray:(NSArray *)arguments;
 
 // Exceptions
-+ (MOException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx;
-- (MOException *)exceptionWithJSException:(JSValueRef)exception;
++ (NSException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx;
+- (NSException *)exceptionWithJSException:(JSValueRef)exception;
+- (void)throwJSException:(JSValueRef)exception;
 
 // Support
 - (void)installBuiltins;
