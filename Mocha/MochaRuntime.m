@@ -812,9 +812,8 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         // Functions
         if ([symbol isKindOfClass:[MOBridgeSupportFunction class]]) {
             MOBridgeSupportObject *private = [MOBridgeSupportObject bridgeSupportObjectWithSymbol:symbol];
-            //JSObjectRef o = JSObjectMake(ctx, MOFunctionClass, private);
-            //return o;
-            return NULL;
+            JSObjectRef o = JSObjectMake(ctx, MOFunctionClass, private);
+            return o;
         }
         
         // Structs
@@ -1123,22 +1122,26 @@ static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functi
     id function = [private representedObject];
     JSValueRef value = NULL;
     
-    if ([function isKindOfClass:[MOMethod class]]) {
-        id target = [function target];
-        SEL selector = [function selector];
-        
-        // Perform the invocation
-        @try {
+    // Perform the invocation
+    @try {
+        if ([function isKindOfClass:[MOMethod class]]) {
+            id target = [function target];
+            SEL selector = [function selector];
             value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
         }
-        @catch (NSException *e) {
-            // Catch ObjC exceptions and propogate them up as JS exceptions
-            if (exception != nil) {
-                *exception = [runtime JSValueForObject:e];
+        else if ([function isKindOfClass:[MOBridgeSupportObject class]]) {
+            id symbol = [function symbol];
+            if ([symbol isKindOfClass:[MOBridgeSupportFunction class]]) {
+                value = MOFunctionInvoke(symbol, ctx, argumentCount, arguments, exception);
             }
+        }
+    }
+    @catch (NSException *e) {
+        // Catch ObjC exceptions and propogate them up as JS exceptions
+        if (exception != nil) {
+            *exception = [runtime JSValueForObject:e];
         }
     }
     
     return value;
 }
-

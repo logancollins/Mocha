@@ -10,11 +10,13 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 
 
+@class MOBridgeSupportFunction;
+
+
 NSString * MOJSValueToString(JSValueRef value, JSContextRef ctx);
 
 JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
-
-void MOExceptionThrow(JSContextRef ctx, JSValueRef *exception, NSString *reason);
+JSValueRef MOFunctionInvoke(MOBridgeSupportFunction *function, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
 
 SEL MOSelectorFromPropertyName(NSString *propertyName);
 NSString * MOSelectorToPropertyName(SEL selector);

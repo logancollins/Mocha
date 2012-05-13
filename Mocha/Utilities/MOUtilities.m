@@ -15,6 +15,8 @@
 
 #import "MOBox.h"
 
+#import <ffi/ffi.h>
+
 
 #pragma mark -
 #pragma mark Descriptions
@@ -236,37 +238,9 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
 }
 
 
-#pragma mark -
-#pragma mark Exceptions
-
-void MOExceptionThrow(JSContextRef ctx, JSValueRef *exception, NSString *reason) {
-    // Gather call stack
-    JSValueRef callStackException = NULL;
-    JSStringRef scriptJS = JSStringCreateWithUTF8CString("return dumpCallStack()");
-    JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 0, NULL);
-    JSValueRef result = JSObjectCallAsFunction(ctx, fn, NULL, 0, NULL, &callStackException);
-    JSStringRelease(scriptJS);
-    if (!callStackException) {
-        // Convert call stack to string
-        JSStringRef resultStringJS = JSValueToStringCopy(ctx, result, NULL);
-        NSString *callStack = [(NSString *)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS) autorelease];
-        JSStringRelease(resultStringJS);
-        
-        // Append call stack to exception
-        if ([callStack length]) {
-            reason = [NSString stringWithFormat:@"%@\n%@", reason, callStack];
-        }
-    }
+JSValueRef MOFunctionInvoke(MOBridgeSupportFunction *function, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
+    NSString *name = [function name];
     
-    // Convert exception to string
-    JSStringRef jsName = JSStringCreateWithUTF8CString([reason UTF8String]);
-    JSValueRef jsString = JSValueMakeString(ctx, jsName);
-    JSStringRelease(jsName);
-    
-    // Convert to object to allow JavascriptCore to add line and sourceURL
-    if (exception != NULL) {
-        *exception = JSValueToObject(ctx, jsString, NULL);
-    }
 }
 
 
