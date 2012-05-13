@@ -9,7 +9,7 @@
 #import "MochaRuntime.h"
 #import "MochaRuntime_Private.h"
 
-#import "MOFunction_Private.h"
+#import "MOMethod_Private.h"
 #import "MOBridgeSupportObject.h"
 
 #import "MOBox.h"
@@ -396,7 +396,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     box.representedObject = object;
     JSObjectRef jsObject = NULL;
     
-    if ([object isKindOfClass:[MOFunction class]]) {
+    if ([object isKindOfClass:[MOMethod class]]) {
         jsObject = JSObjectMake(_ctx, MOFunctionClass, box);
     }
     else {
@@ -738,7 +738,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 #pragma mark Support
 
 - (void)installBuiltins {
-    MOFunction *loadFramework = [MOFunction functionWithTarget:self selector:@selector(loadFrameworkWithName:)];
+    MOMethod *loadFramework = [MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)];
     [self setValue:loadFramework forKey:@"loadFramework"];
 }
 
@@ -809,19 +809,15 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     //
     MOBridgeSupportSymbol *symbol = [[MOBridgeSupportController sharedController] performQueryForSymbolName:propertyName];
     if (symbol != nil) {
-        //
-        // Function
-        //
+        // Functions
         if ([symbol isKindOfClass:[MOBridgeSupportFunction class]]) {
-            //MOBridgeSupportObject *private = [MOBridgeSupportObject bridgeSupportObjectWithSymbol:symbol];
+            MOBridgeSupportObject *private = [MOBridgeSupportObject bridgeSupportObjectWithSymbol:symbol];
             //JSObjectRef o = JSObjectMake(ctx, MOFunctionClass, private);
             //return o;
             return NULL;
         }
         
-        //
-        // Struct
-        //
+        // Structs
         else if ([symbol isKindOfClass:[MOBridgeSupportStruct class]]) {
             //MOBridgeSupportObject *private = [MOBridgeSupportObject bridgeSupportObjectWithSymbol:symbol];
             //JSObjectRef o = JSObjectMake(ctx, MOFunctionClass, private);
@@ -829,9 +825,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
             return NULL;
         }
         
-        //
-        // Constant
-        //
+        // Constants
         else if ([symbol isKindOfClass:[MOBridgeSupportConstant class]]) {
 			NSString *type = nil;
 			if ([(MOBridgeSupportConstant *)symbol type]) {
@@ -866,9 +860,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
             return jsString;
         }
         
-        //
-        // Enum
-        //
+        // Enums
         else if ([symbol isKindOfClass:[MOBridgeSupportEnum class]]) {
 			NSNumber *value = [(MOBridgeSupportEnum *)symbol value];
 			NSNumber *value64 = [(MOBridgeSupportEnum *)symbol value64];
@@ -999,7 +991,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         // Method
         SEL selector = MOSelectorFromPropertyName(propertyName);
         if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
-            MOFunction *function = [MOFunction functionWithTarget:object selector:selector];
+            MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
             return [runtime JSValueForObject:function];
         }
         
@@ -1128,19 +1120,22 @@ static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor,
 static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functionJS, JSObjectRef thisObject, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
     Mocha *runtime = [Mocha runtimeWithContext:ctx];
 	MOBox *private = JSObjectGetPrivate(functionJS);
-    MOFunction *function = private.representedObject;
-    id target = [function target];
-    SEL selector = [function selector];
+    id function = [private representedObject];
     JSValueRef value = NULL;
     
-    // Perform the invocation
-    @try {
-        value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
-    }
-    @catch (NSException *e) {
-        // Catch ObjC exceptions and propogate them up as JS exceptions
-        if (exception != nil) {
-            *exception = [runtime JSValueForObject:e];
+    if ([function isKindOfClass:[MOMethod class]]) {
+        id target = [function target];
+        SEL selector = [function selector];
+        
+        // Perform the invocation
+        @try {
+            value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
+        }
+        @catch (NSException *e) {
+            // Catch ObjC exceptions and propogate them up as JS exceptions
+            if (exception != nil) {
+                *exception = [runtime JSValueForObject:e];
+            }
         }
     }
     

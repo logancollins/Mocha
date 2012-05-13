@@ -1,5 +1,5 @@
 //
-//  MOFunction.h
+//  MOMethod.h
 //  Mocha
 //
 //  Created by Logan Collins on 5/12/12.
@@ -9,9 +9,9 @@
 #import <Mocha/MOObject.h>
 
 
-@interface MOFunction : MOObject
+@interface MOMethod : MOObject
 
-+ (MOFunction *)functionWithTarget:(id)target selector:(SEL)selector;
++ (MOMethod *)functionWithTarget:(id)target selector:(SEL)selector;
 
 @property (readonly) id target;
 @property (readonly) SEL selector;

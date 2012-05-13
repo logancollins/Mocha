@@ -34,13 +34,13 @@ static const char interactivePrompt[] = "> ";
 - (void)installBuiltins {
     Mocha *runtime = [Mocha sharedRuntime];
     
-    MOFunction *gc = [MOFunction functionWithTarget:runtime selector:@selector(garbageCollect)];
+    MOMethod *gc = [MOMethod methodWithTarget:runtime selector:@selector(garbageCollect)];
     [runtime setValue:gc forKey:@"gc"];
     
-    MOFunction *checkSyntax = [MOFunction functionWithTarget:runtime selector:@selector(isSyntaxValidForString:)];
+    MOMethod *checkSyntax = [MOMethod methodWithTarget:runtime selector:@selector(isSyntaxValidForString:)];
     [runtime setValue:checkSyntax forKey:@"checkSyntax"];
     
-    MOFunction *exit = [MOFunction functionWithTarget:self selector:@selector(exit)];
+    MOMethod *exit = [MOMethod methodWithTarget:self selector:@selector(exit)];
     [runtime setValue:exit forKey:@"exit"];
 }
 
