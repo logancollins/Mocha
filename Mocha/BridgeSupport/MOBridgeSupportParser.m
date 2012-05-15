@@ -231,13 +231,18 @@
 		argument.type64 = [attributeDict objectForKey:@"type64"];
 		argument.index = [[attributeDict objectForKey:@"index"] integerValue];
 		
-		MOBridgeSupportSymbol *currentSymbol = [_symbolStack lastObject];
+		id currentSymbol = [_symbolStack lastObject];
 		if ([currentSymbol isKindOfClass:[MOBridgeSupportMethod class]]) {
 			[(MOBridgeSupportMethod *)currentSymbol addArgument:argument];
 		}
         else if ([currentSymbol isKindOfClass:[MOBridgeSupportFunction class]]) {
 			[(MOBridgeSupportFunction *)currentSymbol addArgument:argument];
 		}
+        else if ([currentSymbol isKindOfClass:[MOBridgeSupportArgument class]]) {
+			[(MOBridgeSupportArgument *)currentSymbol addArgument:argument];
+		}
+		
+		[_symbolStack addObject:argument];
 	}
 	else if ([elementName isEqualToString:@"retval"]) {
 		// Return value
@@ -257,13 +262,18 @@
 		argument.type64 = [attributeDict objectForKey:@"type64"];
 		argument.index = [[attributeDict objectForKey:@"index"] integerValue];
 		
-		MOBridgeSupportSymbol *currentSymbol = [_symbolStack lastObject];
+		id currentSymbol = [_symbolStack lastObject];
 		if ([currentSymbol isKindOfClass:[MOBridgeSupportMethod class]]) {
 			[(MOBridgeSupportMethod *)currentSymbol setReturnValue:argument];
 		}
         else if ([currentSymbol isKindOfClass:[MOBridgeSupportFunction class]]) {
 			[(MOBridgeSupportFunction *)currentSymbol setReturnValue:argument];
 		}
+        else if ([currentSymbol isKindOfClass:[MOBridgeSupportArgument class]]) {
+			[(MOBridgeSupportArgument *)currentSymbol setReturnValue:argument];
+		}
+		
+		[_symbolStack addObject:argument];
 	}
 }
 
@@ -288,6 +298,19 @@
 	else if ([elementName isEqualToString:@"method"]) {
 		// Method
 		if ([currentSymbol isKindOfClass:[MOBridgeSupportMethod class]]) {
+			[_symbolStack removeLastObject];
+		}
+	}
+	else if ([elementName isEqualToString:@"function"]) {
+		// Function
+		if ([currentSymbol isKindOfClass:[MOBridgeSupportFunction class]]) {
+			[_symbolStack removeLastObject];
+		}
+	}
+	else if ([elementName isEqualToString:@"arg"]
+             || [elementName isEqualToString:@"retval"]) {
+		// Argument
+		if ([currentSymbol isKindOfClass:[MOBridgeSupportArgument class]]) {
 			[_symbolStack removeLastObject];
 		}
 	}

@@ -334,7 +334,9 @@
 @end
 
 
-@implementation MOBridgeSupportArgument
+@implementation MOBridgeSupportArgument {
+    NSMutableArray *_arguments;
+}
 
 @synthesize type=_type;
 @synthesize type64=_type64;
@@ -358,6 +360,16 @@
 @synthesize alreadyRetained=_alreadyRetained;
 @synthesize functionPointer=_functionPointer;
 
+@synthesize returnValue=_returnValue;
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        _arguments = [[NSMutableArray alloc] init];
+    }
+    return self;
+}
+
 - (void)dealloc {
 	[_type release];
 	[_type64 release];
@@ -366,6 +378,30 @@
 	[_signature64 release];
 	[_cArrayLengthInArg release];
 	[super dealloc];
+}
+
+
+#pragma mark -
+#pragma mark Arguments
+
+- (NSArray *)arguments {
+	return [[_arguments copy] autorelease];
+}
+
+- (void)setArguments:(NSArray *)arguments {
+	[_arguments setArray:arguments];
+}
+
+- (void)addArgument:(MOBridgeSupportArgument *)argument {
+	if (![_arguments containsObject:argument]) {
+		[_arguments addObject:argument];
+	}
+}
+
+- (void)removeArgument:(MOBridgeSupportArgument *)argument {
+	if ([_arguments containsObject:argument]) {
+		[_arguments removeObject:argument];
+	}
 }
 
 @end

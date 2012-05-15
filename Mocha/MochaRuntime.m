@@ -1125,9 +1125,10 @@ static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functi
     // Perform the invocation
     @try {
         if ([function isKindOfClass:[MOMethod class]]) {
-            id target = [function target];
-            SEL selector = [function selector];
-            value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
+            //id target = [function target];
+            //SEL selector = [function selector];
+            //value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
+            value = MOFunctionInvoke(function, ctx, argumentCount, arguments, exception);
         }
         else if ([function isKindOfClass:[MOBridgeSupportObject class]]) {
             id symbol = [function symbol];

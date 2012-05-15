@@ -221,5 +221,11 @@
 @property (getter=isAlreadyRetained) BOOL alreadyRetained;
 @property (getter=isFunctionPointer) BOOL functionPointer;
 
+@property (copy) NSArray *arguments;
+- (void)addArgument:(MOBridgeSupportArgument *)argument;
+- (void)removeArgument:(MOBridgeSupportArgument *)argument;
+
+@property (strong) MOBridgeSupportArgument *returnValue;
+
 @end
 
