@@ -40,6 +40,7 @@
 - (id)init {
     self = [super init];
     if (self) {
+        _storage = NULL;
         _ownsStorage = YES;
     }
     return self;

@@ -12,6 +12,7 @@
 #import "MOMethod_Private.h"
 #import "MOBridgeSupportObject.h"
 
+#import "MOUndefined.h"
 #import "MOBox.h"
 #import "MOUtilities.h"
 
@@ -218,11 +219,11 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 
 + (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx unboxObjects:(BOOL)unboxObjects {
 	if (value == NULL || JSValueIsUndefined(ctx, value)) {
-		return nil;
+		return [MOUndefined undefined];
 	}
     
     if (JSValueIsNull(ctx, value)) {
-        return [NSNull null];
+        return nil;
     }
 	
 	if (JSValueIsString(ctx, value)) {
@@ -360,10 +361,10 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 		double doubleValue = [object doubleValue];
 		value = JSValueMakeNumber(_ctx, doubleValue);
 	}
-	else if ([object isKindOfClass:[NSNull class]]) {
+	else if (object == nil || [object isKindOfClass:[NSNull class]]) {
 		value = JSValueMakeNull(_ctx);
 	}
-    else if (object == nil) {
+    else if (object == [MOUndefined undefined]) {
         value = JSValueMakeUndefined(_ctx);
     }
 	

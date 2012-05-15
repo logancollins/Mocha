@@ -422,6 +422,16 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         return JSValueMakeUndefined(ctx);
     }
     
+    @try {
+        value = [returnValue getValueAsJSValueInContext:ctx];
+    }
+    @catch (NSException *e) {
+        if (exception != NULL) {
+            *exception = [runtime JSValueForObject:e];
+        }
+        return NULL;
+    }
+    
     return value;
 }
 
