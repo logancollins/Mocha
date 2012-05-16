@@ -6,10 +6,10 @@
 //  Copyright (c) 2012 Sunflower Softworks. All rights reserved.
 //
 
-#import <Mocha/MOObject.h>
+#import <Foundation/Foundation.h>
 
 
-@interface MOMethod : MOObject
+@interface MOMethod : NSObject
 
 + (MOMethod *)methodWithTarget:(id)target selector:(SEL)selector;
 

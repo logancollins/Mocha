@@ -9,5 +9,4 @@
 #import <Mocha/MochaDefines.h>
 #import <Mocha/MochaRuntime.h>
 #import <Mocha/MOMethod.h>
-#import <Mocha/MOObject.h>
 #import <Mocha/MOUndefined.h>

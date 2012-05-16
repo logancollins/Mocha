@@ -35,8 +35,6 @@
 		EAA45E24155CE57600F93E40 /* MochaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E22155CE57600F93E40 /* MochaRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA45E25155CE57600F93E40 /* MochaRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E23155CE57600F93E40 /* MochaRuntime.m */; };
 		EAA45E27155CE66600F93E40 /* MochaRuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAA45E3A155D09A700F93E40 /* MOObject.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E38155D09A700F93E40 /* MOObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAA45E3B155D09A700F93E40 /* MOObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E39155D09A700F93E40 /* MOObject.m */; };
 		EAA45E73155EE5AF00F93E40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E0B155CE44B00F93E40 /* Foundation.framework */; };
 		EAA45E76155EE5AF00F93E40 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E75155EE5AF00F93E40 /* main.m */; };
 		EAA45E7E155EE63700F93E40 /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
@@ -108,8 +106,6 @@
 		EAA45E22155CE57600F93E40 /* MochaRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime.h; sourceTree = "<group>"; };
 		EAA45E23155CE57600F93E40 /* MochaRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochaRuntime.m; sourceTree = "<group>"; };
 		EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime_Private.h; sourceTree = "<group>"; };
-		EAA45E38155D09A700F93E40 /* MOObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOObject.h; sourceTree = "<group>"; };
-		EAA45E39155D09A700F93E40 /* MOObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOObject.m; sourceTree = "<group>"; };
 		EAA45E49155E5DB100F93E40 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		EAA45E4C155E5DB100F93E40 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		EAA45E4D155E5DB100F93E40 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
@@ -236,8 +232,6 @@
 			children = (
 				EAA45E92155EEB9400F93E40 /* MOBox.h */,
 				EAA45E93155EEB9400F93E40 /* MOBox.m */,
-				EAA45E38155D09A700F93E40 /* MOObject.h */,
-				EAA45E39155D09A700F93E40 /* MOObject.m */,
 				EAA45E86155EE97200F93E40 /* MOMethod.h */,
 				EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */,
 				EAA45E87155EE97200F93E40 /* MOMethod.m */,
@@ -313,7 +307,6 @@
 				EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */,
 				EAA45E24155CE57600F93E40 /* MochaRuntime.h in Headers */,
 				EAA45E27155CE66600F93E40 /* MochaRuntime_Private.h in Headers */,
-				EAA45E3A155D09A700F93E40 /* MOObject.h in Headers */,
 				02112323155D7BD000415471 /* MOUtilities.h in Headers */,
 				02112327155D973100415471 /* MOBridgeSupportController.h in Headers */,
 				0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */,
@@ -415,7 +408,6 @@
 			files = (
 				EAA45E15155CE44B00F93E40 /* Mocha.m in Sources */,
 				EAA45E25155CE57600F93E40 /* MochaRuntime.m in Sources */,
-				EAA45E3B155D09A700F93E40 /* MOObject.m in Sources */,
 				02112324155D7BD000415471 /* MOUtilities.m in Sources */,
 				02112328155D973100415471 /* MOBridgeSupportController.m in Sources */,
 				0211232D155D99F600415471 /* MOBridgeSupportSymbol.m in Sources */,
