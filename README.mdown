@@ -3,6 +3,13 @@
 
 Mocha is a runtime that bridges JavaScript to Objective-C.
 
+
+## Code Usage
+
+Mocha utilizes some code and ideas from both PyObjC (http://pyobjc.sourceforge.net/, MIT license) and JSCocoa (http://inexdo.com/JSCocoa, MIT license).
+Implementation files are marked appropriately when code it utilized in complete or near-complete duplicate from these awesome projects.
+
+
 ## License
 
 Copyright 2012 Logan Collins
