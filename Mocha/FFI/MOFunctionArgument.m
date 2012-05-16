@@ -934,15 +934,8 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     
 	NSString *structureName = [MOFunctionArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
     
-    MOStruct *structure = [[[MOStruct alloc] init] autorelease];
-    structure.name = structureName;
-    
-    JSValueRef jsValue = [runtime JSValueForObject:structure];
-    JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
-    
-	if (!*value) {
-        *value = jsObject;
-    }
+    NSMutableArray *memberNames = [NSMutableArray array];
+    NSMutableDictionary *memberValues = [NSMutableDictionary dictionary];
     
 	char *c0 = c;
     
@@ -1017,11 +1010,25 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 }
 			}
             
-			JSStringRef	propertyNameJS = JSStringCreateWithCFString((CFStringRef)propertyName);
-			JSObjectSetProperty(ctx, jsObject, propertyNameJS, valueJS, 0, NULL);
-			JSStringRelease(propertyNameJS);
+            id objValue = [runtime objectForJSValue:valueJS];
+            [memberNames addObject:propertyName];
+            [memberValues setObject:objValue forKey:propertyName];
 		}
 	}
+    
+    MOStruct *structure = [MOStruct structureWithName:structureName memberNames:memberNames];
+    for (NSString *key in memberNames) {
+        id value = [memberValues objectForKey:key];
+        [structure setObject:value forKey:key];
+    }
+    
+    JSValueRef jsValue = [runtime JSValueForObject:structure];
+    JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
+    
+	if (!*value) {
+        *value = jsObject;
+    }
+    
 	return c - c0 - 1;
 }
 

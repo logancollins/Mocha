@@ -11,22 +11,34 @@
 
 
 @implementation MOStruct {
-    NSMutableDictionary *_dictionary;
+    NSArray *_memberNames;
+    NSMutableDictionary *_memberValues;
 }
 
 @synthesize name=_name;
 
-- (id)init {
++ (MOStruct *)structureWithName:(NSString *)name memberNames:(NSArray *)memberNames {
+    return [[[self alloc] initWithName:name memberNames:memberNames] autorelease];
+}
+
+- (id)initWithName:(NSString *)name memberNames:(NSArray *)memberNames {
     self = [super init];
     if (self) {
-        _dictionary = [[NSMutableDictionary alloc] init];
+        _name = [name copy];
+        _memberNames = [memberNames copy];
+        _memberValues = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
 
+- (id)init {
+    return [self initWithName:nil memberNames:nil];
+}
+
 - (void)dealloc {
     [_name release];
-    [_dictionary release];
+    [_memberNames release];
+    [_memberValues release];
     [super dealloc];
 }
 
@@ -37,16 +49,15 @@
     }
     
     NSMutableString *items = [NSMutableString stringWithString:@"{\n"];
-    NSArray *keys = [_dictionary allKeys];
-    for (NSUInteger i=0; i<[keys count]; i++) {
-        NSString *key = [keys objectAtIndex:i];
+    for (NSUInteger i=0; i<[_memberNames count]; i++) {
+        NSString *key = [_memberNames objectAtIndex:i];
         
         [items appendString:indentString];
         [items appendString:@"    "];
         [items appendString:key];
         [items appendString:@" = "];
         
-        id value = [_dictionary objectForKey:key];
+        id value = [_memberValues objectForKey:key];
         if ([value isKindOfClass:[MOStruct class]]) {
             [items appendString:[value descriptionWithIndent:indent + 1]];
         }
@@ -54,7 +65,7 @@
             [items appendString:[value description]];
         }
         
-        if (i != [keys count] - 1) {
+        if (i != [_memberNames count] - 1) {
             [items appendString:@","];
         }
         
@@ -70,11 +81,17 @@
 }
 
 - (id)objectForKey:(NSString *)key {
-    return [_dictionary objectForKey:key];
+    if (![_memberNames containsObject:key]) {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, key] userInfo:nil];
+    }
+    return [_memberValues objectForKey:key];
 }
 
 - (void)setObject:(id)obj forKey:(NSString *)key {
-    [_dictionary setObject:obj forKey:key];
+    if (![_memberNames containsObject:key]) {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, key] userInfo:nil];
+    }
+    [_memberValues setObject:obj forKey:key];
 }
 
 - (id)objectForKeyedSubscript:(NSString *)key {

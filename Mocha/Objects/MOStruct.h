@@ -11,9 +11,15 @@
 
 @interface MOStruct : NSObject
 
-@property (copy) NSString *name;
++ (MOStruct *)structureWithName:(NSString *)name memberNames:(NSArray *)memberNames;
+- (id)initWithName:(NSString *)name memberNames:(NSArray *)memberNames;
+
+@property (copy, readonly) NSString *name;
+@property (copy, readonly) NSArray *memberNames;
 
 - (id)objectForKey:(NSString *)key;
 - (void)setObject:(id)obj forKey:(NSString *)key;
+
+- (void)setObject:(id)obj forKey:(NSString *)key allowUndefinedKeys:(BOOL)allowUndefinedKeys;
 
 @end
