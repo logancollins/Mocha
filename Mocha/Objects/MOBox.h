@@ -10,9 +10,26 @@
 #import <JavaScriptCore/JavaScriptCore.h>
 
 
+/*!
+ * @class MOBox
+ * @abstract A boxed ObjC object
+ */
 @interface MOBox : NSObject
 
+/*!
+ * @property representedObject
+ * @abstract The boxed ObjC object
+ * 
+ * @result An object
+ */
 @property (strong) id representedObject;
+
+/*!
+ * @property JSObject
+ * @abstract The JSObject representation of the box
+ * 
+ * @result A JSObjectRef value
+ */
 @property JSObjectRef JSObject;
 
 @end

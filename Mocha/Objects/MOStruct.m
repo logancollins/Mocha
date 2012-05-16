@@ -81,26 +81,26 @@
     return [self descriptionWithIndent:0];
 }
 
-- (id)objectForKey:(NSString *)key {
-    if (![_memberNames containsObject:key]) {
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, key] userInfo:nil];
+- (id)objectForMemberName:(NSString *)name {
+    if (![_memberNames containsObject:name]) {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, name] userInfo:nil];
     }
-    return [_memberValues objectForKey:key];
+    return [_memberValues objectForKey:name];
 }
 
-- (void)setObject:(id)obj forKey:(NSString *)key {
-    if (![_memberNames containsObject:key]) {
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, key] userInfo:nil];
+- (void)setObject:(id)obj forMemberName:(NSString *)name {
+    if (![_memberNames containsObject:name]) {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, name] userInfo:nil];
     }
-    [_memberValues setObject:obj forKey:key];
+    [_memberValues setObject:obj forKey:name];
 }
 
 - (id)objectForKeyedSubscript:(NSString *)key {
-    return [self objectForKey:key];
+    return [self objectForMemberName:key];
 }
 
 - (void)setObject:(id)obj forKeyedSubscript:(NSString *)key {
-    [self setObject:obj forKey:key];
+    [self setObject:obj forMemberName:key];
 }
 
 @end
