@@ -87,8 +87,8 @@
 		0211233D155DB8F800415471 /* MOBridgeSupportLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportLibrary.m; sourceTree = "<group>"; };
 		02112340155DB9A100415471 /* MOBridgeSupportParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBridgeSupportParser.h; sourceTree = "<group>"; };
 		02112341155DB9A100415471 /* MOBridgeSupportParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportParser.m; sourceTree = "<group>"; };
-		EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MOFunctionArgument.h; path = ../FFI/MOFunctionArgument.h; sourceTree = "<group>"; };
-		EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MOFunctionArgument.m; path = ../FFI/MOFunctionArgument.m; sourceTree = "<group>"; };
+		EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionArgument.h; sourceTree = "<group>"; };
+		EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionArgument.m; sourceTree = "<group>"; };
 		EA1A1231156160F200A1F1A4 /* libffi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffi.dylib; path = usr/lib/libffi.dylib; sourceTree = SDKROOT; };
 		EAA34F9C156304A800B62244 /* MOUndefined.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOUndefined.h; sourceTree = "<group>"; };
 		EAA34F9D156304A800B62244 /* MOUndefined.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOUndefined.m; sourceTree = "<group>"; };
