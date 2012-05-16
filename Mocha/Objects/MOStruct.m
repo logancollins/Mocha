@@ -16,6 +16,7 @@
 }
 
 @synthesize name=_name;
+@synthesize memberNames=_memberNames;
 
 + (MOStruct *)structureWithName:(NSString *)name memberNames:(NSArray *)memberNames {
     return [[[self alloc] initWithName:name memberNames:memberNames] autorelease];
