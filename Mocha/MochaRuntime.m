@@ -10,11 +10,11 @@
 #import "MochaRuntime_Private.h"
 
 #import "MOMethod_Private.h"
-#import "MOBridgeSupportObject.h"
 
 #import "MOUndefined.h"
 #import "MOBox.h"
 #import "MOUtilities.h"
+#import "MOFunctionArgument.h"
 
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
@@ -95,7 +95,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         MOBoxedObjectDefinition.deleteProperty     = MOBoxedObject_deleteProperty;
         MOBoxedObjectDefinition.getPropertyNames   = MOBoxedObject_getPropertyNames;
         MOBoxedObjectDefinition.callAsConstructor  = MOBoxedObject_callAsConstructor;
-        MOBoxedObjectDefinition.hasInstance      = MOBoxedObject_hasInstance;
+        MOBoxedObjectDefinition.hasInstance        = MOBoxedObject_hasInstance;
         MOBoxedObjectDefinition.convertToType      = MOBoxedObject_convertToType;
         MOBoxedObjectClass                         = JSClassCreate(&MOBoxedObjectDefinition);
         
@@ -104,6 +104,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         MOFunctionDefinition.className             = "MOFunction";
         MOFunctionDefinition.parentClass           = MOObjectClass;
         MOFunctionDefinition.callAsFunction        = MOFunction_callAsFunction;
+        MOFunctionDefinition.convertToType         = MOBoxedObject_convertToType;
         MOFunctionClass                            = JSClassCreate(&MOFunctionDefinition);
         
         
@@ -172,7 +173,18 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         
         [self setObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
         
+        // Load builtins
         [self installBuiltins];
+        
+        // Load base frameworks
+#if !TARGET_OS_IPHONE
+        [self loadFrameworkWithName:@"Foundation"];
+        [self loadFrameworkWithName:@"AppKit"];
+        [self loadFrameworkWithName:@"CoreFoundation"];
+        if (![self loadFrameworkWithName:@"CoreGraphics"]) {
+            [self loadFrameworkWithName:@"CoreGraphics" inDirectory:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
+        }
+#endif
     }
     return self;
 }
@@ -223,7 +235,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 	}
     
     if (JSValueIsNull(ctx, value)) {
-        return nil;
+        return [NSNull null];
     }
 	
 	if (JSValueIsString(ctx, value)) {
@@ -352,7 +364,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 	if ([object isKindOfClass:[MOBox class]]) {
         value = [object JSObject];
     }
-    else if ([object isKindOfClass:[NSString class]]) {
+    /*else if ([object isKindOfClass:[NSString class]]) {
 		JSStringRef string = JSStringCreateWithCFString((CFStringRef)object);
 		value = JSValueMakeString(_ctx, string);
 		JSStringRelease(string);
@@ -360,11 +372,11 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 	else if ([object isKindOfClass:[NSNumber class]]) {
 		double doubleValue = [object doubleValue];
 		value = JSValueMakeNumber(_ctx, doubleValue);
-	}
-	else if (object == nil || [object isKindOfClass:[NSNull class]]) {
+	}*/
+	else if ([object isKindOfClass:[NSNull class]]) {
 		value = JSValueMakeNull(_ctx);
 	}
-    else if (object == [MOUndefined undefined]) {
+    else if (object == nil || object == [MOUndefined undefined]) {
         value = JSValueMakeUndefined(_ctx);
     }
 	
@@ -397,7 +409,8 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     box.representedObject = object;
     JSObjectRef jsObject = NULL;
     
-    if ([object isKindOfClass:[MOMethod class]]) {
+    if ([object isKindOfClass:[MOMethod class]]
+        || [object isKindOfClass:[MOBridgeSupportFunction class]]) {
         jsObject = JSObjectMake(_ctx, MOFunctionClass, box);
     }
     else {
@@ -785,14 +798,14 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         return NULL;
     }
     
-    Mocha *mocha = [Mocha runtimeWithContext:ctx];
+    Mocha *runtime = [Mocha runtimeWithContext:ctx];
     
     //
     // Exported objects
     //
-    id exportedObj = [mocha valueForKey:propertyName];
+    id exportedObj = [runtime valueForKey:propertyName];
     if (exportedObj != nil) {
-        JSValueRef ret = [mocha JSValueForObject:exportedObj];
+        JSValueRef ret = [runtime JSValueForObject:exportedObj];
         return ret;
     }
     
@@ -801,7 +814,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     //
     Class objCClass = NSClassFromString(propertyName);
     if (objCClass != Nil && ![propertyName isEqualToString:@"Object"]) {
-        JSValueRef ret = [mocha JSValueForObject:objCClass];
+        JSValueRef ret = [runtime JSValueForObject:objCClass];
         return ret;
     }
     
@@ -812,14 +825,11 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     if (symbol != nil) {
         // Functions
         if ([symbol isKindOfClass:[MOBridgeSupportFunction class]]) {
-            MOBridgeSupportObject *private = [MOBridgeSupportObject bridgeSupportObjectWithSymbol:symbol];
-            JSObjectRef o = JSObjectMake(ctx, MOFunctionClass, private);
-            return o;
+            return [runtime JSValueForObject:symbol];
         }
         
         // Structs
         else if ([symbol isKindOfClass:[MOBridgeSupportStruct class]]) {
-            //MOBridgeSupportObject *private = [MOBridgeSupportObject bridgeSupportObjectWithSymbol:symbol];
             //JSObjectRef o = JSObjectMake(ctx, MOFunctionClass, private);
             //return o;
             return NULL;
@@ -845,19 +855,27 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
                 return NULL;
             }
             
-            // ObjC objects, like NSApp : pointer to NSApplication.sharedApplication
-            if ([type isEqualToString:@"@"]) {
-                id o = *(id*)symbol;
-                return [mocha JSValueForObject:o];
+            char typeEncodingChar = [type UTF8String][0];
+            MOFunctionArgument *argument = [[[MOFunctionArgument alloc] init] autorelease];
+            
+            if (typeEncodingChar == _C_STRUCT_B) {
+                [argument setStructureTypeEncoding:type withCustomStorage:symbol];
+            }
+            else if (typeEncodingChar == _C_PTR) {
+                if ([type isEqualToString:@"^{__CFString=}"]) {
+                    [argument setTypeEncoding:_C_ID withCustomStorage:symbol];
+                }
+                else {
+                    [argument setPointerTypeEncoding:type withCustomStorage:symbol];
+                }
+            }
+            else {
+                [argument setTypeEncoding:typeEncodingChar withCustomStorage:symbol];
             }
             
-            // Return symbol as a Javascript string
-            NSString *str = *(NSString **)symbol;
-            JSStringRef jsName = JSStringCreateWithUTF8CString([str UTF8String]);
-            JSValueRef jsString = JSValueMakeString(ctx, jsName);
-            JSStringRelease(jsName);
+            JSValueRef valueJS = [argument getValueAsJSValueInContext:ctx];
             
-            return jsString;
+            return valueJS;
         }
         
         // Enums
@@ -1025,11 +1043,77 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
 	return nil;
 }
 
-static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef value, JSValueRef *exception) {
+static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef valueJS, JSValueRef *exception) {
+	NSString *propertyName = [(NSString *)JSStringCopyCFString(NULL, propertyNameJS) autorelease];
+	
+	Mocha *runtime = [Mocha runtimeWithContext:ctx];
+	
+	id private = JSObjectGetPrivate(objectJS);
+	id object = [private representedObject];
+	
+    // Perform the lookup
+    @try {
+        // Indexed subscript
+        if ([object respondsToSelector:@selector(setObject:forIndexedSubscript:)]) {
+            NSScanner *scanner = [NSScanner scannerWithString:propertyName];
+            NSInteger integerValue;
+            if ([scanner scanInteger:&integerValue]) {
+                id value = [runtime objectForJSValue:valueJS];
+                [object setObject:value forIndexedSubscript:integerValue];
+                return YES;
+            }
+        }
+        
+        // Keyed subscript
+        if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+            id value = [runtime objectForJSValue:valueJS];
+            [object setObject:value forKeyedSubscript:propertyName];
+            return YES;
+        }
+    }
+    @catch (NSException *e) {
+        // Catch ObjC exceptions and propogate them up as JS exceptions
+        if (exception != NULL) {
+            *exception = [runtime JSValueForObject:e];
+        }
+    }
+	
 	return NO;
 }
 
-static bool MOBoxedObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyNameJS, JSValueRef *exception) {
+static bool MOBoxedObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
+	NSString *propertyName = [(NSString *)JSStringCopyCFString(NULL, propertyNameJS) autorelease];
+	
+	Mocha *runtime = [Mocha runtimeWithContext:ctx];
+	
+	id private = JSObjectGetPrivate(objectJS);
+	id object = [private representedObject];
+	
+    // Perform the lookup
+    @try {
+        // Indexed subscript
+        if ([object respondsToSelector:@selector(setObject:forIndexedSubscript:)]) {
+            NSScanner *scanner = [NSScanner scannerWithString:propertyName];
+            NSInteger integerValue;
+            if ([scanner scanInteger:&integerValue]) {
+                [object setObject:nil forIndexedSubscript:integerValue];
+                return YES;
+            }
+        }
+        
+        // Keyed subscript
+        if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+            [object setObject:nil forKeyedSubscript:propertyName];
+            return YES;
+        }
+    }
+    @catch (NSException *e) {
+        // Catch ObjC exceptions and propogate them up as JS exceptions
+        if (exception != NULL) {
+            *exception = [runtime JSValueForObject:e];
+        }
+    }
+	
 	return NO;
 }
 
@@ -1056,29 +1140,7 @@ static JSObjectRef MOBoxedObject_callAsConstructor(JSContextRef ctx, JSObjectRef
 }
 
 static JSValueRef MOBoxedObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef *exception) {
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
-    if (type == kJSTypeString) {
-        MOBox *privateObject = JSObjectGetPrivate(object);
-        id representedObject = [privateObject representedObject];
-        JSValueRef value = NULL;
-        
-        // Use the object's description for string conversions
-        @try {
-            NSString *description = [representedObject description];
-            JSStringRef string = JSStringCreateWithCFString((CFStringRef)description);
-            value = JSValueMakeString(ctx, string);
-            JSStringRelease(string);
-        }
-        @catch (NSException *e) {
-            // Catch ObjC exceptions and propogate them up as JS exceptions
-            if (exception != nil) {
-                *exception = [runtime JSValueForObject:e];
-            }
-        }
-        
-        return value;
-    }
-	return NULL;
+	return MOJSValueToType(ctx, object, type, exception);
 }
 
 static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception) {
@@ -1125,18 +1187,7 @@ static JSValueRef MOFunction_callAsFunction(JSContextRef ctx, JSObjectRef functi
     
     // Perform the invocation
     @try {
-        if ([function isKindOfClass:[MOMethod class]]) {
-            //id target = [function target];
-            //SEL selector = [function selector];
-            //value = MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
-            value = MOFunctionInvoke(function, ctx, argumentCount, arguments, exception);
-        }
-        else if ([function isKindOfClass:[MOBridgeSupportObject class]]) {
-            id symbol = [function symbol];
-            if ([symbol isKindOfClass:[MOBridgeSupportFunction class]]) {
-                value = MOFunctionInvoke(symbol, ctx, argumentCount, arguments, exception);
-            }
-        }
+        value = MOFunctionInvoke(function, ctx, argumentCount, arguments, exception);
     }
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions

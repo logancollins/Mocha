@@ -19,6 +19,7 @@
 - (BOOL)isBridgeSupportLoadedForURL:(NSURL *)aURL;
 - (BOOL)loadBridgeSupportAtURL:(NSURL *)aURL error:(NSError **)outError;
 
-- (MOBridgeSupportSymbol *)performQueryForSymbolName:(NSString *)name;
+- (id)performQueryForSymbolName:(NSString *)name;
+- (id)performQueryForSymbolName:(NSString *)name ofType:(Class)klass;
 
 @end

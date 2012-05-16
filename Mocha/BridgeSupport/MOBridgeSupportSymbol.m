@@ -223,6 +223,16 @@
 	}
 }
 
+- (MOBridgeSupportMethod *)methodWithSelector:(SEL)selector {
+    NSUInteger index = [_methods indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return ([obj selector] == selector);
+    }];
+    if (index != NSNotFound) {
+        return [_methods objectAtIndex:index];
+    }
+    return nil;
+}
+
 @end
 
 
@@ -265,6 +275,16 @@
 	if ([_methods containsObject:method]) {
 		[_methods removeObject:method];
 	}
+}
+
+- (MOBridgeSupportMethod *)methodWithSelector:(SEL)selector {
+    NSUInteger index = [_methods indexOfObjectPassingTest:^BOOL(id obj, NSUInteger idx, BOOL *stop) {
+        return ([obj selector] == selector);
+    }];
+    if (index != NSNotFound) {
+        return [_methods objectAtIndex:index];
+    }
+    return nil;
 }
 
 @end

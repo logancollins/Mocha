@@ -22,4 +22,8 @@
     return [method autorelease];
 }
 
+- (NSString *)description {
+    return [NSString stringWithFormat:@"<%@: %p : target=%@, selector=%@>", [self class], self, [self target], NSStringFromSelector([self selector])];
+}
+
 @end

@@ -64,12 +64,12 @@
 @interface NSObject (MochaObjectSubscripting)
 
 // Indexed subscripts
-- (id)objectForIndexedSubscript:(NSUInteger)index;
-- (void)setObject:(id)object forIndexedSubscript:(NSUInteger)index;
+- (id)objectForIndexedSubscript:(NSUInteger)idx;
+- (void)setObject:(id)obj forIndexedSubscript:(NSUInteger)idx;
 
 // Keyed subscripts
 - (id)objectForKeyedSubscript:(NSString *)key;
-- (void)setObject:(id)object forKeyedSubscript:(NSString *)key;
+- (void)setObject:(id)obj forKeyedSubscript:(NSString *)key;
 
 @end
 

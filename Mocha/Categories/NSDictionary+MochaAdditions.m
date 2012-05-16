@@ -21,7 +21,12 @@
 @implementation NSMutableDictionary (MochaAdditions)
 
 - (void)mo_setObject:(id)obj forKeyedSubscript:(id <NSCopying>)key {
-    [self setObject:obj forKey:key];
+    if (obj != nil) {
+        [self setObject:obj forKey:key];
+    }
+    else {
+        [self removeObjectForKey:key];
+    }
 }
 
 @end

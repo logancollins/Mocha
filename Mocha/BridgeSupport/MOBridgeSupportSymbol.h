@@ -150,6 +150,8 @@
 - (void)addMethod:(MOBridgeSupportMethod *)method;
 - (void)removeMethod:(MOBridgeSupportMethod *)method;
 
+- (MOBridgeSupportMethod *)methodWithSelector:(SEL)selector;
+
 @end
 
 
@@ -162,6 +164,8 @@
 @property (copy) NSArray *methods;
 - (void)addMethod:(MOBridgeSupportMethod *)method;
 - (void)removeMethod:(MOBridgeSupportMethod *)method;
+
+- (MOBridgeSupportMethod *)methodWithSelector:(SEL)selector;
 
 @end
 

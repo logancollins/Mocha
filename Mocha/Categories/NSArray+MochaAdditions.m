@@ -21,11 +21,14 @@
 @implementation NSMutableArray (MochaAdditions)
 
 - (void)mo_setObject:(id)obj forIndexedSubscript:(NSUInteger)idx {
-    if ([self count] > idx) {
+    if ([self count] > idx && obj != nil) {
         [self replaceObjectAtIndex:idx withObject:obj];
     }
-    else if ([self count] == idx) {
+    else if ([self count] == idx && obj != nil) {
         [self addObject:obj];
+    }
+    else if (obj == nil) {
+        [self removeObjectAtIndex:idx];
     }
 }
 

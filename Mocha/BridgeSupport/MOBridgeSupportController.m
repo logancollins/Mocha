@@ -87,8 +87,16 @@
 #pragma mark -
 #pragma mark Queries
 
-- (MOBridgeSupportSymbol *)performQueryForSymbolName:(NSString *)name {
+- (id)performQueryForSymbolName:(NSString *)name {
 	return [_symbols objectForKey:name];
+}
+
+- (id)performQueryForSymbolName:(NSString *)name ofType:(Class)klass {
+    id symbol = [self performQueryForSymbolName:name];
+    if ([symbol isKindOfClass:klass]) {
+        return symbol;
+    }
+    return nil;
 }
 
 @end

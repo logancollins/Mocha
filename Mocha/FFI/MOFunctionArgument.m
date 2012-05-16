@@ -11,6 +11,7 @@
 // 
 
 #import "MochaRuntime_Private.h"
+#import "MOStruct.h"
 #import "MOFunctionArgument.h"
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
@@ -100,10 +101,19 @@
 }
 
 - (void)setPointerTypeEncoding:(NSString *)pointerTypeEncoding {
+    [self setPointerTypeEncoding:pointerTypeEncoding withCustomStorage:NULL];
+}
+
+- (void)setPointerTypeEncoding:(NSString *)pointerTypeEncoding withCustomStorage:(void *)storagePtr {
     _typeEncoding = _C_PTR;
     
     [_pointerTypeEncoding release];
     _pointerTypeEncoding = [pointerTypeEncoding copy];
+    
+	if (storagePtr != NULL) {
+		_ownsStorage = NO;
+		_storage = storagePtr;
+	}
 }
 
 - (NSString *)structureTypeEncoding {
@@ -226,7 +236,7 @@
 	
 	long address = (long)*ptr;
 	if ((address % alignOnSize) != 0) {
-		address = (address+alignOnSize) & ~(alignOnSize-1);
+		address = (address + alignOnSize) & ~(alignOnSize - 1);
     }
     
 	*ptr = (void*)address;
@@ -270,9 +280,14 @@
 }
 
 - (void)setValueAsJSValue:(JSValueRef)value context:(JSContextRef)ctx {
-	NSString *encoding = (_structureTypeEncoding ? _structureTypeEncoding : _pointerTypeEncoding);
-    if (![MOFunctionArgument fromJSValue:value inContext:ctx typeEncoding:_typeEncoding fullTypeEncoding:encoding storage:_storage]) {
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Setting value from JSValue failed: %@, %@", self, MOJSValueToString(value, ctx)] userInfo:nil];
+    if (value != NULL) {
+        NSString *encoding = (_structureTypeEncoding ? _structureTypeEncoding : _pointerTypeEncoding);
+        if (![MOFunctionArgument fromJSValue:value inContext:ctx typeEncoding:_typeEncoding fullTypeEncoding:encoding storage:_storage]) {
+            @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Setting value from JSValue failed: %@, %@", self, MOJSValueToString(ctx, value, NULL)] userInfo:nil];
+        }
+    }
+    else {
+        *(id *)_storage = nil;
     }
 }
 
@@ -667,7 +682,8 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 		case _C_CLASS:
         case _C_PTR: {
 			id object = [runtime objectForJSValue:value];
-            ptr = &object;
+            *(id *)ptr = object;
+            return YES;
 		}
         
 		case _C_CHR:
@@ -718,18 +734,18 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
             
 			JSObjectRef object = JSValueToObject(ctx, value, NULL);
 			void *p = ptr;
-			id type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
+			NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
 			
-            NSInteger numParsed = [MOFunctionArgument structureFromJSObjectRef:object inContext:ctx inParentJSValueRef:NULL cString:(char*)[type UTF8String] storage:&p];
+            NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char*)[type UTF8String] storage:&p];
 			return numParsed;
         }
         case _C_SEL: {
-            NSString *str = MOJSValueToString(value, ctx);
+            NSString *str = MOJSValueToString(ctx, value, NULL);
             *(SEL*)ptr = NSSelectorFromString(str);
 			return YES;
         }
         case _C_CHARPTR: {
-			NSString *str = MOJSValueToString(value, ctx);
+            NSString *str = MOJSValueToString(ctx, value, NULL);
 			*(char**)ptr = (char*)[str UTF8String];
 			return YES;
         }
@@ -787,7 +803,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 				case _C_FLT:        number = *(float*)ptr; break;
 				case _C_DBL:        number = *(double*)ptr; break;
 			}
-			*value = JSValueMakeNumber(ctx, number);
+            *value = JSValueMakeNumber(ctx, number);
 			return YES;
 		}
         case _C_STRUCT_B: {
@@ -798,11 +814,8 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 return NO;
             }
             
-			//JSObjectRef jsObject = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
-			//JSCocoaPrivateObject* private = JSObjectGetPrivate(jsObject);
-			//private.type = @"struct";
-			//NSInteger numParsed =	[JSCocoaFFIArgument structureToJSValueRef:value inContext:ctx fromCString:(char*)[type UTF8String] fromStorage:&p];
-			//return numParsed;
+			NSInteger numParsed = [MOFunctionArgument structureToJSValue:value inContext:ctx cString:(char *)[type UTF8String] storage:&p];
+			return numParsed;
 		}
         case _C_SEL: {
 			SEL sel = *(SEL*)ptr;
@@ -846,7 +859,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     return NO;
 }
 
-+ (NSInteger)structureFromJSObjectRef:(JSObjectRef)object inContext:(JSContextRef)ctx inParentJSValueRef:(JSValueRef)parentValue cString:(char *)c storage:(void **)ptr {
++ (NSInteger)structureFromJSObject:(JSObjectRef)object inContext:(JSContextRef)ctx inParentJSValueRef:(JSValueRef)parentValue cString:(char *)c storage:(void **)ptr {
 	id structureName = [MOFunctionArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
 	char *c0 = c;
     
@@ -892,7 +905,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 			if (encoding == '{') {
 				if (JSValueIsObject(ctx, valueJS)) {
 					JSObjectRef objectProperty = JSValueToObject(ctx, valueJS, NULL);
-					NSInteger numParsed = [self structureFromJSObjectRef:objectProperty inContext:ctx inParentJSValueRef:NULL cString:c storage:ptr];
+					NSInteger numParsed = [self structureFromJSObject:objectProperty inContext:ctx inParentJSValueRef:NULL cString:c storage:ptr];
 					c += numParsed;
 				}
 				else {
@@ -921,14 +934,14 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     
 	NSString *structureName = [MOFunctionArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
     
-    id object = nil;
+    MOStruct *structure = [[[MOStruct alloc] init] autorelease];
+    structure.name = structureName;
     
-    JSObjectRef jsObject = NULL;
-    JSValueRef jsValue = [runtime JSValueForObject:object];
-    JSValueToObject(ctx, jsValue, NULL);
+    JSValueRef jsValue = [runtime JSValueForObject:structure];
+    JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
     
 	if (!*value) {
-        *value = jsValue;
+        *value = jsObject;
     }
     
 	char *c0 = c;
@@ -961,7 +974,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 c2++;
             }
             
-			NSString *propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding] autorelease];
+			NSString *propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2 - c - 1) encoding:NSUTF8StringEncoding] autorelease];
 			c = c2;
             
 			// Skip '"'
@@ -970,7 +983,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 			char encoding = *c;
 			
 			JSValueRef valueJS = NULL;
-			if (encoding == '{') {
+			if (encoding == _C_STRUCT_B) {
 				NSInteger numParsed = [self structureToJSValue:&valueJS inContext:ctx cString:c storage:ptr initialValues:initialValues initialValueCount:initialValueCount convertedValueCount:convertedValueCount];
 				c += numParsed;
 			}

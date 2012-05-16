@@ -13,7 +13,9 @@
 #import "MOFunctionArgument.h"
 #import "MOMethod.h"
 #import "MOFunctionArgument.h"
-#import "MOBridgeSupportObject.h"
+#import "MOUndefined.h"
+
+#import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
 
 #import "MOBox.h"
@@ -25,13 +27,52 @@
 
 
 #pragma mark -
-#pragma mark Descriptions
+#pragma mark Values
 
-NSString * MOJSValueToString(JSValueRef value, JSContextRef ctx) {
+JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, JSValueRef *exception) {
+    MOBox *box = JSObjectGetPrivate(objectJS);
+    if (box != nil) {
+        // Boxed object
+        id object = [box representedObject];
+        
+        if ([object isKindOfClass:[NSString class]]) {
+            JSStringRef string = JSStringCreateWithCFString((CFStringRef)object);
+            JSValueRef value = JSValueMakeString(ctx, string);
+            JSStringRelease(string);
+            return value;
+        }
+        else if ([object isKindOfClass:[NSNumber class]] && type == kJSTypeBoolean) {
+            BOOL boolValue = [object boolValue];
+            return JSValueMakeBoolean(ctx, boolValue);
+        }
+        else if ([object isKindOfClass:[NSNumber class]]) {
+            double doubleValue = [object doubleValue];
+            return JSValueMakeNumber(ctx, doubleValue);
+        }
+        else if ([object isKindOfClass:[NSNull class]] && type == kJSTypeNull) {
+            return JSValueMakeNull(ctx);
+        }
+        else if ([object isKindOfClass:[MOUndefined class]] && type == kJSTypeNull) {
+            return JSValueMakeUndefined(ctx);
+        }
+        else if (type == kJSTypeString) {
+            // Convert the object's description to a string
+            NSString *description = [object description];
+            JSStringRef string = JSStringCreateWithCFString((CFStringRef)description);
+            JSValueRef value = JSValueMakeString(ctx, string);
+            JSStringRelease(string);
+            return value;
+        }
+    }
+    
+    return NULL;
+}
+
+NSString * MOJSValueToString(JSContextRef ctx, JSValueRef value, JSValueRef *exception) {
 	if (value == NULL || JSValueIsNull(ctx, value)) {
         return nil;
     }
-	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, NULL);
+	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, exception);
 	NSString *resultString = [(NSString *)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS) autorelease];
 	JSStringRelease(resultStringJS);
 	return resultString;
@@ -262,9 +303,10 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         objCCall = YES;
         target = [function target];
         selector = [function selector];
+        Class klass = [target class];
         
         Method method = NULL;
-        BOOL classMethod = (target == [target class]);
+        BOOL classMethod = (target == klass);
         
         // Determine the method type
         if (classMethod) {
@@ -273,6 +315,8 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         else {
             method = class_getInstanceMethod([target class], selector);
         }
+        
+        variadic = MOSelectorIsVariadic(klass, selector);
         
         if (method == NULL) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to locate method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
@@ -298,6 +342,24 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
 		// Get call address
 		callAddress = MOInvocationGetObjCCallAddressForArguments(argumentEncodings);
+        
+        if (variadic) {
+            if (argumentCount > 0 && !JSValueIsNull(ctx, arguments[argumentCount - 1])) {
+                // add an argument for NULL
+                argumentCount++;
+            }
+        }
+        
+        if ((variadic && (callAddressArgumentCount > argumentCount))
+            || (!variadic && (callAddressArgumentCount != argumentCount)))
+        {
+            NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %d arguments", NSStringFromSelector(selector), callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
+            if (exception != NULL) {
+                *exception = [runtime JSValueForObject:e];
+            }
+            return NULL;
+        }
     }
     else if ([function isKindOfClass:[MOBridgeSupportFunction class]]) {
         // C function
@@ -317,22 +379,63 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
         variadic = [function isVariadic];
         
-        NSUInteger functionArgCount = [[function arguments] count];
-        if ((variadic && (functionArgCount > argumentCount))
-            || (!variadic && (functionArgCount != argumentCount)))
-        {
-            if (functionArgCount > argumentCount) {
-                NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %d arguments", functionName, functionArgCount, (functionArgCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
-                if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e];
-                }
-                return NULL;
+        NSMutableArray *args = [NSMutableArray array];
+        
+        // Build return type
+        MOBridgeSupportArgument *returnValue = [function returnValue];
+        MOFunctionArgument *returnArg = nil;
+        if (returnValue != nil) {
+            NSString *returnTypeEncoding = nil;
+#if __LP64__
+            returnTypeEncoding = [returnValue type64];
+            if (returnTypeEncoding == nil) {
+                returnTypeEncoding = [returnValue type];
             }
+#else
+            returnTypeEncoding = [returnValue type];
+#endif
+            returnArg = MOFunctionArgumentForTypeEncoding(returnTypeEncoding);
+        }
+        else {
+            // void return
+            returnArg = [[[MOFunctionArgument alloc] init] autorelease];
+            [returnArg setTypeEncoding:_C_VOID];
+        }
+        [returnArg setReturnValue:YES];
+        [args addObject:returnArg];
+        
+        // Build arguments
+        for (MOBridgeSupportArgument *argument in [function arguments]) {
+            NSString *typeEncoding = nil;
+#if __LP64__
+            typeEncoding = [argument type64];
+            if (typeEncoding == nil) {
+                typeEncoding = [argument type];
+            }
+#else
+            typeEncoding = [argument type];
+#endif
+            
+            MOFunctionArgument *arg = MOFunctionArgumentForTypeEncoding(typeEncoding);
+            [args addObject:arg];
         }
         
+        argumentEncodings = args;
+        
 		// Function arguments are all arguments minus return value
-		callAddressArgumentCount = [argumentEncodings count] - 1;
+		callAddressArgumentCount = [args count] - 1;
+        
+        // Raise if the argument counts don't match
+        if ((variadic && (callAddressArgumentCount > argumentCount))
+            || (!variadic && (callAddressArgumentCount != argumentCount)))
+        {
+            NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %d arguments", functionName, callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
+            if (exception != NULL) {
+                *exception = [runtime JSValueForObject:e];
+            }
+            return NULL;
+        }
     }
     
     
@@ -359,16 +462,28 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         }
         
         for (NSUInteger i=0; i<argumentCount; i++, j++) {
-            JSValueRef jsValue = arguments[i];
+            JSValueRef jsValue = NULL;
             
-            MOFunctionArgument *arg = [argumentEncodings objectAtIndex:i];
+            MOFunctionArgument *arg = nil;
+            if (variadic && i >= callAddressArgumentCount) {
+				arg = [[[MOFunctionArgument alloc] init] autorelease];
+				[arg setTypeEncoding:_C_ID];
+			}
+            else {
+                arg = [argumentEncodings objectAtIndex:j+1];
+            }
+                
+            if (objCCall && variadic && i == argumentCount - 1) {
+                // The last variadic argument in ObjC calls is nil (the sentinel value)
+                jsValue = NULL;
+            }
+            else {
+                jsValue = arguments[i];
+            }
             [arg setValueAsJSValue:jsValue context:ctx];
             
-            ffi_type *argType = [arg ffiType];
-            void *storage = [arg storage];
-            
-            args[i] = argType;
-            values[i] = storage;
+            args[j] = [arg ffiType];
+            values[j] = [arg storage];
         }
     }
 	
@@ -433,6 +548,50 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     }
     
     return value;
+}
+
+BOOL MOSelectorIsVariadic(Class klass, SEL selector) {
+    NSString *className = [NSString stringWithUTF8String:class_getName(klass)];
+    
+    while (klass != Nil) {
+        MOBridgeSupportClass *classSymbol = [[MOBridgeSupportController sharedController] performQueryForSymbolName:className ofType:[MOBridgeSupportClass class]];
+        if (classSymbol == nil) {
+            klass = [klass superclass];
+            continue;
+        }
+        
+        MOBridgeSupportMethod *methodSymbol = [classSymbol methodWithSelector:selector];
+        if (methodSymbol != nil) {
+            return [methodSymbol isVariadic];
+        }
+        
+        klass = [klass superclass];
+    }
+    
+    return NO;
+}
+
+MOFunctionArgument * MOFunctionArgumentForTypeEncoding(NSString *typeEncoding) {
+    MOFunctionArgument *argument = [[[MOFunctionArgument alloc] init] autorelease];
+    
+    char typeEncodingChar = [typeEncoding UTF8String][0];
+    
+    if (typeEncodingChar == _C_STRUCT_B) {
+        [argument setStructureTypeEncoding:typeEncoding];
+    }
+    else if (typeEncodingChar == _C_PTR) {
+        if ([typeEncoding isEqualToString:@"^{__CFString=}"]) {
+            [argument setTypeEncoding:_C_ID];
+        }
+        else {
+            [argument setPointerTypeEncoding:typeEncoding];
+        }
+    }
+    else {
+        [argument setTypeEncoding:typeEncodingChar];
+    }
+    
+    return argument;
 }
 
 NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
