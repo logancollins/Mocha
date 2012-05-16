@@ -38,6 +38,10 @@ static MOUndefined *sharedInstance = nil;
     // no-op
 }
 
+- (id)autorelease {
+    return self;
+}
+
 - (NSUInteger)retainCount {
     return NSUIntegerMax;
 }

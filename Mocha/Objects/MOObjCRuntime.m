@@ -36,12 +36,16 @@ static MOObjCRuntime * sharedRuntime = nil;
     return self;
 }
 
-- (NSUInteger)retainCount {
-    return NSUIntegerMax;
-}
-
 - (oneway void)release {
     // no-op
+}
+
+- (id)autorelease {
+    return self;
+}
+
+- (NSUInteger)retainCount {
+    return NSUIntegerMax;
 }
 
 - (id)init {

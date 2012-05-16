@@ -832,30 +832,34 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
             return [runtime JSValueForObject:symbol];
         }
         
-        // Structs
-        else if ([symbol isKindOfClass:[MOBridgeSupportStruct class]]) {
-            //JSObjectRef o = JSObjectMake(ctx, MOFunctionClass, private);
-            //return o;
-            return NULL;
-        }
-        
         // Constants
         else if ([symbol isKindOfClass:[MOBridgeSupportConstant class]]) {
 			NSString *type = nil;
-			if ([(MOBridgeSupportConstant *)symbol type]) {
-				type = [(MOBridgeSupportConstant *)symbol type];
-			}
-			else if ([(MOBridgeSupportConstant *)symbol type64]) {
-				type = [(MOBridgeSupportConstant *)symbol type64];
-			}
-			else {
-				NSLog(@"ERROR: No type for constant: %@", symbol.name);
+#if __LP64__
+            type = [(MOBridgeSupportConstant *)symbol type64];
+            if (type == nil) {
+                type = [(MOBridgeSupportConstant *)symbol type];
+            }
+#else
+            type = [(MOBridgeSupportConstant *)symbol type];
+#endif
+            
+            // Raise if there is no type
+			if (type == nil) {
+				NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No type defined for symbol: %@", symbol] userInfo:nil];
+                if (exception != NULL) {
+                    *exception = [runtime JSValueForObject:e];
+                }
+                return NULL;
 			}
             
             // Grab symbol
             void *symbol = dlsym(RTLD_DEFAULT, [propertyName UTF8String]);
             if (!symbol) {
-                NSLog(@"(Mocha_getPropertyCallback) symbol %@ not found", propertyName);
+                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Symbol not found: %@", symbol] userInfo:nil];
+                if (exception != NULL) {
+                    *exception = [runtime JSValueForObject:e];
+                }
                 return NULL;
             }
             
@@ -889,15 +893,32 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
 			
             double doubleValue = 0;
 			
+#if __LP64__
 			if (value != nil) {
 				doubleValue = [value doubleValue];
 			}
 			else if (value64 != nil) {
 				doubleValue = [value doubleValue];
 			}
-			else {
-				NSLog(@"ERROR: No value set for enum: %@", symbol.name);
+            else {
+                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", symbol] userInfo:nil];
+                if (exception != NULL) {
+                    *exception = [runtime JSValueForObject:e];
+                }
+                return NULL;
+            }
+#else
+			if (value != nil) {
+				doubleValue = [value doubleValue];
 			}
+            else {
+                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", symbol] userInfo:nil];
+                if (exception != NULL) {
+                    *exception = [runtime JSValueForObject:e];
+                }
+                return NULL;
+            }
+#endif
             
             return JSValueMakeNumber(ctx, doubleValue);
         }
