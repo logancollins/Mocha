@@ -30,14 +30,6 @@ static MOUndefined *sharedInstance = nil;
     }
 }
 
-- (id)init {
-    self = [super init];
-    if (self) {
-        
-    }
-    return self;
-}
-
 - (id)retain {
     return self;
 }

@@ -9,12 +9,13 @@
 #import "MochaRuntime.h"
 #import "MochaRuntime_Private.h"
 
-#import "MOMethod_Private.h"
-
-#import "MOUndefined.h"
 #import "MOBox.h"
+#import "MOUndefined.h"
+#import "MOMethod_Private.h"
 #import "MOUtilities.h"
 #import "MOFunctionArgument.h"
+
+#import "MOObjCRuntime.h"
 
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
@@ -755,6 +756,8 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 - (void)installBuiltins {
     MOMethod *loadFramework = [MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)];
     [self setValue:loadFramework forKey:@"loadFramework"];
+    
+    [self setValue:[MOObjCRuntime sharedRuntime] forKey:@"objc"];
 }
 
 - (void)cleanUp {
