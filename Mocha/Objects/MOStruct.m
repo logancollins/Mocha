@@ -62,7 +62,7 @@
     }
     [items appendString:indentString];
     [items appendString:@"}"];
-    return [NSString stringWithFormat:@"<%@: %p : %@%@>", [self class], self, self.name, items];
+    return [NSString stringWithFormat:@"%@ %@", self.name, items];
 }
 
 - (NSString *)description {
