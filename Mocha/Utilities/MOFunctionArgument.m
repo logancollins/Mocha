@@ -1017,9 +1017,9 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 	}
     
     MOStruct *structure = [MOStruct structureWithName:structureName memberNames:memberNames];
-    for (NSString *key in memberNames) {
-        id value = [memberValues objectForKey:key];
-        [structure setObject:value forKey:key];
+    for (NSString *name in memberNames) {
+        id value = [memberValues objectForKey:name];
+        [structure setObject:value forMemberName:name];
     }
     
     JSValueRef jsValue = [runtime JSValueForObject:structure];
