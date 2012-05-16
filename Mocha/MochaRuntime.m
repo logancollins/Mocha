@@ -171,6 +171,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         _ctx = ctx;
         _exportedObjects = [[NSMutableDictionary alloc] init];
         
+        // Add the runtime as a property of the context
         [self setObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
         
         // Load builtins
