@@ -781,7 +781,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 
 @implementation NSObject (MochaScripting)
 
-+ (BOOL)isSelectorExcludedFromMochaScript:(SEL)aSelector {
++ (BOOL)isSelectorExcludedFromMochaScript:(SEL)selector {
     return NO;
 }
 
