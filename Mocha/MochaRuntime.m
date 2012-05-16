@@ -967,7 +967,7 @@ static void MOObject_finalize(JSObjectRef object) {
 static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS) {
 	NSString *propertyName = [(NSString *)JSStringCopyCFString(NULL, propertyNameJS) autorelease];
 	
-	Mocha *runtime = [Mocha runtimeWithContext:ctx];
+	//Mocha *runtime = [Mocha runtimeWithContext:ctx];
     
 	id private = JSObjectGetPrivate(objectJS);
 	id object = [private representedObject];
