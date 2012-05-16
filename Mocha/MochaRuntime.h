@@ -11,7 +11,6 @@
 #import <Mocha/MochaDefines.h>
 
 
-@class MOException;
 @protocol MochaDelegate;
 
 
