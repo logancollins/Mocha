@@ -24,6 +24,8 @@
 @property (readonly) JSGlobalContextRef context;
 @property (assign) id <MochaDelegate> delegate;
 
+@property BOOL autocallObjCProperties;
+
 // Evaluation
 - (id)evalString:(NSString *)string;
 

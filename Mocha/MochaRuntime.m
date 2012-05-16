@@ -69,6 +69,8 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 
 @synthesize delegate=_delegate;
 
+@synthesize autocallObjCProperties=_autocallObjCProperties;
+
 + (void)initialize {
     if (self == [Mocha class]) {
         // Mocha global object
@@ -171,6 +173,8 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     if (self) {
         _ctx = ctx;
         _exportedObjects = [[NSMutableDictionary alloc] init];
+        
+        _autocallObjCProperties = NO;
         
         // Add the runtime as a property of the context
         [self setObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
@@ -967,15 +971,22 @@ static void MOObject_finalize(JSObjectRef object) {
 static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS) {
 	NSString *propertyName = [(NSString *)JSStringCopyCFString(NULL, propertyNameJS) autorelease];
 	
+	Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    
 	id private = JSObjectGetPrivate(objectJS);
 	id object = [private representedObject];
 	Class objectClass = [object class];
 	
     // Property
-    //objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
-    //if (property != NULL) {
-    //    return YES;
-    //}
+    if (runtime.autocallObjCProperties) {
+        objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
+        if (property != NULL) {
+            SEL selector = MOSelectorFromPropertyName(propertyName);
+            if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                return YES;
+            }
+        }
+    }
 	
 	// Association object
 	id value = objc_getAssociatedObject(object, propertyName);
@@ -1015,16 +1026,21 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
 	id object = [private representedObject];
 	Class objectClass = [object class];
 	
-	// Property
-	//objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
-	//if (property != NULL) {
-	//    SEL selector = MOSelectorFromPropertyName(propertyName);
-    //    JSValueRef value = MOSelectorInvoke(object, selector, ctx, 0, NULL, NULL);
-    //    return value;
-	//}
-	
     // Perform the lookup
     @try {
+        // Property
+        if (runtime.autocallObjCProperties) {
+            objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
+            if (property != NULL) {
+                SEL selector = MOSelectorFromPropertyName(propertyName);
+                if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                    MOMethod *method = [MOMethod methodWithTarget:object selector:selector];
+                    JSValueRef value = MOFunctionInvoke(method, ctx, 0, NULL, exception);
+                    return value;
+                }
+            }
+        }
+        
         // Association object
         id value = objc_getAssociatedObject(object, propertyName);
         if (value != nil) {
@@ -1075,15 +1091,30 @@ static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 	
 	id private = JSObjectGetPrivate(objectJS);
 	id object = [private representedObject];
+	Class objectClass = [object class];
+    id value = [runtime objectForJSValue:valueJS];
 	
     // Perform the lookup
     @try {
+        // Property
+        if (runtime.autocallObjCProperties) {
+            objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
+            if (property != NULL) {
+                NSString *setterName = MOPropertyNameToSetterName(propertyName);
+                SEL selector = MOSelectorFromPropertyName(setterName);
+                if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                    MOMethod *method = [MOMethod methodWithTarget:object selector:selector];
+                    JSValueRef valueJS = MOFunctionInvoke(method, ctx, 1, &valueJS, exception);
+                    return YES;
+                }
+            }
+        }
+        
         // Indexed subscript
         if ([object respondsToSelector:@selector(setObject:forIndexedSubscript:)]) {
             NSScanner *scanner = [NSScanner scannerWithString:propertyName];
             NSInteger integerValue;
             if ([scanner scanInteger:&integerValue]) {
-                id value = [runtime objectForJSValue:valueJS];
                 [object setObject:value forIndexedSubscript:integerValue];
                 return YES;
             }
@@ -1091,7 +1122,6 @@ static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JS
         
         // Keyed subscript
         if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
-            id value = [runtime objectForJSValue:valueJS];
             [object setObject:value forKeyedSubscript:propertyName];
             return YES;
         }

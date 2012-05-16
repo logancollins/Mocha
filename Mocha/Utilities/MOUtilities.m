@@ -782,4 +782,13 @@ NSString * MOSelectorToPropertyName(SEL selector) {
     return propertyString;
 }
 
-
+NSString * MOPropertyNameToSetterName(NSString *propertyName) {
+    if ([propertyName length] > 0) {
+        // Capitalize first character and append "set" and "_"
+        // title -> setTitle_
+        return [[@"set" stringByAppendingString:[propertyName capitalizedString]] stringByAppendingString:@"_"];
+    }
+    else {
+        return nil;
+    }
+}
