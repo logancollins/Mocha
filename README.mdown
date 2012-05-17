@@ -44,7 +44,7 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 Frameworks that expose BridgeSupport information (as all public OS X frameworks do) can be imported through the use of the `loadFramework` built-in function.
 
-On OS X, the following frameworks are imported automatically: Foundation, AppKit, CoreData, CoreFoundation, CoreGraphics.
+On OS X, the following frameworks are imported automatically: Foundation, AppKit, CoreFoundation, CoreGraphics.
 
 #### Example:
 <pre>
