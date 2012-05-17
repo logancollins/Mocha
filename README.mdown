@@ -2,7 +2,7 @@
 ### Objective-C / JavaScript Bridge
 
 
-Mocha is a runtime that bridges JavaScript to Objective-C. It is built on top of JavaScriptCore, the component of WebKit responsible for parsing and evaluating JavaScript code.
+Mocha is a runtime that bridges JavaScript to Objective-C. It is built on top of JavaScriptCore, the component of WebKit responsible for parsing and evaluating JavaScript code, and BridgeSupport, which enables libraries to expose the definition of their C structures and functions for use at run-time, as opposed to compile-time.
 
 
 ## Usage
@@ -38,6 +38,18 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 - `null` is converted to `nil` (when bare) or `NSNull` (when placed in a container)
 - `undefined` is converted to `MOUndefined`
 - **All boxed types** are unboxed
+
+
+## Exposing Objective-C objects and methods
+
+Arbitrary Objective-C objects and methods can be exposed to the runtime without needing to declare BridgeSupport information for them. The `Mocha` class is a fully Key-Value Coding compliant container for just this purpose. Calling `-valueForKey:` and `-setValue:forKey:` exposes an object to the runtime, assuming it can be boxed as an appropriate JavaScript type (see above).
+
+To expose arbitrary methods to the runtime, use the `MOMethod` class. Instances of the class keep reference to a target object and Objective-C selector, which can be invoked dynamically by the runtime whenever the method is called on the JavaScript side of the bridge. Like all other objects, methods can be exposed using the `-valueForKey:` and `-setValue:forKey:` methods of the `Mocha` class.
+
+
+## moc: The Mocha Interpreter
+
+`mod` is a simple command-line interpreter for debugging and testing with Mocha. It is similar to `jsc`, provided as part of JavaScriptCore.
 
 
 ## Code Usage
