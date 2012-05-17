@@ -54,7 +54,7 @@ To expose arbitrary global functions to the runtime, use the `MOMethod` class. I
 
 ## moc: The Mocha Interpreter
 
-`mod` is a simple command-line interpreter for debugging and testing with Mocha. It is similar to `jsc`, provided as part of JavaScriptCore.
+`moc` is a simple command-line interpreter for debugging and testing with Mocha. It is similar to `jsc`, provided as part of JavaScriptCore.
 
 
 ## Code Usage
