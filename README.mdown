@@ -12,7 +12,7 @@ Instances of the `Mocha` class is the representation of a runtime. A runtime can
 
 ## Values and Boxed Objects
 
-When arguments are passed between the Objective-C and the JavaScript sides of the bridge, they may be implicitly converted to the appropriate type counterpart (in the case of strings and numbers) or boxed within an opaque proxy. The following type conventions are in effect when moving between each side of the bridge:
+When arguments are passed between the Objective-C and JavaScript sides of the bridge they may be implicitly converted to an appropriate type counterpart or boxed within an opaque proxy object. The following type conventions are in effect when moving between each side of the bridge:
 
 ### Objective-C to JavaScript:
 - `nil` is converted to `null`
