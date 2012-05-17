@@ -480,6 +480,11 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             else {
                 jsValue = arguments[i];
             }
+            
+            if ([arg typeEncoding] == _C_PTR) {
+                [arg allocateStorage];
+            }
+            
             [arg setValueAsJSValue:jsValue context:ctx];
             
             args[j] = [arg ffiType];

@@ -20,8 +20,10 @@
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
 
+#import "NSObject+MochaAdditions.h"
 #import "NSArray+MochaAdditions.h"
 #import "NSDictionary+MochaAdditions.h"
+#import "NSOrderedSet+MochaAdditions.h"
 
 #import <objc/runtime.h>
 #import <dlfcn.h>
@@ -137,6 +139,9 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
             imp = class_getMethodImplementation([NSMutableDictionary class], @selector(mo_setObject:forKeyedSubscript:));
             class_addMethod([NSMutableDictionary class], @selector(setObject:forKeyedSubscript:), imp, "@@:@@");
         }
+        
+        // Swizzle in NSObject additions
+        [NSObject mo_swizzleAdditions];
     }
 }
 
@@ -190,7 +195,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         // Load base frameworks
 #if !TARGET_OS_IPHONE
         [self loadFrameworkWithName:@"Foundation"];
-        [self loadFrameworkWithName:@"CoreFoundation"];
         if (![self loadFrameworkWithName:@"CoreGraphics"]) {
             [self loadFrameworkWithName:@"CoreGraphics" inDirectory:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
         }

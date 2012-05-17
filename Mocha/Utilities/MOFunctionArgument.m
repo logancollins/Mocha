@@ -675,6 +675,10 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
         return NO;
     }
     
+    if (ptr == NULL) {
+        return NO;
+    }
+    
     Mocha *runtime = [Mocha runtimeWithContext:ctx];
     
     switch (typeEncoding) {
@@ -754,9 +758,17 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 			return YES;
         }
         case _C_PTR: {
-			NSValue *object = [runtime objectForJSValue:value];
-            void *pointer = [object pointerValue];
-            *(void**)ptr = pointer;
+			id object = [runtime objectForJSValue:value];
+            if ([object isKindOfClass:[NSNull class]]) {
+                *(void**)ptr = NULL;
+            }
+            else if ([object isKindOfClass:[NSValue class]]) {
+                void *pointer = [object pointerValue];
+                *(void**)ptr = pointer;
+            }
+            else {
+                *(id*)ptr = object;
+            }
             return YES;
         }
     }
@@ -852,8 +864,13 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 			return YES;
 		}
 		case _C_PTR: {
-            NSValue *object = [NSValue valueWithPointer:ptr];
-            *value = [runtime JSValueForObject:object];
+            if (ptr == NULL) {
+                *value = [runtime JSValueForObject:[NSNull null]];
+            }
+            else {
+                NSValue *object = [NSValue valueWithPointer:ptr];
+                *value = [runtime JSValueForObject:object];
+            }
 			return YES;
 		}
     }

@@ -84,6 +84,8 @@
 		EAA45EAD155F0CC800F93E40 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */; };
 		EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */; };
 		EABA262715657747005CF076 /* NSOrderedSet+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EABA262515657747005CF076 /* NSOrderedSet+MochaAdditions.m */; };
+		EABA262B15658AA3005CF076 /* NSObject+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */; };
+		EABA262C15658AA3005CF076 /* NSObject+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EABA262A15658AA3005CF076 /* NSObject+MochaAdditions.m */; };
 		EAC8BFC4155F3E01003653BA /* NSArray+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC2155F3E01003653BA /* NSArray+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAC8BFC9155F3ECD003653BA /* NSDictionary+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC7155F3ECD003653BA /* NSDictionary+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 /* End PBXBuildFile section */
@@ -161,6 +163,8 @@
 		EAA45EAA155F0B4600F93E40 /* libreadline.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.dylib; path = usr/lib/libreadline.dylib; sourceTree = SDKROOT; };
 		EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOrderedSet+MochaAdditions.h"; sourceTree = "<group>"; };
 		EABA262515657747005CF076 /* NSOrderedSet+MochaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOrderedSet+MochaAdditions.m"; sourceTree = "<group>"; };
+		EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MochaAdditions.h"; sourceTree = "<group>"; };
+		EABA262A15658AA3005CF076 /* NSObject+MochaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+MochaAdditions.m"; sourceTree = "<group>"; };
 		EAC8BFC2155F3E01003653BA /* NSArray+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+MochaAdditions.h"; sourceTree = "<group>"; };
 		EAC8BFC3155F3E01003653BA /* NSArray+MochaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+MochaAdditions.m"; sourceTree = "<group>"; };
 		EAC8BFC7155F3ECD003653BA /* NSDictionary+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDictionary+MochaAdditions.h"; sourceTree = "<group>"; };
@@ -360,6 +364,8 @@
 				EAC8BFC8155F3ECD003653BA /* NSDictionary+MochaAdditions.m */,
 				EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */,
 				EABA262515657747005CF076 /* NSOrderedSet+MochaAdditions.m */,
+				EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */,
+				EABA262A15658AA3005CF076 /* NSObject+MochaAdditions.m */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -415,6 +421,7 @@
 				EAA34FA31563986F00B62244 /* MOStruct.h in Headers */,
 				EAA34FB81563B3A500B62244 /* MOObjCRuntime.h in Headers */,
 				EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */,
+				EABA262B15658AA3005CF076 /* NSObject+MochaAdditions.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -556,6 +563,7 @@
 				EAA3503515647DAD00B62244 /* NSArray+MochaAdditions.m in Sources */,
 				EAA3503615647DAD00B62244 /* NSDictionary+MochaAdditions.m in Sources */,
 				EABA262715657747005CF076 /* NSOrderedSet+MochaAdditions.m in Sources */,
+				EABA262C15658AA3005CF076 /* NSObject+MochaAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
