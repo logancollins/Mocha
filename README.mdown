@@ -130,7 +130,7 @@ Implementing `-objectForKeyedSubscript:` allows an object to use the `object['ke
 
 Exceptions in Objective-C code can be automatically caught by JavaScript exception handlers. The value of the `err` argument within the `try {} catch {}` block will be a boxed `NSException` instance.
 
-JavaScript exceptions that are uncaught will be converted to `NSException` objects with a name of `MORuntimeException`. They can be caught in an Objective-C `@try {} @catch (NSException *e) {}` block.
+JavaScript exceptions that are uncaught will be converted to `NSException` objects with a name of `MOJavaScriptException`. They can be caught in an Objective-C `@try {} @catch (NSException *e) {}` block.
 
 
 ## moc: The Mocha Interpreter
