@@ -61,6 +61,16 @@ var result = MyObject.someMethod();
 
 To expose arbitrary global functions to the runtime, use the `MOMethod` class. Instances of the class keep reference to a target object and Objective-C selector, which can be invoked dynamically by the runtime whenever the method is called on the JavaScript side of the bridge. Like all other objects, methods can be exposed using the `-valueForKey:` and `-setValue:forKey:` methods of the `Mocha` class.
 
+### Example:
+<pre>
+Mocha *runtime = [Mocha sharedRuntime];<br />
+MOMethod *method = [MOMethod methodWithTarget:myObject selector:@selector(someMethod)];
+[runtime setValue:method forKey:@"someMethod"];<br />
+</pre>
+<pre>
+var result = someMethod();
+</pre>
+
 
 ## moc: The Mocha Interpreter
 
