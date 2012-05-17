@@ -15,28 +15,28 @@ The Mocha class is used to interface with a runtime. A runtime can be used eithe
 When arguments are passed between the Objective-C and the JavaScript sides of the bridge, they may be implicitly converted to the appropriate type counterpart (in the case of strings and numbers) or boxed within an opaque proxy. The following type conventions are in effect when moving between each side of the bridge:
 
 ### Objective-C to JavaScript:
-- `**nil**` is converted to `**null**`
-- `**NSNull**` is converted to `**null**`
-- `**MOUndefined**` is converted to `**undefined**`
-- `**char***` is converted to `**String**`
-- **Objective-C methods** are converted to `**MOMethod**`, and are callable
+- `nil` is converted to `null`
+- `NSNull` is converted to `null`
+- `MOUndefined` is converted to `undefined`
+- `char*` is converted to `String`
+- **Objective-C methods** are converted to `MOMethod`, and are callable
 - **C structs** are boxed within an opaque `Object` type, allowing direct access to members in a dictionary-like manner.
-- **C numeric primitives** (`int`, `long`, `short`, `char`, `float`, `double`, etc.) are converted to `**Number**`
-- `**bool**` is converted to `**Boolean**`
+- **C numeric primitives** (`int`, `long`, `short`, `char`, `float`, `double`, etc.) are converted to `Number`
+- `bool` is converted to `Boolean`
 - **C Functions** are boxed within an opaque `Object` type, and are callable
 - **Pointers** are boxed within an opaque `Object` type
 - **All other Objective-C objects** are boxed within an opaque `Object` type. This type can be converted to `String` or `Number` from within JavaScript. `NSString` instances will convert to `String` appropriately. `NSNumber` will convert to `Number` appropriately. All other conversions will use the -description method of the `NSObject` subclass.
 
-Note: `**BOOL**`, unlike `bool`, is converted to `**Number**`, as `BOOL` is typedef'd as an `unsigned char` in Objective-C.
+Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as an `unsigned char` in Objective-C.
 
 ### JavaScript to Objective-C
-- `**String**` is converted to `**NSString**` or `**char***`, depending on context
-- `**Number**` is converted to `**NSNumber**` or a **C numeric primitive**, depending on context
-- `**Boolean**` is converted to `**NSNumber**` or `**bool**`, depending on context
-- `**Array**` is converted to `**NSArray**`
-- `**Object**` is converted to `**NSDictionary**`
-- `**null**` is converted to `**nil**` (when bare) or `**NSNull**` (when placed in a container)
-- `**undefined**` is converted to `**MOUndefined**`
+- `String` is converted to `NSString` or `char*`, depending on context
+- `Number` is converted to `NSNumber` or a **C numeric primitive**, depending on context
+- `Boolean` is converted to `NSNumber` or `bool`, depending on context
+- `Array` is converted to `NSArray`
+- `Object` is converted to `NSDictionary`
+- `null` is converted to `nil` (when bare) or `NSNull` (when placed in a container)
+- `undefined` is converted to `MOUndefined`
 - **All boxed types** are unboxed
 
 
