@@ -40,6 +40,17 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 - **All boxed types** are unboxed
 
 
+## Sending messages
+
+Objective-C methods are exposed as properties of the object's opaque JavaScript proxy. When a method is invoked, it is automatically converted to the appropriate selector on the Objective-C side of the bridge, and all arguments are converted to the appropriate types.
+
+Method name conversion follow a similar pattern to PyObjC. To convert a selector name to the JavaScript object property, the following steps are taken:
+- All colons are converted to underscores.
+- Each component of the selector is concatenated into a single string with no separation.
+
+As such, a selector such as `executeOperation:withObject:error:` is converted to the function name `executeOperation_withObject_error()`. The reverse is done to convert the property name back into an Objective-C selector.
+
+
 ## Frameworks
 
 Frameworks that expose BridgeSupport information (as all public OS X frameworks do) can be imported through the use of the `loadFramework` built-in function.
