@@ -91,6 +91,23 @@ var result = someMethod();
 </pre>
 
 
+## Object Subscripting
+
+Objects that support indexed-access (acting as array-types) or keyed-access (acting as dictionary-types) can support the JavaScript subscripting syntax for accessing values.
+
+### Indexed Subscripting
+
+Implementing `-objectForIndexedSubscript:` allows an object can use the `object[idx]` syntax for read-only access to values. For read-write access, you should also implement the `-setObject:forIndexedSubscript:` method. Both of these methods are declared within an informal protocol defined in MochaRuntime.h.
+
+`NSArray` and `NSMutableArray` automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting Objective-C indexed subscripting syntax on 10.8+).
+
+### Keyed Subscripting
+
+Implementing `-objectForKeyedSubscript:` allows an object can use the `object['key']` syntax for read-only access to values. For read-write access, you should also implement the `-setObject:forKeyedSubscript:` method. Both of these methods are declared within an informal protocol defined in MochaRuntime.h.
+
+`NSDictionary` and `NSMutableDictionary` automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting Objective-C keyed subscripting syntax on 10.8+).
+
+
 ## moc: The Mocha Interpreter
 
 `moc` is a simple command-line interpreter for debugging and testing with Mocha. It is similar to `jsc`, provided as part of JavaScriptCore.
