@@ -180,6 +180,11 @@ Mocha exceptions that do not originate from within the JavaScript environment ca
 - `checkSyntax(string)` – Validates the syntax of `string`, returning a `Boolean`
 
 
+## iOS Support
+
+iOS support is currently non-functional. The plan is to change this soon. :)
+
+
 ## Code Usage
 
 Mocha utilizes some code and ideas from both PyObjC (http://pyobjc.sourceforge.net/, MIT license) and JSCocoa (http://inexdo.com/JSCocoa, MIT license).
