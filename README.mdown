@@ -46,7 +46,7 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 Arguments to C functions and Objective-C methods are automatically converted when crossing the bridge, as discussed above.
 
-Variable-argument functions work as expected. Objective-C functions that require a terminating sentinel (through the `NS_REQUIRES_NIL_TERMINATION` compiler attribute) do not require the trailing `nil`.
+Variable-argument functions work as expected. Objective-C functions that require a terminating sentinel (through the `NS_REQUIRES_NIL_TERMINATION` compiler attribute) do not require a trailing `null`.
 
 #### Example:
 <pre>
