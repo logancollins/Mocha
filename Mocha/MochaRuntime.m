@@ -190,7 +190,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         // Load base frameworks
 #if !TARGET_OS_IPHONE
         [self loadFrameworkWithName:@"Foundation"];
-        [self loadFrameworkWithName:@"AppKit"];
         [self loadFrameworkWithName:@"CoreFoundation"];
         if (![self loadFrameworkWithName:@"CoreGraphics"]) {
             [self loadFrameworkWithName:@"CoreGraphics" inDirectory:@"/System/Library/Frameworks/ApplicationServices.framework/Frameworks"];
