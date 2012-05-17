@@ -47,12 +47,12 @@ Frameworks that expose BridgeSupport information (as all public OS X frameworks 
 #### Example:
 <pre>
 AVAsset.assetWithURL_(url);
->>> MOJavaScriptException: ReferenceError: Can't find variable: AVAsset
+>>> "MOJavaScriptException: ReferenceError: Can't find variable: AVAsset"
 
 loadFramework('AVFoundation');
 
 AVAsset.assetWithURL_(url);
->> <AVURLAsset: 0x7fe803ce8340>
+>>> "<AVURLAsset: 0x7fe803ce8340>"
 </pre>
 
 On OS X, the following frameworks are imported automatically: Foundation, AppKit, CoreFoundation, CoreGraphics.
