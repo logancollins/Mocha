@@ -2,7 +2,7 @@
 ### Objective-C / JavaScript Bridge
 
 
-Mocha is a runtime that bridges JavaScript to Objective-C. It is built on top of JavaScriptCore, the component of WebKit responsible for parsing and evaluating JavaScript code, and BridgeSupport, which enables libraries to expose the definition of their C structures and functions for use at run-time, as opposed to compile-time.
+Mocha is a runtime that bridges JavaScript to Objective-C. It is built on top of JavaScriptCore, the component of WebKit responsible for parsing and evaluating JavaScript code, and BridgeSupport, which enables libraries to expose the definition of their C structures and functions for use at run-time (as opposed to compile-time).
 
 
 ## Usage
