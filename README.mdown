@@ -139,6 +139,11 @@ Mocha exceptions that do not originate from within the JavaScript environment ca
 
 `moc` is a simple command-line interpreter for debugging and testing with Mocha. It is similar to `jsc`, provided as part of JavaScriptCore.
 
+`moc` has the following set of built-in functions:
+- `exit()` – Exits the interpreter
+- `gc()` – Instructs the JavaScript garbage collector to perform a collection
+- `checkSyntax(string)` – Validates the syntax of `string`, returning a `Boolean`
+
 
 ## Code Usage
 
