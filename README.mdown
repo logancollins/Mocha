@@ -52,7 +52,7 @@ AVAsset.assetWithURL_(url);
 loadFramework('AVFoundation');
 
 AVAsset.assetWithURL_(url);
->>> "<AVURLAsset: 0x7fe803ce8340>"
+>>> "&lt;AVURLAsset: 0x7fe803ce8340&gt;"
 </pre>
 
 On OS X, the following frameworks are imported automatically: Foundation, AppKit, CoreFoundation, CoreGraphics.
