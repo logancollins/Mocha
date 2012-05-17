@@ -42,6 +42,22 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 ## Functions and Methods
 
+### Arguments
+
+Arguments to C functions and Objective-C methods are automatically converted when crossing the bridge, as discussed above.
+
+Variable-argument functions work as expected. Objective-C functions that require a terminating sentinel (through the `NS_REQUIRES_NIL_TERMINATION` compiler attribute) do not require the trailing `nil`.
+
+#### Example:
+<pre>
+// ObjC
+NSArray *array = [NSArray arrayWithObjects:first, second, third, nil];
+
+// JavaScript
+var array = NSArray.arrayWithObjects(first, second, third);
+</pre>
+
+
 ### Objective-C Selectors
 
 Objective-C methods are exposed as properties of the object's opaque JavaScript proxy. When a method is invoked, it is automatically converted to the appropriate selector on the Objective-C side of the bridge, and all arguments are converted to the appropriate types.
