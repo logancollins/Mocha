@@ -114,11 +114,12 @@ Arbitrary Objective-C objects and methods can be exposed as global objects to th
 
 #### Example:
 <pre>
+// ObjC
 Mocha *runtime = [Mocha sharedRuntime];
 MyClass *object = [[[MyClass alloc] init];
 [runtime setValue:object forKey:@"MyObject"];
-</pre>
-<pre>
+
+// JavaScript
 var result = MyObject.someMethod();
 </pre>
 
@@ -128,11 +129,12 @@ To expose arbitrary global functions to the runtime, use the `MOMethod` class. I
 
 #### Example:
 <pre>
+// ObjC
 Mocha *runtime = [Mocha sharedRuntime];
 MOMethod *method = [MOMethod methodWithTarget:myObject selector:@selector(someMethod)];
 [runtime setValue:method forKey:@"someMethod"];
-</pre>
-<pre>
+
+// JavaScript
 var result = someMethod();
 </pre>
 
