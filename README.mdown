@@ -126,6 +126,13 @@ Implementing `-objectForKeyedSubscript:` allows an object to use the `object['ke
 `NSDictionary` and `NSMutableDictionary` automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting the Objective-C keyed subscripting syntax on 10.8+).
 
 
+## Exceptions
+
+Exceptions in Objective-C code can be automatically caught by JavaScript exception handlers. The value of the `err` argument within the `try {} catch {}` block will be a boxed `NSException` instance.
+
+JavaScript exceptions that are uncaught will be converted to `NSException` objects with a name of `MORuntimeException`. They can be caught in an Objective-C `@try {} @catch (NSException *e) {}` block.
+
+
 ## moc: The Mocha Interpreter
 
 `moc` is a simple command-line interpreter for debugging and testing with Mocha. It is similar to `jsc`, provided as part of JavaScriptCore.
