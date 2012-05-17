@@ -49,6 +49,16 @@ By default, all methods and properties of an Objective-C object crossing the bri
 
 Arbitrary Objective-C objects and methods can be exposed as global objects to the runtime without needing to declare BridgeSupport information. The `Mocha` class is a fully Key-Value Coding compliant container for just this purpose. Calling `-valueForKey:` and `-setValue:forKey:` exposes an object to the runtime, assuming it can be boxed as an appropriate JavaScript type (see above).
 
+### Example:
+<code>
+Mocha *runtime = [Mocha sharedRuntime];
+MyClass *object = [[[MyClass alloc] init];
+[runtime setValue:object forKey:@"MyObject"];
+</code>
+<code>
+var result = MyObject.someMethod();
+</code>
+
 To expose arbitrary global functions to the runtime, use the `MOMethod` class. Instances of the class keep reference to a target object and Objective-C selector, which can be invoked dynamically by the runtime whenever the method is called on the JavaScript side of the bridge. Like all other objects, methods can be exposed using the `-valueForKey:` and `-setValue:forKey:` methods of the `Mocha` class.
 
 
