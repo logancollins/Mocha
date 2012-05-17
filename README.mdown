@@ -152,7 +152,7 @@ Objects that support indexed-access (acting as array-types) or keyed-access (act
 
 Implementing `-objectForIndexedSubscript:` allows an object to use the `object[idx]` syntax for read-only access to values. For read-write access, you should also implement the `-setObject:forIndexedSubscript:` method. Both of these methods are declared within an informal protocol defined in MochaRuntime.h.
 
-`NSArray` and `NSMutableArray` automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting the Objective-C indexed subscripting syntax on 10.8+).
+`NSArray` and `NSMutableArray`, and `NSOrderedSet` and `NSMutableOrderedSet` automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting the Objective-C indexed subscripting syntax on 10.8+).
 
 ### Keyed Subscripting
 

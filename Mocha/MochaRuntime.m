@@ -119,6 +119,15 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
             class_addMethod([NSMutableArray class], @selector(setObject:forIndexedSubscript:), imp, "@@:@l");
         }
         
+        // Swizzle indexed subscripting support for NSOrderedSet
+        if (![NSOrderedSet instancesRespondToSelector:indexedSubscriptSelector]) {
+            IMP imp = class_getMethodImplementation([NSOrderedSet class], @selector(mo_objectForIndexedSubscript:));
+            class_addMethod([NSOrderedSet class], @selector(objectForIndexedSubscript:), imp, "@@:l");
+            
+            imp = class_getMethodImplementation([NSMutableOrderedSet class], @selector(mo_setObject:forIndexedSubscript:));
+            class_addMethod([NSMutableOrderedSet class], @selector(setObject:forIndexedSubscript:), imp, "@@:@l");
+        }
+        
         // Swizzle keyed subscripting support for NSDictionary
         SEL keyedSubscriptSelector = @selector(objectForKeyedSubscript:);
         if (![NSDictionary instancesRespondToSelector:keyedSubscriptSelector]) {
