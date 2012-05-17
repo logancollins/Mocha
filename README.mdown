@@ -42,7 +42,22 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 ## Exposing of Objective-C methods
 
-By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the `+isSelectorExcludedFromMochaScript:` method. Objects implementing this method can return `NO` for any selector that should not be invoked from the bridge.
+By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the `+isSelectorExcludedFromMochaScript:` method. Objects implementing this method can return `YES` for any selector that should not be invoked from the bridge.
+
+#### Example:
+<pre>
+@implementation MyClass
+…
+
++ (BOOL)isSelectorExcludedFromMochaScript:(SEL)selector {
+    if (selector == @selector(someMethod)) {
+        return YES;
+    }
+    return [super isSelectorExcludedFromMochaScript:selector];
+}
+
+@end
+</pre>
 
 
 ## Globals
