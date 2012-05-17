@@ -40,7 +40,9 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 - **All boxed types** are unboxed
 
 
-## Sending messages
+## Functions and Methods
+
+### Objective-C Selectors
 
 Objective-C methods are exposed as properties of the object's opaque JavaScript proxy. When a method is invoked, it is automatically converted to the appropriate selector on the Objective-C side of the bridge, and all arguments are converted to the appropriate types.
 
@@ -49,6 +51,25 @@ Method name conversion follow a similar pattern to PyObjC. To convert a selector
 - Each component of the selector is concatenated into a single string with no separation.
 
 As such, a selector such as `executeOperation:withObject:error:` is converted to the function name `executeOperation_withObject_error()`. The reverse is done to convert the property name back into an Objective-C selector.
+
+### Exposing Objective-C methods
+
+By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the `+isSelectorExcludedFromMochaScript:` method. Objects implementing this method can return `YES` for any selector that should not be invoked from the bridge.
+
+#### Example:
+<pre>
+@implementation MyClass
+…
+
++ (BOOL)isSelectorExcludedFromMochaScript:(SEL)selector {
+    if (selector == @selector(someMethod)) {
+        return YES;
+    }
+    return [super isSelectorExcludedFromMochaScript:selector];
+}
+
+@end
+</pre>
 
 
 ## Frameworks
@@ -67,26 +88,6 @@ AVAsset.assetWithURL_(url);
 </pre>
 
 On OS X, the following frameworks are imported automatically: Foundation, AppKit, CoreFoundation, CoreGraphics.
-
-
-## Exposing Objective-C methods
-
-By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the `+isSelectorExcludedFromMochaScript:` method. Objects implementing this method can return `YES` for any selector that should not be invoked from the bridge.
-
-#### Example:
-<pre>
-@implementation MyClass
-…
-
-+ (BOOL)isSelectorExcludedFromMochaScript:(SEL)selector {
-    if (selector == @selector(someMethod)) {
-        return YES;
-    }
-    return [super isSelectorExcludedFromMochaScript:selector];
-}
-
-@end
-</pre>
 
 
 ## Globals
