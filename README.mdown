@@ -51,9 +51,9 @@ Arbitrary Objective-C objects and methods can be exposed as global objects to th
 
 ### Example:
 <code>
-Mocha *runtime = [Mocha sharedRuntime];
-MyClass *object = [[[MyClass alloc] init];
-[runtime setValue:object forKey:@"MyObject"];
+Mocha *runtime = [Mocha sharedRuntime];<br />
+MyClass *object = [[[MyClass alloc] init];<br />
+[runtime setValue:object forKey:@"MyObject"];<br />
 </code>
 <code>
 var result = MyObject.someMethod();
