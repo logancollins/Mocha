@@ -8,52 +8,86 @@
 
 /* Begin PBXBuildFile section */
 		02112323155D7BD000415471 /* MOUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112321155D7BD000415471 /* MOUtilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		02112324155D7BD000415471 /* MOUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112322155D7BD000415471 /* MOUtilities.m */; };
 		02112327155D973100415471 /* MOBridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112325155D973100415471 /* MOBridgeSupportController.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		02112328155D973100415471 /* MOBridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112326155D973100415471 /* MOBridgeSupportController.m */; };
 		0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211232A155D99F600415471 /* MOBridgeSupportSymbol.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		0211232D155D99F600415471 /* MOBridgeSupportSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211232B155D99F600415471 /* MOBridgeSupportSymbol.m */; };
 		0211233E155DB8F800415471 /* MOBridgeSupportLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211233C155DB8F800415471 /* MOBridgeSupportLibrary.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		0211233F155DB8F800415471 /* MOBridgeSupportLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211233D155DB8F800415471 /* MOBridgeSupportLibrary.m */; };
 		02112342155DB9A100415471 /* MOBridgeSupportParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112340155DB9A100415471 /* MOBridgeSupportParser.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		02112343155DB9A100415471 /* MOBridgeSupportParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112341155DB9A100415471 /* MOBridgeSupportParser.m */; };
 		EA037E701560B4C100D3E7C8 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EA037E711560B4C100D3E7C8 /* MOFunctionArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */; };
 		EA1A1232156160F200A1F1A4 /* libffi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A1231156160F200A1F1A4 /* libffi.dylib */; };
 		EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34F9C156304A800B62244 /* MOUndefined.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAA34F9F156304A800B62244 /* MOUndefined.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34F9D156304A800B62244 /* MOUndefined.m */; };
 		EAA34FA31563986F00B62244 /* MOStruct.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34FA11563986F00B62244 /* MOStruct.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAA34FA41563986F00B62244 /* MOStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34FA21563986F00B62244 /* MOStruct.m */; };
 		EAA34FB81563B3A500B62244 /* MOObjCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAA34FB91563B3A500B62244 /* MOObjCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34FB71563B3A500B62244 /* MOObjCRuntime.m */; };
+		EAA34FC915647AD700B62244 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E0B155CE44B00F93E40 /* Foundation.framework */; };
+		EAA34FE415647BAE00B62244 /* MochaRuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA34FE615647BB700B62244 /* MochaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E22155CE57600F93E40 /* MochaRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA34FE715647BBC00B62244 /* Mocha.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E13155CE44B00F93E40 /* Mocha.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA34FEA15647BC300B62244 /* MochaDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E1B155CE46000F93E40 /* MochaDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA34FEC15647BCA00B62244 /* Mocha.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E14155CE44B00F93E40 /* Mocha.m */; };
+		EAA34FEE15647BCF00B62244 /* MochaRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E23155CE57600F93E40 /* MochaRuntime.m */; };
+		EAA34FEF15647BDC00B62244 /* MOBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E92155EEB9400F93E40 /* MOBox.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA34FF115647BE100B62244 /* MOBox.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E93155EEB9400F93E40 /* MOBox.m */; };
+		EAA34FF315647BE500B62244 /* MOMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E86155EE97200F93E40 /* MOMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA34FF515647BEB00B62244 /* MOMethod_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA34FF715647BF000B62244 /* MOMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E87155EE97200F93E40 /* MOMethod.m */; };
+		EAA34FFA15647BF600B62244 /* MOStruct.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34FA11563986F00B62244 /* MOStruct.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA34FFC15647BFA00B62244 /* MOStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34FA21563986F00B62244 /* MOStruct.m */; };
+		EAA34FFE15647BFE00B62244 /* MOUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34F9C156304A800B62244 /* MOUndefined.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA34FFF15647C0300B62244 /* MOUndefined.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34F9D156304A800B62244 /* MOUndefined.m */; };
+		EAA3500315647C0700B62244 /* MOObjCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3500515647C0D00B62244 /* MOObjCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34FB71563B3A500B62244 /* MOObjCRuntime.m */; };
+		EAA3500815647C1400B62244 /* MOBridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112325155D973100415471 /* MOBridgeSupportController.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3500A15647C1900B62244 /* MOBridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112326155D973100415471 /* MOBridgeSupportController.m */; };
+		EAA3500B15647C1C00B62244 /* MOBridgeSupportParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112340155DB9A100415471 /* MOBridgeSupportParser.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3500D15647C2200B62244 /* MOBridgeSupportParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112341155DB9A100415471 /* MOBridgeSupportParser.m */; };
+		EAA3500F15647C2400B62244 /* MOBridgeSupportLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211233C155DB8F800415471 /* MOBridgeSupportLibrary.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3501115647C2A00B62244 /* MOBridgeSupportLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211233D155DB8F800415471 /* MOBridgeSupportLibrary.m */; };
+		EAA3501415647C2D00B62244 /* MOBridgeSupportSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211232A155D99F600415471 /* MOBridgeSupportSymbol.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3501515647C3300B62244 /* MOBridgeSupportSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211232B155D99F600415471 /* MOBridgeSupportSymbol.m */; };
+		EAA3501815647C4400B62244 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3501A15647C4A00B62244 /* MOFunctionArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */; };
+		EAA3501B15647C4D00B62244 /* MOUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112321155D7BD000415471 /* MOUtilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3501E15647C5400B62244 /* MOUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112322155D7BD000415471 /* MOUtilities.m */; };
+		EAA3502015647C5A00B62244 /* NSArray+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC2155F3E01003653BA /* NSArray+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3502215647C5F00B62244 /* NSArray+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC3155F3E01003653BA /* NSArray+MochaAdditions.m */; };
+		EAA3502315647C6100B62244 /* NSDictionary+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC7155F3ECD003653BA /* NSDictionary+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA3502615647C6500B62244 /* NSDictionary+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC8155F3ECD003653BA /* NSDictionary+MochaAdditions.m */; };
+		EAA3502815647DAD00B62244 /* Mocha.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E14155CE44B00F93E40 /* Mocha.m */; };
+		EAA3502915647DAD00B62244 /* MochaRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E23155CE57600F93E40 /* MochaRuntime.m */; };
+		EAA3502A15647DAD00B62244 /* MOBox.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E93155EEB9400F93E40 /* MOBox.m */; };
+		EAA3502B15647DAD00B62244 /* MOMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E87155EE97200F93E40 /* MOMethod.m */; };
+		EAA3502C15647DAD00B62244 /* MOStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34FA21563986F00B62244 /* MOStruct.m */; };
+		EAA3502D15647DAD00B62244 /* MOUndefined.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34F9D156304A800B62244 /* MOUndefined.m */; };
+		EAA3502E15647DAD00B62244 /* MOObjCRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34FB71563B3A500B62244 /* MOObjCRuntime.m */; };
+		EAA3502F15647DAD00B62244 /* MOBridgeSupportController.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112326155D973100415471 /* MOBridgeSupportController.m */; };
+		EAA3503015647DAD00B62244 /* MOBridgeSupportParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112341155DB9A100415471 /* MOBridgeSupportParser.m */; };
+		EAA3503115647DAD00B62244 /* MOBridgeSupportLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211233D155DB8F800415471 /* MOBridgeSupportLibrary.m */; };
+		EAA3503215647DAD00B62244 /* MOBridgeSupportSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211232B155D99F600415471 /* MOBridgeSupportSymbol.m */; };
+		EAA3503315647DAD00B62244 /* MOFunctionArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */; };
+		EAA3503415647DAD00B62244 /* MOUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112322155D7BD000415471 /* MOUtilities.m */; };
+		EAA3503515647DAD00B62244 /* NSArray+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC3155F3E01003653BA /* NSArray+MochaAdditions.m */; };
+		EAA3503615647DAD00B62244 /* NSDictionary+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC8155F3ECD003653BA /* NSDictionary+MochaAdditions.m */; };
+		EAA3503715647DD400B62244 /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
 		EAA45E11155CE44B00F93E40 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = EAA45E0F155CE44B00F93E40 /* InfoPlist.strings */; };
-		EAA45E15155CE44B00F93E40 /* Mocha.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E14155CE44B00F93E40 /* Mocha.m */; };
 		EAA45E1C155CE46000F93E40 /* MochaDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E1B155CE46000F93E40 /* MochaDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E13155CE44B00F93E40 /* Mocha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA45E1F155CE4CB00F93E40 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */; };
 		EAA45E20155CE4D100F93E40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E0B155CE44B00F93E40 /* Foundation.framework */; };
 		EAA45E24155CE57600F93E40 /* MochaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E22155CE57600F93E40 /* MochaRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAA45E25155CE57600F93E40 /* MochaRuntime.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E23155CE57600F93E40 /* MochaRuntime.m */; };
 		EAA45E27155CE66600F93E40 /* MochaRuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA45E73155EE5AF00F93E40 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E0B155CE44B00F93E40 /* Foundation.framework */; };
 		EAA45E76155EE5AF00F93E40 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E75155EE5AF00F93E40 /* main.m */; };
-		EAA45E7E155EE63700F93E40 /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
 		EAA45E81155EE68000F93E40 /* MOCInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E80155EE68000F93E40 /* MOCInterpreter.m */; };
 		EAA45E88155EE97200F93E40 /* MOMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E86155EE97200F93E40 /* MOMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAA45E89155EE97200F93E40 /* MOMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E87155EE97200F93E40 /* MOMethod.m */; };
 		EAA45E8B155EEA3000F93E40 /* MOMethod_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAA45E94155EEB9500F93E40 /* MOBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E92155EEB9400F93E40 /* MOBox.h */; };
-		EAA45E95155EEB9500F93E40 /* MOBox.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E93155EEB9400F93E40 /* MOBox.m */; };
+		EAA45E94155EEB9500F93E40 /* MOBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E92155EEB9400F93E40 /* MOBox.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA45EAB155F0B4600F93E40 /* libreadline.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45EAA155F0B4600F93E40 /* libreadline.dylib */; };
 		EAA45EAD155F0CC800F93E40 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */; };
 		EAC8BFC4155F3E01003653BA /* NSArray+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC2155F3E01003653BA /* NSArray+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAC8BFC5155F3E01003653BA /* NSArray+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC3155F3E01003653BA /* NSArray+MochaAdditions.m */; };
 		EAC8BFC9155F3ECD003653BA /* NSDictionary+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC7155F3ECD003653BA /* NSDictionary+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAC8BFCA155F3ECD003653BA /* NSDictionary+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC8155F3ECD003653BA /* NSDictionary+MochaAdditions.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		EAA45EA8155F0B3200F93E40 /* PBXContainerItemProxy */ = {
+		EAA3503815647DEA00B62244 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
 			proxyType = 1;
@@ -94,6 +128,8 @@
 		EAA34FA21563986F00B62244 /* MOStruct.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOStruct.m; sourceTree = "<group>"; };
 		EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOObjCRuntime.h; sourceTree = "<group>"; };
 		EAA34FB71563B3A500B62244 /* MOObjCRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOObjCRuntime.m; sourceTree = "<group>"; };
+		EAA34FC815647AD700B62244 /* libMocha.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libMocha.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAA34FCC15647AD700B62244 /* libMocha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "libMocha-Prefix.pch"; sourceTree = "<group>"; };
 		EAA45E03155CE44B00F93E40 /* Mocha.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Mocha.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAA45E0B155CE44B00F93E40 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		EAA45E0E155CE44B00F93E40 /* Mocha-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Mocha-Info.plist"; sourceTree = "<group>"; };
@@ -128,6 +164,14 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		EAA34FC515647AD700B62244 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAA34FC915647AD700B62244 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EAA45DFF155CE44B00F93E40 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -144,7 +188,7 @@
 			files = (
 				EAA45E73155EE5AF00F93E40 /* Foundation.framework in Frameworks */,
 				EAA45EAD155F0CC800F93E40 /* JavaScriptCore.framework in Frameworks */,
-				EAA45E7E155EE63700F93E40 /* Mocha.framework in Frameworks */,
+				EAA3503715647DD400B62244 /* Mocha.framework in Frameworks */,
 				EAA45EAB155F0B4600F93E40 /* libreadline.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -167,11 +211,28 @@
 			path = BridgeSupport;
 			sourceTree = "<group>";
 		};
+		EAA34FCA15647AD700B62244 /* libMocha (iOS) */ = {
+			isa = PBXGroup;
+			children = (
+				EAA34FCB15647AD700B62244 /* Supporting Files */,
+			);
+			path = "libMocha (iOS)";
+			sourceTree = "<group>";
+		};
+		EAA34FCB15647AD700B62244 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				EAA34FCC15647AD700B62244 /* libMocha-Prefix.pch */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		EAA45DF7155CE44B00F93E40 = {
 			isa = PBXGroup;
 			children = (
 				EAA45E0C155CE44B00F93E40 /* Mocha */,
 				EAA45E74155EE5AF00F93E40 /* moc */,
+				EAA34FCA15647AD700B62244 /* libMocha (iOS) */,
 				EAA45E05155CE44B00F93E40 /* Frameworks */,
 				EAA45E04155CE44B00F93E40 /* Products */,
 			);
@@ -182,6 +243,7 @@
 			children = (
 				EAA45E03155CE44B00F93E40 /* Mocha.framework */,
 				EAA45E71155EE5AF00F93E40 /* moc */,
+				EAA34FC815647AD700B62244 /* libMocha.a */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -299,6 +361,31 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		EAA34FC615647AD700B62244 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAA34FE415647BAE00B62244 /* MochaRuntime_Private.h in Headers */,
+				EAA34FE615647BB700B62244 /* MochaRuntime.h in Headers */,
+				EAA34FE715647BBC00B62244 /* Mocha.h in Headers */,
+				EAA34FEA15647BC300B62244 /* MochaDefines.h in Headers */,
+				EAA34FEF15647BDC00B62244 /* MOBox.h in Headers */,
+				EAA34FF315647BE500B62244 /* MOMethod.h in Headers */,
+				EAA34FF515647BEB00B62244 /* MOMethod_Private.h in Headers */,
+				EAA34FFA15647BF600B62244 /* MOStruct.h in Headers */,
+				EAA34FFE15647BFE00B62244 /* MOUndefined.h in Headers */,
+				EAA3500315647C0700B62244 /* MOObjCRuntime.h in Headers */,
+				EAA3500815647C1400B62244 /* MOBridgeSupportController.h in Headers */,
+				EAA3500B15647C1C00B62244 /* MOBridgeSupportParser.h in Headers */,
+				EAA3500F15647C2400B62244 /* MOBridgeSupportLibrary.h in Headers */,
+				EAA3501415647C2D00B62244 /* MOBridgeSupportSymbol.h in Headers */,
+				EAA3501815647C4400B62244 /* MOFunctionArgument.h in Headers */,
+				EAA3501B15647C4D00B62244 /* MOUtilities.h in Headers */,
+				EAA3502015647C5A00B62244 /* NSArray+MochaAdditions.h in Headers */,
+				EAA3502315647C6100B62244 /* NSDictionary+MochaAdditions.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EAA45E00155CE44B00F93E40 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -327,6 +414,23 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		EAA34FC715647AD700B62244 /* libMocha (iOS) */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EAA34FD015647AD700B62244 /* Build configuration list for PBXNativeTarget "libMocha (iOS)" */;
+			buildPhases = (
+				EAA34FC415647AD700B62244 /* Sources */,
+				EAA34FC515647AD700B62244 /* Frameworks */,
+				EAA34FC615647AD700B62244 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "libMocha (iOS)";
+			productName = "libMocha (iOS)";
+			productReference = EAA34FC815647AD700B62244 /* libMocha.a */;
+			productType = "com.apple.product-type.library.static";
+		};
 		EAA45E02155CE44B00F93E40 /* Mocha */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = EAA45E18155CE44B00F93E40 /* Build configuration list for PBXNativeTarget "Mocha" */;
@@ -356,7 +460,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				EAA45EA9155F0B3200F93E40 /* PBXTargetDependency */,
+				EAA3503915647DEA00B62244 /* PBXTargetDependency */,
 			);
 			name = moc;
 			productName = moc;
@@ -386,6 +490,7 @@
 			targets = (
 				EAA45E02155CE44B00F93E40 /* Mocha */,
 				EAA45E70155EE5AF00F93E40 /* moc */,
+				EAA34FC715647AD700B62244 /* libMocha (iOS) */,
 			);
 		};
 /* End PBXProject section */
@@ -402,25 +507,47 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		EAA34FC415647AD700B62244 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EAA34FEC15647BCA00B62244 /* Mocha.m in Sources */,
+				EAA34FEE15647BCF00B62244 /* MochaRuntime.m in Sources */,
+				EAA34FF115647BE100B62244 /* MOBox.m in Sources */,
+				EAA34FF715647BF000B62244 /* MOMethod.m in Sources */,
+				EAA34FFC15647BFA00B62244 /* MOStruct.m in Sources */,
+				EAA34FFF15647C0300B62244 /* MOUndefined.m in Sources */,
+				EAA3500515647C0D00B62244 /* MOObjCRuntime.m in Sources */,
+				EAA3500A15647C1900B62244 /* MOBridgeSupportController.m in Sources */,
+				EAA3500D15647C2200B62244 /* MOBridgeSupportParser.m in Sources */,
+				EAA3501115647C2A00B62244 /* MOBridgeSupportLibrary.m in Sources */,
+				EAA3501515647C3300B62244 /* MOBridgeSupportSymbol.m in Sources */,
+				EAA3501A15647C4A00B62244 /* MOFunctionArgument.m in Sources */,
+				EAA3501E15647C5400B62244 /* MOUtilities.m in Sources */,
+				EAA3502215647C5F00B62244 /* NSArray+MochaAdditions.m in Sources */,
+				EAA3502615647C6500B62244 /* NSDictionary+MochaAdditions.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EAA45DFE155CE44B00F93E40 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EAA45E15155CE44B00F93E40 /* Mocha.m in Sources */,
-				EAA45E25155CE57600F93E40 /* MochaRuntime.m in Sources */,
-				02112324155D7BD000415471 /* MOUtilities.m in Sources */,
-				02112328155D973100415471 /* MOBridgeSupportController.m in Sources */,
-				0211232D155D99F600415471 /* MOBridgeSupportSymbol.m in Sources */,
-				0211233F155DB8F800415471 /* MOBridgeSupportLibrary.m in Sources */,
-				02112343155DB9A100415471 /* MOBridgeSupportParser.m in Sources */,
-				EAA45E89155EE97200F93E40 /* MOMethod.m in Sources */,
-				EAA45E95155EEB9500F93E40 /* MOBox.m in Sources */,
-				EAC8BFC5155F3E01003653BA /* NSArray+MochaAdditions.m in Sources */,
-				EAC8BFCA155F3ECD003653BA /* NSDictionary+MochaAdditions.m in Sources */,
-				EA037E711560B4C100D3E7C8 /* MOFunctionArgument.m in Sources */,
-				EAA34F9F156304A800B62244 /* MOUndefined.m in Sources */,
-				EAA34FA41563986F00B62244 /* MOStruct.m in Sources */,
-				EAA34FB91563B3A500B62244 /* MOObjCRuntime.m in Sources */,
+				EAA3502815647DAD00B62244 /* Mocha.m in Sources */,
+				EAA3502915647DAD00B62244 /* MochaRuntime.m in Sources */,
+				EAA3502A15647DAD00B62244 /* MOBox.m in Sources */,
+				EAA3502B15647DAD00B62244 /* MOMethod.m in Sources */,
+				EAA3502C15647DAD00B62244 /* MOStruct.m in Sources */,
+				EAA3502D15647DAD00B62244 /* MOUndefined.m in Sources */,
+				EAA3502E15647DAD00B62244 /* MOObjCRuntime.m in Sources */,
+				EAA3502F15647DAD00B62244 /* MOBridgeSupportController.m in Sources */,
+				EAA3503015647DAD00B62244 /* MOBridgeSupportParser.m in Sources */,
+				EAA3503115647DAD00B62244 /* MOBridgeSupportLibrary.m in Sources */,
+				EAA3503215647DAD00B62244 /* MOBridgeSupportSymbol.m in Sources */,
+				EAA3503315647DAD00B62244 /* MOFunctionArgument.m in Sources */,
+				EAA3503415647DAD00B62244 /* MOUtilities.m in Sources */,
+				EAA3503515647DAD00B62244 /* NSArray+MochaAdditions.m in Sources */,
+				EAA3503615647DAD00B62244 /* NSDictionary+MochaAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,10 +563,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		EAA45EA9155F0B3200F93E40 /* PBXTargetDependency */ = {
+		EAA3503915647DEA00B62244 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EAA45E02155CE44B00F93E40 /* Mocha */;
-			targetProxy = EAA45EA8155F0B3200F93E40 /* PBXContainerItemProxy */;
+			targetProxy = EAA3503815647DEA00B62244 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -455,6 +582,37 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		EAA34FD115647AD700B62244 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DSTROOT = /tmp/libMocha__iOS_.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libMocha (iOS)/libMocha-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = Mocha;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+			};
+			name = Debug;
+		};
+		EAA34FD215647AD700B62244 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
+				DSTROOT = /tmp/libMocha__iOS_.dst;
+				GCC_PRECOMPILE_PREFIX_HEADER = YES;
+				GCC_PREFIX_HEADER = "libMocha (iOS)/libMocha-Prefix.pch";
+				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = Mocha;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
 		EAA45E16155CE44B00F93E40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -553,6 +711,14 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EAA34FD015647AD700B62244 /* Build configuration list for PBXNativeTarget "libMocha (iOS)" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EAA34FD115647AD700B62244 /* Debug */,
+				EAA34FD215647AD700B62244 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		EAA45DFC155CE44B00F93E40 /* Build configuration list for PBXProject "Mocha" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
