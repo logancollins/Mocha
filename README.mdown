@@ -14,7 +14,7 @@ Instances of the `Mocha` class is the representation of a runtime. A runtime can
 
 When arguments are passed between the Objective-C and JavaScript sides of the bridge they may be implicitly converted to an appropriate type counterpart or boxed within an opaque proxy object. The following type conventions are in effect when moving between each side of the bridge:
 
-### Objective-C to JavaScript:
+### Objective-C to JavaScript
 - `nil` is converted to `null`
 - `NSNull` is converted to `null`
 - `MOUndefined` is converted to `undefined`
