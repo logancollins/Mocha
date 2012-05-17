@@ -68,7 +68,9 @@ static MOObjCRuntime * sharedRuntime = nil;
         Class klass = classList[i];
         const char *name = class_getName(klass);
         NSString *string = [NSString stringWithUTF8String:name];
-        [classes addObject:string];
+        if (![string hasPrefix:@"_"]) {
+            [classes addObject:string];
+        }
     }
     free(classList);
     [classes sortUsingSelector:@selector(caseInsensitiveCompare:)];
@@ -88,7 +90,9 @@ static MOObjCRuntime * sharedRuntime = nil;
         Protocol *protocol = protocolList[i];
         const char *name = protocol_getName(protocol);
         NSString *string = [NSString stringWithUTF8String:name];
-        [protocols addObject:string];
+        if (![string hasPrefix:@"_"]) {
+            [protocols addObject:string];
+        }
     }
     free(protocolList);
     [protocols sortUsingSelector:@selector(caseInsensitiveCompare:)];
