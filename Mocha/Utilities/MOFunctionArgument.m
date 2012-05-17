@@ -679,8 +679,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     
     switch (typeEncoding) {
         case _C_ID:	
-		case _C_CLASS:
-        case _C_PTR: {
+		case _C_CLASS: {
 			id object = [runtime objectForJSValue:value];
             *(id *)ptr = object;
             return YES;
@@ -753,6 +752,12 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
             bool b = JSValueToBoolean(ctx, value);
 			*(bool*)ptr = b;
 			return YES;
+        }
+        case _C_PTR: {
+			NSValue *object = [runtime objectForJSValue:value];
+            void *pointer = [object pointerValue];
+            *(void**)ptr = pointer;
+            return YES;
         }
     }
     
@@ -847,12 +852,9 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 			return YES;
 		}
 		case _C_PTR: {
-//			JSObjectRef o = [[JSCocoa controllerFromContext:ctx] newPrivateObject];
-//			JSCocoaPrivateObject* private = JSObjectGetPrivate(o);
-//			private.type = @"rawPointer";
-//			[private setRawPointer:*(void**)ptr encoding:fullTypeEncoding];
-//			*value = o;
-//			return	YES;
+            NSValue *object = [NSValue valueWithPointer:ptr];
+            *value = [runtime JSValueForObject:object];
+			return YES;
 		}
     }
     
