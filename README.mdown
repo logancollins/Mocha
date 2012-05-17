@@ -40,6 +40,23 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 - **All boxed types** are unboxed
 
 
+## Frameworks
+
+Frameworks that expose BridgeSupport information (as all public OS X frameworks do) can be imported through the use of the `loadFramework` built-in function.
+
+On OS X, the following frameworks are imported automatically: Foundation, AppKit, CoreData, CoreFoundation, CoreGraphics.
+
+#### Example:
+<pre>
+AVAsset.assetWithURL_(url);
+>>> MOJavaScriptException: ReferenceError: Can't find variable: AVAsset
+
+loadFramework('AVFoundation');
+AVAsset.assetWithURL_(url);
+>> <AVURLAsset: 0x7fe803ce8340>
+</pre>
+
+
 ## Exposing Objective-C methods
 
 By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the `+isSelectorExcludedFromMochaScript:` method. Objects implementing this method can return `YES` for any selector that should not be invoked from the bridge.
