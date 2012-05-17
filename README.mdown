@@ -25,7 +25,7 @@ When arguments are passed between the Objective-C and JavaScript sides of the br
 - `bool` is converted to `Boolean`
 - **C Functions** are boxed within an opaque `Object` type, and are callable
 - **Pointers** are boxed within an opaque `Object` type
-- **All other Objective-C objects** are boxed within an opaque `Object` type. This type can be converted to `String` or `Number` from within JavaScript. `NSString` instances will convert to `String` appropriately. `NSNumber` will convert to `Number` appropriately. All other conversions will use the -description method of the `NSObject` subclass.
+- **All other Objective-C objects** are boxed within an opaque `Object` type. This type can be converted to `String` or `Number` from within JavaScript. `NSString` instances will convert to `String` appropriately. `NSNumber` instances will convert to `Number` appropriately. All other conversions will use the -description method of the `NSObject` subclass.
 
 Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as an `unsigned char` in Objective-C.
 
