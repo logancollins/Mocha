@@ -54,7 +54,7 @@ Variable-argument functions work as expected. Objective-C functions that require
 NSArray *array = [NSArray arrayWithObjects:first, second, third, nil];
 
 // JavaScript
-var array = NSArray.arrayWithObjects(first, second, third);
+var array = NSArray.arrayWithObjects_(first, second, third);
 </pre>
 
 
