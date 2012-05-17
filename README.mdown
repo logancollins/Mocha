@@ -42,9 +42,14 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 ## Exposing Objective-C objects and methods
 
-Arbitrary Objective-C objects and methods can be exposed as global objects to the runtime without needing to declare BridgeSupport information for them. The `Mocha` class is a fully Key-Value Coding compliant container for just this purpose. Calling `-valueForKey:` and `-setValue:forKey:` exposes an object to the runtime, assuming it can be boxed as an appropriate JavaScript type (see above).
+By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the `+isSelectorExcludedFromMochaScript:` method. Objects implementing this method can return `NO` for any selector that should not be invoked from the bridge.
 
-To expose arbitrary methods to the runtime (which appear as global JavaScript functions), use the `MOMethod` class. Instances of the class keep reference to a target object and Objective-C selector, which can be invoked dynamically by the runtime whenever the method is called on the JavaScript side of the bridge. Like all other objects, methods can be exposed using the `-valueForKey:` and `-setValue:forKey:` methods of the `Mocha` class.
+
+## Global objects and functions
+
+Arbitrary Objective-C objects and methods can be exposed as global objects to the runtime without needing to declare BridgeSupport information. The `Mocha` class is a fully Key-Value Coding compliant container for just this purpose. Calling `-valueForKey:` and `-setValue:forKey:` exposes an object to the runtime, assuming it can be boxed as an appropriate JavaScript type (see above).
+
+To expose arbitrary global functions to the runtime, use the `MOMethod` class. Instances of the class keep reference to a target object and Objective-C selector, which can be invoked dynamically by the runtime whenever the method is called on the JavaScript side of the bridge. Like all other objects, methods can be exposed using the `-valueForKey:` and `-setValue:forKey:` methods of the `Mocha` class.
 
 
 ## moc: The Mocha Interpreter
