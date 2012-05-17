@@ -7,7 +7,7 @@
 //
 
 // 
-// Note: Includes code from PyObjC and JSCocoa projects
+// Note: A lot of this code is based on code from the PyObjC and JSCocoa projects.
 // 
 
 #import "MochaRuntime_Private.h"
