@@ -132,6 +132,8 @@ Exceptions in Objective-C code can be automatically caught by JavaScript excepti
 
 JavaScript exceptions that are uncaught will be converted to `NSException` objects with a name of `MOJavaScriptException`. They can be caught in an Objective-C `@try {} @catch (NSException *e) {}` block just like any other exception.
 
+Mocha exceptions that do not originate from within the JavaScript environment carry the name `MORuntimeException`, and generally indicate a more serious failure that indicates an issue within the runtime.
+
 
 ## moc: The Mocha Interpreter
 
