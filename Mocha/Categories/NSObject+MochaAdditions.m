@@ -38,9 +38,9 @@
     }
 }
 
-+ (NSArray *)mo_methods {
++ (NSArray *)mo_methodsForClass:(Class)klass {
     unsigned int count;
-    Method *methods = class_copyMethodList(self, &count);
+    Method *methods = class_copyMethodList(klass, &count);
     NSMutableArray *methodNames = [NSMutableArray arrayWithCapacity:count];
     for (NSUInteger i=0; i<count; i++) {
         Method method = methods[i];
@@ -52,21 +52,16 @@
     }
     [methodNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
     return methodNames;
-    
-//    NSString *name = [NSString stringWithUTF8String:class_getName(self)];
-//    id symbol = [[MOBridgeSupportController sharedController] performQueryForSymbolName:name ofType:[MOBridgeSupportClass class]];
-//    if (symbol != nil) {
-//        NSArray *methods = [symbol methods];
-//        NSMutableArray *array = [NSMutableArray arrayWithCapacity:[methods count]];
-//        for (MOBridgeSupportMethod *method in methods) {
-//            NSString *methodName = [method name];
-//            [array addObject:methodName];
-//        }
-//        return array;
-//    }
-//    else {
-//        return nil;
-//    }
+}
+
++ (NSArray *)mo_methods {
+    NSMutableArray *methodNames = [NSMutableArray array];
+    for (Class klass in [self mo_ancestors]) {
+        [methodNames addObjectsFromArray:[self mo_methodsForClass:klass]];
+    }
+    [methodNames addObjectsFromArray:[self mo_methodsForClass:self]];
+    [methodNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
+    return methodNames;
 }
 
 + (NSArray *)mo_ancestors {
@@ -78,15 +73,25 @@
     return classes;
 }
 
-+ (NSArray *)mo_protocols {
++ (NSArray *)mo_protocolsForClass:(Class)klass {
     unsigned int count;
-    Protocol **protocols = class_copyProtocolList(self, &count);
+    Protocol **protocols = class_copyProtocolList(klass, &count);
     NSMutableArray *protocolNames = [NSMutableArray arrayWithCapacity:count];
     for (NSUInteger i=0; i<count; i++) {
         Protocol *protocol = protocols[i];
         NSString *name = [NSString stringWithUTF8String:protocol_getName(protocol)];
         [protocolNames addObject:name];
     }
+    free(protocols);
+    return protocolNames;
+}
+
++ (NSArray *)mo_protocols {
+    NSMutableArray *protocolNames = [NSMutableArray array];
+    for (Class klass in [self mo_ancestors]) {
+        [protocolNames addObjectsFromArray:[self mo_protocolsForClass:klass]];
+    }
+    [protocolNames addObjectsFromArray:[self mo_protocolsForClass:self]];
     return protocolNames;
 }
 
