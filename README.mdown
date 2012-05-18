@@ -165,7 +165,7 @@ Implementing `-objectForKeyedSubscript:` allows an object to use the `object['ke
 
 Mocha adds several facilities for introspecting the Objective-C runtime. The built-in object `objc` can be used to query various attributes about the Objective-C runtime. Use the `-classes` and `-classWithName:` methods to get information about classes registered with the runtime, or `-protocols` and `-protocolWithName:` to get information about protocols registered with the runtime.
 
-An NSObject category is also added by the Mocha runtime to add additional introspection abilities to class objects. Use the `+ancestors` method to get a list of a class's superclass chain. Use the `+classMethods`, `+instanceMethods`, `+properties`, and `+protocols` methods to query information about a class's class methods, instance methods, properties, and protocols, respectively.
+An NSObject category is also added by the Mocha runtime to add additional introspection abilities to class objects. Use the `+ancestors` method to get a list of a class's superclass chain. Use the `+classMethods`, `+instanceMethods`, `+properties`, and `+protocols` methods to query information about a class's class methods, instance methods, properties, and protocols, respectively. Note that these methods only return methods, properties and protocols defined by the class itself. As a convenience, Mocha also provides the following methods to query for the entire superclass chain: `+classMethodsWithAncestors`, `+instanceMethodsWithAncestors`, `+propertiesWithAncestors`, and `+protocolsWithAncestors`.
 
 
 ## Exceptions
