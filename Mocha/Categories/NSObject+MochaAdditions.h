@@ -13,10 +13,18 @@
 
 + (void)mo_swizzleAdditions;
 
-+ (NSArray *)mo_methods;
-
 + (NSArray *)mo_ancestors;
 
++ (NSArray *)mo_instanceMethods;
++ (NSArray *)mo_instanceMethodsWithAncestors;
+
++ (NSArray *)mo_classMethods;
++ (NSArray *)mo_classMethodsWithAncestors;
+
++ (NSArray *)mo_properties;
++ (NSArray *)mo_propertiesWithAncestors;
+
 + (NSArray *)mo_protocols;
++ (NSArray *)mo_protocolsWithAncestors;
 
 @end
