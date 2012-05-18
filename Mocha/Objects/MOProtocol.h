@@ -44,36 +44,36 @@
 
 
 /*!
- * @method requiredClassMethods
+ * @property requiredClassMethods
  * @abstract The array of required class method names
  * 
  * @result An NSArray of NSString objects
  */
-- (NSArray *)requiredClassMethods;
+@property (copy, readonly) NSArray *requiredClassMethods;
 
 /*!
- * @method optionalClassMethods
+ * @property optionalClassMethods
  * @abstract The array of optional class method names
  * 
  * @result An NSArray of NSString objects
  */
-- (NSArray *)optionalClassMethods;
+@property (copy, readonly) NSArray *optionalClassMethods;
 
 /*!
- * @method requiredInstanceMethods
+ * @property requiredInstanceMethods
  * @abstract The array of required instance method names
  * 
  * @result An NSArray of NSString objects
  */
-- (NSArray *)requiredInstanceMethods;
+@property (copy, readonly) NSArray *requiredInstanceMethods;
 
 /*!
- * @method optionalInstanceMethods
+ * @property optionalInstanceMethods
  * @abstract The array of optional instance method names
  * 
  * @result An NSArray of NSString objects
  */
-- (NSArray *)optionalInstanceMethods;
+@property (copy, readonly) NSArray *optionalInstanceMethods;
 
 /*!
  * @property properties
@@ -81,7 +81,7 @@
  * 
  * @result An NSArray of NSString objects
  */
-- (NSArray *)properties;
+@property (copy, readonly) NSArray *properties;
 
 /*!
  * @property protocols
@@ -89,6 +89,6 @@
  * 
  * @result An NSArray of NSString objects
  */
-- (NSArray *)protocols;
+@property (copy, readonly) NSArray *protocols;
 
 @end
