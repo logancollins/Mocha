@@ -161,6 +161,13 @@ Implementing `-objectForKeyedSubscript:` allows an object to use the `object['ke
 `NSDictionary` and `NSMutableDictionary` automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting the Objective-C keyed subscripting syntax on 10.8+).
 
 
+## Introspecting the Objective-C Runtime
+
+Mocha adds several facilities for introspecting the Objective-C runtime. The built-in object `objc` can be used to query various attributes about the Objective-C runtime. Use the `-classes` and `-classWithName:` methods to get information about classes registered with the runtime, or `-protocols` and `-protocolWithName:` to get information about protocols registered with the runtime.
+
+An NSObject category is also added by the Mocha runtime to add additional introspection abilities to class objects. Use the `+ancestors` method to get a list of a class's superclass chain. Use the `+classMethods`, `+instanceMethods`, `+properties`, and `+protocols` methods to query information about a class's class methods, instance methods, properties, and protocols, respectively.
+
+
 ## Exceptions
 
 Exceptions in Objective-C code can be automatically caught by JavaScript exception handlers. The value of the `err` argument within the `try {} catch (err) {}` block will be a boxed `NSException` instance.
