@@ -9,6 +9,9 @@
 #import <Foundation/Foundation.h>
 
 
+@class MOProtocol;
+
+
 /*!
  * @class MOObjCRuntime
  * @abstract Interface bridge to the Objective-C runtime
@@ -70,10 +73,12 @@
  * The name of the protocol
  * 
  * @discusion
- * This method is equivalent to NSProtocolFromString(name)
+ * This method returns an MOProtocol object, which is a thin wrapper around
+ * an Objective-C Protocol object. See MOProtocol.h for more details.
+ * As such, this method is not equivalent to NSProtocolFromString(name).
  * 
- * @result A Protocol object
+ * @result An MOProtocol object
  */
-- (Protocol *)protocolWithName:(NSString *)name;
+- (MOProtocol *)protocolWithName:(NSString *)name;
 
 @end

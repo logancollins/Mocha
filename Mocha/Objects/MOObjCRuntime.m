@@ -7,6 +7,7 @@
 //
 
 #import "MOObjCRuntime.h"
+#import "MOProtocol.h"
 
 #import <objc/runtime.h>
 
@@ -99,9 +100,10 @@ static MOObjCRuntime * sharedRuntime = nil;
     return protocols;
 }
 
-- (Protocol *)protocolWithName:(NSString *)name {
+- (MOProtocol *)protocolWithName:(NSString *)name {
     Protocol *protocol = objc_getProtocol([name UTF8String]);
-    return protocol;
+    MOProtocol *protocolWrapper = [MOProtocol protocolWithProtocol:protocol];
+    return protocolWrapper;
 }
 
 @end

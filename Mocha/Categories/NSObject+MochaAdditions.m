@@ -86,7 +86,13 @@
 + (NSArray *)mo_methodsForClass:(Class)klass {
     unsigned int count;
     Method *methods = class_copyMethodList(klass, &count);
+    
+    if (methods == NULL) {
+        return [NSArray array];
+    }
+    
     NSMutableArray *methodNames = [NSMutableArray arrayWithCapacity:count];
+    
     for (NSUInteger i=0; i<count; i++) {
         Method method = methods[i];
         SEL selector = method_getName(method);
@@ -95,7 +101,11 @@
             [methodNames addObject:name];
         }
     }
+    
     [methodNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
+    
+    free(methods);
+    
     return methodNames;
 }
 
@@ -133,7 +143,13 @@
 + (NSArray *)mo_propertiesForClass:(Class)klass {
     unsigned int count;
     objc_property_t * properties = class_copyPropertyList(klass, &count);
+    
+    if (properties == NULL) {
+        return [NSArray array];
+    }
+    
     NSMutableArray *propertyNames = [NSMutableArray arrayWithCapacity:count];
+    
     for (NSUInteger i=0; i<count; i++) {
         objc_property_t property = properties[i];
         NSString *name = [NSString stringWithUTF8String:property_getName(property)];
@@ -141,7 +157,11 @@
             [propertyNames addObject:name];
         }
     }
+    
     [propertyNames sortUsingSelector:@selector(caseInsensitiveCompare:)];
+    
+    free(properties);
+    
     return propertyNames;
 }
 
@@ -161,13 +181,21 @@
 + (NSArray *)mo_protocolsForClass:(Class)klass {
     unsigned int count;
     Protocol **protocols = class_copyProtocolList(klass, &count);
+    
+    if (protocols == NULL) {
+        return [NSArray array];
+    }
+    
     NSMutableArray *protocolNames = [NSMutableArray arrayWithCapacity:count];
+    
     for (NSUInteger i=0; i<count; i++) {
         Protocol *protocol = protocols[i];
         NSString *name = [NSString stringWithUTF8String:protocol_getName(protocol)];
         [protocolNames addObject:name];
     }
+    
     free(protocols);
+    
     return protocolNames;
 }
 
