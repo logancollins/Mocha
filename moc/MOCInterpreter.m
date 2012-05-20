@@ -52,8 +52,8 @@ static char ** runtimeCompletion(const char * text, int start, int end);
     
     [self installBuiltins];
     
-    rl_attempted_completion_function = runtimeCompletion;
-    rl_bind_key('\t', rl_complete);
+    //rl_attempted_completion_function = runtimeCompletion;
+    //rl_bind_key('\t', rl_complete);
     
     char *line = NULL;
     
