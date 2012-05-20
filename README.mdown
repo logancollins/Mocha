@@ -45,12 +45,12 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 ### Functions, Methods, and Blocks… Oh My!
 
-As described above, all three of these constructs are automatically converted across the bridge. The specifics of how each of them are boxed is different, but the end result is the same: All three are available to be called from within the runtime as if they were a normal JavaScript function.
+All three of these constructs are automatically converted across the bridge. The specifics of how each of them are boxed is different, but the end result is the same: All three are available to be called from within the runtime as if they were a normal JavaScript function.
 
 
 ### Arguments
 
-Arguments to boxed callables are automatically converted when crossing the bridge, as discussed above. Care is taken to automatically allocate storage space for return values and maintain type consistency between the C, Objective-C and JavaScript layers.
+Arguments to boxed callables are automatically converted when crossing the bridge. Care is taken to automatically allocate storage space for return values and maintain type consistency between the C, Objective-C and JavaScript layers.
 
 Variable-argument functions work as expected. Objective-C functions that require a terminating sentinel (through the `NS_REQUIRES_NIL_TERMINATION` compiler attribute) **do not** require a trailing `null`.
 
