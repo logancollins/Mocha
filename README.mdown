@@ -45,7 +45,7 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 ### Functions, Methods, and Blocks… Oh My!
 
-As described above, all three of these constructs are automatically converted across the bridge. The way that each of them are boxed is different, but the end result is the same: All three are available to be called from within the runtime as if they were a normal JavaScript function.
+As described above, all three of these constructs are automatically converted across the bridge. The specifics of how each of them are boxed is different, but the end result is the same: All three are available to be called from within the runtime as if they were a normal JavaScript function.
 
 
 ### Arguments
