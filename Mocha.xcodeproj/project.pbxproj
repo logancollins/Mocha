@@ -84,6 +84,10 @@
 		EAA45E94155EEB9500F93E40 /* MOBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E92155EEB9400F93E40 /* MOBox.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA45EAB155F0B4600F93E40 /* libreadline.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45EAA155F0B4600F93E40 /* libreadline.dylib */; };
 		EAA45EAD155F0CC800F93E40 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */; };
+		EAA59E9015686C8600368A96 /* MOClosure.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA59E8E15686C8600368A96 /* MOClosure.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA59E9115686C8600368A96 /* MOClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA59E8F15686C8600368A96 /* MOClosure.m */; };
+		EAA59E9415686CEA00368A96 /* MOClosure_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA59E9315686CEA00368A96 /* MOClosure_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA59E991568786000368A96 /* MOClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA59E8F15686C8600368A96 /* MOClosure.m */; };
 		EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */; };
 		EABA262715657747005CF076 /* NSOrderedSet+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EABA262515657747005CF076 /* NSOrderedSet+MochaAdditions.m */; };
 		EABA262B15658AA3005CF076 /* NSObject+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */; };
@@ -165,6 +169,9 @@
 		EAA45E92155EEB9400F93E40 /* MOBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBox.h; sourceTree = "<group>"; };
 		EAA45E93155EEB9400F93E40 /* MOBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBox.m; sourceTree = "<group>"; };
 		EAA45EAA155F0B4600F93E40 /* libreadline.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.dylib; path = usr/lib/libreadline.dylib; sourceTree = SDKROOT; };
+		EAA59E8E15686C8600368A96 /* MOClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOClosure.h; sourceTree = "<group>"; };
+		EAA59E8F15686C8600368A96 /* MOClosure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOClosure.m; sourceTree = "<group>"; };
+		EAA59E9315686CEA00368A96 /* MOClosure_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOClosure_Private.h; sourceTree = "<group>"; };
 		EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOrderedSet+MochaAdditions.h"; sourceTree = "<group>"; };
 		EABA262515657747005CF076 /* NSOrderedSet+MochaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOrderedSet+MochaAdditions.m"; sourceTree = "<group>"; };
 		EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MochaAdditions.h"; sourceTree = "<group>"; };
@@ -309,6 +316,9 @@
 				EAA45E86155EE97200F93E40 /* MOMethod.h */,
 				EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */,
 				EAA45E87155EE97200F93E40 /* MOMethod.m */,
+				EAA59E8E15686C8600368A96 /* MOClosure.h */,
+				EAA59E9315686CEA00368A96 /* MOClosure_Private.h */,
+				EAA59E8F15686C8600368A96 /* MOClosure.m */,
 				EAA34FA11563986F00B62244 /* MOStruct.h */,
 				EAA34FA21563986F00B62244 /* MOStruct.m */,
 				EAA34F9C156304A800B62244 /* MOUndefined.h */,
@@ -429,6 +439,8 @@
 				EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */,
 				EABA262B15658AA3005CF076 /* NSObject+MochaAdditions.h in Headers */,
 				EA31AF7A1567064B001F8BE0 /* MOProtocol.h in Headers */,
+				EAA59E9015686C8600368A96 /* MOClosure.h in Headers */,
+				EAA59E9415686CEA00368A96 /* MOClosure_Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -547,6 +559,7 @@
 				EAA3501E15647C5400B62244 /* MOUtilities.m in Sources */,
 				EAA3502215647C5F00B62244 /* NSArray+MochaAdditions.m in Sources */,
 				EAA3502615647C6500B62244 /* NSDictionary+MochaAdditions.m in Sources */,
+				EAA59E991568786000368A96 /* MOClosure.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -572,6 +585,7 @@
 				EABA262715657747005CF076 /* NSOrderedSet+MochaAdditions.m in Sources */,
 				EABA262C15658AA3005CF076 /* NSObject+MochaAdditions.m in Sources */,
 				EA31AF7B1567064B001F8BE0 /* MOProtocol.m in Sources */,
+				EAA59E9115686C8600368A96 /* MOClosure.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

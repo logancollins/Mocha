@@ -12,6 +12,7 @@
 #import "MOBox.h"
 #import "MOUndefined.h"
 #import "MOMethod_Private.h"
+#import "MOClosure_Private.h"
 #import "MOUtilities.h"
 #import "MOFunctionArgument.h"
 
@@ -387,10 +388,10 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 		double doubleValue = [object doubleValue];
 		value = JSValueMakeNumber(_ctx, doubleValue);
 	}*/
-	else if ([object isKindOfClass:[NSNull class]]) {
+	else if (object == nil || [object isKindOfClass:[NSNull class]]) {
 		value = JSValueMakeNull(_ctx);
 	}
-    else if (object == nil || object == [MOUndefined undefined]) {
+    else if (object == [MOUndefined undefined]) {
         value = JSValueMakeUndefined(_ctx);
     }
 	
@@ -424,6 +425,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     JSObjectRef jsObject = NULL;
     
     if ([object isKindOfClass:[MOMethod class]]
+        || [object isKindOfClass:[MOClosure class]]
         || [object isKindOfClass:[MOBridgeSupportFunction class]]) {
         jsObject = JSObjectMake(_ctx, MOFunctionClass, box);
     }

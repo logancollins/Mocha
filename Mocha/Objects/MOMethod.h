@@ -17,7 +17,7 @@
 
 /*!
  * @method methodWithTarget:selector:
- * @abstract Creates a new method object
+ * @abstract Creates a new method object from a target and selector
  * 
  * @param target
  * The target of the method call

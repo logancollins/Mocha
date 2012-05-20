@@ -53,7 +53,7 @@ static CFMutableDictionaryRef _protocolsTable = NULL;
 + (MOProtocol *)protocolWithProtocol:(Protocol *)protocol {
     MOProtocol *protocolWrapper = (id)CFDictionaryGetValue(_protocolsTable, protocol);
     if (protocolWrapper == nil) {
-        protocolWrapper = [[self alloc] init];
+        protocolWrapper = [[[self alloc] init] autorelease];
         protocolWrapper.protocol = protocol;
         CFDictionarySetValue(_protocolsTable, protocol, protocolWrapper);
     }

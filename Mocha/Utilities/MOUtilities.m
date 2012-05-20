@@ -11,7 +11,8 @@
 #import "MochaRuntime_Private.h"
 
 #import "MOFunctionArgument.h"
-#import "MOMethod.h"
+#import "MOMethod_Private.h"
+#import "MOClosure_Private.h"
 #import "MOFunctionArgument.h"
 #import "MOUndefined.h"
 
@@ -287,6 +288,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     
     JSValueRef value = NULL;
     BOOL objCCall = NO;
+    BOOL blockCall = NO;
     NSArray *argumentEncodings = nil;
     MOFunctionArgument *returnValue = nil;
     void *callAddress = NULL;
@@ -296,11 +298,13 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     id target = nil;
     SEL selector = NULL;
     
+    id block = nil;
+    
     // Determine the metadata for the function call
     if ([function isKindOfClass:[MOMethod class]]) {
         // ObjC method
-        
         objCCall = YES;
+        
         target = [function target];
         selector = [function selector];
         Class klass = [target class];
@@ -354,6 +358,36 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             || (!variadic && (callAddressArgumentCount != argumentCount)))
         {
             NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %d arguments", NSStringFromSelector(selector), callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
+            if (exception != NULL) {
+                *exception = [runtime JSValueForObject:e];
+            }
+            return NULL;
+        }
+    }
+    else if ([function isKindOfClass:[MOClosure class]]) {
+        // C block
+        blockCall = YES;
+        
+        block = [function block];
+        
+        callAddress = [function callAddress];
+        
+        const char *typeEncoding = [(MOClosure *)function typeEncoding];
+        argumentEncodings = MOParseObjCMethodEncoding(typeEncoding);
+        
+        if (argumentEncodings == nil) {
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
+            if (exception != NULL) {
+                *exception = [runtime JSValueForObject:e];
+            }
+            return NULL;
+        }
+        
+        callAddressArgumentCount = [argumentEncodings count] - 2;
+        
+        if (callAddressArgumentCount != argumentCount) {
+            NSString *reason = [NSString stringWithFormat:@"Block requires %lu %@, but JavaScript passed %d arguments", callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
@@ -445,7 +479,14 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
 	void** values = NULL;
     
     // Build the arguments
-	NSUInteger effectiveArgumentCount = argumentCount + (objCCall ? 2 : 0);
+	NSUInteger effectiveArgumentCount = argumentCount;
+    if (objCCall) {
+        effectiveArgumentCount += 2;
+    }
+    if (blockCall) {
+        effectiveArgumentCount += 1;
+    }
+    
 	if (effectiveArgumentCount > 0) {
 		args = malloc(sizeof(ffi_type *) * effectiveArgumentCount);
 		values = malloc(sizeof(void *) * effectiveArgumentCount);
@@ -459,6 +500,13 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
 			values[0] = (void *)&target;
 			values[1] = (void *)&selector;
             j = 2;
+        }
+        
+        // Block calls include the block as the first argument
+        if (blockCall) {
+            args[0] = &ffi_type_pointer;
+            values[0] = (void *)&block;
+            j = 1;
         }
         
         for (NSUInteger i=0; i<argumentCount; i++, j++) {
@@ -712,7 +760,7 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
 
 BOOL MOInvocationShouldUseStret(NSArray *arguments) {
 	int resultSize = 0;
-	char returnEncoding = [[arguments objectAtIndex:0] typeEncoding];
+	char returnEncoding = [(MOFunctionArgument *)[arguments objectAtIndex:0] typeEncoding];
 	if (returnEncoding == _C_STRUCT_B) {
         resultSize = [MOFunctionArgument sizeOfStructureTypeEncoding:[[arguments objectAtIndex:0] structureTypeEncoding]];
     }

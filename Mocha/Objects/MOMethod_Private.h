@@ -14,4 +14,6 @@
 @property (readwrite) id target;
 @property (readwrite) SEL selector;
 
+@property (copy, readwrite) id block;
+
 @end

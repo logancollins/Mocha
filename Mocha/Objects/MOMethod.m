@@ -14,12 +14,24 @@
 
 @synthesize target=_target;
 @synthesize selector=_selector;
+@synthesize block=_block;
 
 + (MOMethod *)methodWithTarget:(id)target selector:(SEL)selector {
     MOMethod *method = [[self alloc] init];
     method.target = target;
     method.selector = selector;
     return [method autorelease];
+}
+
++ (MOMethod *)methodWithBlock:(id)block {
+    MOMethod *method = [[self alloc] init];
+    method.block = block;
+    return [method autorelease];
+}
+
+- (void)dealloc {
+    [_block release];
+    [super dealloc];
 }
 
 - (NSString *)description {
