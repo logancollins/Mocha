@@ -67,7 +67,7 @@ var array = NSArray.arrayWithObjects_(first, second, third);
 
 Since JavaScript is a dynamic, weak, duck typed language, type safety is key. Mocha will throw an exception if a callable receives more or fewer arguments than is expected, but the actual type of those arguments is mostly left up to the user. The runtime will attempt to convert the JavaScript arguments to the appropriate type as best it can.
 
-**This is important note:** While normal JavaScript functions can have optional arguments, callables provided from the bridge must receive the exact number of arguments that are expected. (Except in the case of variadic functions, in which case the *minimum* number of arguments needed for calling are required.)
+**This is an important note:** While normal JavaScript functions can have optional arguments, callables provided from the bridge must receive the exact number of arguments that are expected. (Except in the case of variadic functions, in which case the *minimum* number of arguments needed for calling are required.)
 
 
 ### Objective-C Selectors
