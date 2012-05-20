@@ -51,7 +51,8 @@ All three of these constructs are automatically converted across the bridge. The
 #### Example:
 <pre>
 // ObjC
-NSString * (^toUppercaseBlock)(NSString *) = [myObject toUppercaseBlock];
+typedef NSString * (^UppercaseBlock)(NSString *);
+UppercaseBlock toUppercaseBlock = [myObject toUppercaseBlock];
 theBlock(@"Hello, World!");
 >>> "HELLO, WORLD!"
 
