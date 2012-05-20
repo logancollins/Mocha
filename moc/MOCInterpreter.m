@@ -21,6 +21,8 @@
 
 static const char interactivePrompt[] = "> ";
 
+static char ** runtimeCompletion(const char * text, int start, int end);
+
 
 @interface MOCInterpreter ()
 
@@ -50,11 +52,12 @@ static const char interactivePrompt[] = "> ";
     
     [self installBuiltins];
     
-    while (1) {
-        char *line = readline(interactivePrompt);
-        if (line == NULL) {
-            break;
-        }
+    rl_attempted_completion_function = runtimeCompletion;
+    rl_bind_key('\t', rl_complete);
+    
+    char *line = NULL;
+    
+    while ((line = readline(interactivePrompt))) {
         if (line[0]) {
             add_history(line);
         }
@@ -80,6 +83,8 @@ static const char interactivePrompt[] = "> ";
                 }
             }
         }
+        
+        free(line);
     }
 }
 
@@ -88,3 +93,29 @@ static const char interactivePrompt[] = "> ";
 }
 
 @end
+
+
+static char ** runtimeCompletion(const char * text, int start, int end) {
+    char ** matches = NULL;
+    
+    Mocha *runtime = [Mocha sharedRuntime];
+    NSString *query = [NSString stringWithUTF8String:text];
+    NSArray *symbols = [[runtime globalSymbolNames] filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"self beginswith %@", query]];
+    NSUInteger count = [symbols count];
+    
+    if (count > 0) {
+        matches = (char **)malloc(sizeof(char *) * ([symbols count] + 1));
+        
+        for (NSUInteger i=0; i<count; i++) {
+            NSString *string = [symbols objectAtIndex:i];
+            char * aString = (char *)[string UTF8String];
+            char * name = (char *)malloc(strlen(aString) + 1);
+            strcpy(name, aString);
+            matches[i] = name;
+        }
+        matches[count] = NULL;
+    }
+    
+    return matches;
+}
+

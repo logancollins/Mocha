@@ -87,6 +87,23 @@
 #pragma mark -
 #pragma mark Queries
 
+- (NSDictionary *)symbols {
+    return _symbols;
+}
+
+- (NSDictionary *)performQueryForSymbolsOfType:(NSArray *)classes {
+    NSMutableDictionary *dictionary = [NSMutableDictionary dictionaryWithCapacity:[_symbols count]];
+    for (NSString *key in _symbols) {
+        MOBridgeSupportSymbol *symbol = [_symbols objectForKey:key];
+        for (Class klass in classes) {
+            if ([symbol isKindOfClass:klass]) {
+                [dictionary setObject:symbol forKey:[symbol name]];
+            }
+        }
+    }
+    return dictionary;
+}
+
 - (id)performQueryForSymbolName:(NSString *)name {
 	return [_symbols objectForKey:name];
 }

@@ -802,6 +802,31 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     [self evalJSString:@"for (var i in this) { this[i] = null; delete this[i]; }"];
 }
 
+
+#pragma mark -
+#pragma mark Symbols
+
+- (NSArray *)globalSymbolNames {
+    NSMutableArray *symbols = [NSMutableArray array];
+    
+    // Exported objects
+    [symbols addObjectsFromArray:[_exportedObjects allKeys]];
+    
+    // ObjC runtime
+    [symbols addObjectsFromArray:[[MOObjCRuntime sharedRuntime] classes]];
+    [symbols addObjectsFromArray:[[MOObjCRuntime sharedRuntime] protocols]];
+    
+    // BridgeSupport
+    NSDictionary *bridgeSupportSymbols = [[MOBridgeSupportController sharedController] performQueryForSymbolsOfType:[NSArray arrayWithObjects:
+                                                                                                                     [MOBridgeSupportFunction class],
+                                                                                                                     [MOBridgeSupportConstant class],
+                                                                                                                     [MOBridgeSupportEnum class],
+                                                                                                                     nil]];
+    [symbols addObjectsFromArray:[bridgeSupportSymbols allKeys]];
+    
+    return symbols;
+}
+
 @end
 
 

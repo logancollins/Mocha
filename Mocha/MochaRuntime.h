@@ -161,6 +161,15 @@
 
 
 /*!
+ * @property globalSymbolNames
+ * @abstract Gets all symbol names in the global Mocha namespace
+ * 
+ * @result An NSArray of NSString objects
+ */
+@property (copy, readonly) NSArray *globalSymbolNames;
+
+
+/*!
  * @method garbageCollect
  * @abstract Instructs the JavaScript garbage collector to perform a collection
  */
