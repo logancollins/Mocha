@@ -1,0 +1,3 @@
+[submodule "libMocha (iOS)/libffi"]
+	path = libMocha (iOS)/libffi
+	url = git://github.com/parmanoir/libffi-iphone.git
