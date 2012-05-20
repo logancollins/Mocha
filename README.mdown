@@ -52,6 +52,8 @@ All three of these constructs are automatically converted across the bridge. The
 
 Arguments to boxed callables are automatically converted when crossing the bridge. Care is taken to automatically allocate storage space for return values and maintain type consistency between the C, Objective-C and JavaScript layers.
 
+Callables that return other callables (e.g a block that returns another block) also work. The returned callable is also boxed up as it crosses the bridge.
+
 Variable-argument functions work as expected. Objective-C methods that require a terminating sentinel (through the `NS_REQUIRES_NIL_TERMINATION` compiler attribute) **do not** require a trailing `null`.
 
 #### Example:
