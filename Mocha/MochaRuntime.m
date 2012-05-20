@@ -227,6 +227,10 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+    if ([value isKindOfClass:NSClassFromString(@"__NSStackBlock__")]) {
+        // Automatically move stack-based blocks to the heap
+        value = [[value copy] autorelease];
+    }
     [_exportedObjects setObject:value forKey:key];
 }
 
@@ -282,7 +286,13 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
             if (unboxObjects == YES) {
                 // Boxed ObjC object
                 id object = [private representedObject];
-                return object;
+                if ([object isKindOfClass:[MOClosure class]]) {
+                    // Auto-unbox closures
+                    return [object block];
+                }
+                else {
+                    return object;
+                }
             }
             else {
                 return private;
@@ -388,6 +398,11 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 		double doubleValue = [object doubleValue];
 		value = JSValueMakeNumber(_ctx, doubleValue);
 	}*/
+    else if ([object isKindOfClass:NSClassFromString(@"NSBlock")]) {
+        // Auto-box blocks inside of a closure object
+        MOClosure *closure = [MOClosure closureWithBlock:object];
+        value = [self boxedJSObjectForObject:closure];
+    }
 	else if (object == nil || [object isKindOfClass:[NSNull class]]) {
 		value = JSValueMakeNull(_ctx);
 	}

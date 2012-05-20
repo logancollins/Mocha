@@ -42,11 +42,6 @@ static const char interactivePrompt[] = "> ";
     
     MOMethod *exit = [MOMethod methodWithTarget:self selector:@selector(exit)];
     [runtime setValue:exit forKey:@"exit"];
-    
-    MOClosure *closure = [MOClosure closureWithBlock:(NSString *)^(NSString *string) {
-        return string;
-    }];
-    [runtime setValue:closure forKey:@"test"];
 }
 
 - (void)run {

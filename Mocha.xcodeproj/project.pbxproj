@@ -84,7 +84,7 @@
 		EAA45E94155EEB9500F93E40 /* MOBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E92155EEB9400F93E40 /* MOBox.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA45EAB155F0B4600F93E40 /* libreadline.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45EAA155F0B4600F93E40 /* libreadline.dylib */; };
 		EAA45EAD155F0CC800F93E40 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */; };
-		EAA59E9015686C8600368A96 /* MOClosure.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA59E8E15686C8600368A96 /* MOClosure.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EAA59E9015686C8600368A96 /* MOClosure.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA59E8E15686C8600368A96 /* MOClosure.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA59E9115686C8600368A96 /* MOClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA59E8F15686C8600368A96 /* MOClosure.m */; };
 		EAA59E9415686CEA00368A96 /* MOClosure_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA59E9315686CEA00368A96 /* MOClosure_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA59E991568786000368A96 /* MOClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA59E8F15686C8600368A96 /* MOClosure.m */; };

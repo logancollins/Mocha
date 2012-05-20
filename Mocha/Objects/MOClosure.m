@@ -16,18 +16,18 @@
 
 @synthesize block=_block;
 
-struct BlockDescriptor {
+struct Block_descriptor {
     unsigned long reserved;
     unsigned long size;
     void *rest[1];
 };
 
-struct Block {
+struct Block_literal {
     void *isa;
     int flags;
     int reserved;
     void *invoke;
-    struct BlockDescriptor *descriptor;
+    struct Block_descriptor *descriptor;
 };
 
 + (MOClosure *)closureWithBlock:(id)block {
@@ -48,12 +48,12 @@ struct Block {
 }
 
 - (void *)callAddress {
-    return ((struct Block *)_block)->invoke;
+    return ((struct Block_literal *)_block)->invoke;
 }
 
 - (const char *)typeEncoding {
-    struct Block *block = (struct Block *)_block;
-    struct BlockDescriptor *descriptor = block->descriptor;
+    struct Block_literal *block = (struct Block_literal *)_block;
+    struct Block_descriptor *descriptor = block->descriptor;
     
     int copyDisposeFlag = 1 << 25;
     int signatureFlag = 1 << 30;
