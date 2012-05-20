@@ -20,6 +20,7 @@ When arguments are passed between the Objective-C and JavaScript sides of the br
 - `MOUndefined` is converted to `undefined`
 - `char*` is converted to `String`
 - **Objective-C methods** are converted to `MOMethod`, and are callable
+- **Blocks** are boxed within an opaque `Object` type, and are callable
 - **C functions** are boxed within an opaque `Object` type, and are callable
 - **C structs** are boxed within an opaque `Object` type, allowing direct access to members in a dictionary-like manner.
 - **C numeric primitives** (`int`, `long`, `short`, `char`, `float`, `double`, etc.) are converted to `Number`
