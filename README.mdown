@@ -47,10 +47,6 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 
 All three of these constructs are automatically converted across the bridge. The specifics of how each of them are boxed is different, but the end result is the same: All three are available to be called from within the runtime as if they were a normal JavaScript function.
 
-Since JavaScript is a dynamic, weak, duck typed language, type safety is key. Mocha will throw an exception if a callable receives more or fewer arguments than is expected, but the actual type of those arguments is mostly left up to the user. The runtime will attempt to convert the JavaScript arguments to the appropriate type as best it can.
-
-This is another important note: While normal JavaScript functions can have optional arguments, callables provided from the bridge must have the exact number of arguments that's expected. (Except in the case of variadic functions. In this case, the *minimum* number of arguments required for calling is checked.)
-
 
 ### Arguments
 
@@ -68,6 +64,10 @@ NSArray *array = [NSArray arrayWithObjects:first, second, third, nil];
 // JavaScript
 var array = NSArray.arrayWithObjects_(first, second, third);
 </pre>
+
+Since JavaScript is a dynamic, weak, duck typed language, type safety is key. Mocha will throw an exception if a callable receives more or fewer arguments than is expected, but the actual type of those arguments is mostly left up to the user. The runtime will attempt to convert the JavaScript arguments to the appropriate type as best it can.
+
+This is another important note: While normal JavaScript functions can have optional arguments, callables provided from the bridge must have the exact number of arguments that's expected. (Except in the case of variadic functions. In this case, the *minimum* number of arguments required for calling is checked.)
 
 
 ### Objective-C Selectors
