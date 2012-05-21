@@ -129,7 +129,7 @@ Frameworks that expose BridgeSupport information (as all public OS X frameworks 
 AVAsset.assetWithURL_(url);
 >>> "MOJavaScriptException: ReferenceError: Can't find variable: AVAsset"
 
-loadFramework('AVFoundation');
+framework('AVFoundation');
 
 AVAsset.assetWithURL_(url);
 >>> "&lt;AVURLAsset: 0x7fe803ce8340&gt;"
