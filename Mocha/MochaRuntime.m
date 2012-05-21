@@ -943,11 +943,11 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         // Enums
         else if ([symbol isKindOfClass:[MOBridgeSupportEnum class]]) {
 			NSNumber *value = [(MOBridgeSupportEnum *)symbol value];
-			NSNumber *value64 = [(MOBridgeSupportEnum *)symbol value64];
 			
             double doubleValue = 0;
 			
 #if __LP64__
+			NSNumber *value64 = [(MOBridgeSupportEnum *)symbol value64];
 			if (value != nil) {
 				doubleValue = [value doubleValue];
 			}

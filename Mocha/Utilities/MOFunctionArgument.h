@@ -8,7 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
+
+#if TARGET_OS_IPHONE
+#import "ffi.h"
+#else
 #import <ffi/ffi.h>
+#endif
 
 
 @interface MOFunctionArgument : NSObject

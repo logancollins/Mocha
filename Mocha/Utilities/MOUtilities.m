@@ -23,8 +23,13 @@
 
 #import <objc/runtime.h>
 #import <objc/message.h>
-#import <ffi/ffi.h>
 #import <dlfcn.h>
+
+#if TARGET_OS_IPHONE
+#import "ffi.h"
+#else
+#import <ffi/ffi.h>
+#endif
 
 
 #pragma mark -
