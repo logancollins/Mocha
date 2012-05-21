@@ -1122,6 +1122,9 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             if (value != nil) {
                 return [runtime JSValueForObject:value];
             }
+			else {
+				return JSValueMakeNull(ctx);
+			}
         }
     }
     @catch (NSException *e) {
