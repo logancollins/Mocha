@@ -238,7 +238,14 @@ Mocha works with iOS, too! libMocha is a static library built for iOS targets. T
 
 ## Code Usage
 
-Mocha utilizes some code and ideas from both PyObjC (http://pyobjc.sourceforge.net/, MIT license) and JSCocoa (http://inexdo.com/JSCocoa, MIT license). Included in the Mocha project are the sources of both libffi-iphone (https://github.com/parmanoir/libffi-iphone, MIT license) and JavaScriptCore-iOS (http://www.phoboslab.org/log/2011/06/javascriptcore-project-files-for-ios, WebKit license). Implementation files are marked appropriately when code it utilized in complete or near-complete duplicate from these awesome projects.
+Mocha utilizes some code and ideas from the following projects:
+
+- PyObjC (http://pyobjc.sourceforge.net/, MIT license)
+- JSCocoa (http://inexdo.com/JSCocoa, MIT license)
+- libffi-iphone (https://github.com/parmanoir/libffi-iphone, MIT license)
+- JavaScriptCore-iOS (http://www.phoboslab.org/log/2011/06/javascriptcore-project-files-for-ios, WebKit license).
+
+Implementation files are marked appropriately when code it utilized in complete or near-complete duplicate from these awesome projects.
 
 
 ## License
