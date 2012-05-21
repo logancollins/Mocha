@@ -222,7 +222,7 @@ Mocha works on iOS too! libMocha is a static library built for iOS targets. To u
 2. Open your **target's build phases**, and under the **Link Binary With Libraries** build phase, click Add and choose **libMocha** from the workspace.
 3. Next, add **libstdc++.dylib** and **libicucore.dylib** to the linked libraries.
 4. Open your **target's build settings** and add **-ObjC** to your **Other Linker Flags**.
-5. Under your **Header Search Paths** add **${BUILT_PRODUCTS_DIR}/usr/local/include**
+5. Under your **Header Search Paths** add **${BUILT_PRODUCTS_DIR}/usr/local/include** and **"${SRCROOT}/(path to Mocha's source folder)/libMocha (iOS)/JavaScriptCore"
 6. Build
 
 
