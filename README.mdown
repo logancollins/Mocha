@@ -122,7 +122,7 @@ var result = myObject.someMethod();
 
 ## Frameworks
 
-Frameworks that expose BridgeSupport information (as all public OS X frameworks do) can be imported through the use of the `loadFramework` built-in function.
+Frameworks that expose BridgeSupport information (as all public OS X frameworks do) can be imported through the use of the `framework` built-in function.
 
 #### Example:
 <pre>

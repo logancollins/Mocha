@@ -784,7 +784,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 
 - (void)installBuiltins {
     MOMethod *loadFramework = [MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)];
-    [self setValue:loadFramework forKey:@"loadFramework"];
+    [self setValue:loadFramework forKey:@"framework"];
     
     [self setValue:[MOObjCRuntime sharedRuntime] forKey:@"objc"];
 }
