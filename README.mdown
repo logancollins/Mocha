@@ -245,7 +245,7 @@ Mocha utilizes some code and ideas from the following projects:
 - libffi-iphone (https://github.com/parmanoir/libffi-iphone, MIT license)
 - JavaScriptCore-iOS (http://www.phoboslab.org/log/2011/06/javascriptcore-project-files-for-ios, WebKit license).
 
-Implementation files are marked appropriately when code it utilized in complete or near-complete duplicate from these awesome projects.
+Files are marked appropriately when code it utilized in complete or near-complete duplicate from these awesome projects.
 
 
 ## License
