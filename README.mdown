@@ -236,6 +236,14 @@ Mocha works with iOS, too! libMocha is a static library built for iOS targets. T
 6. Build!
 
 
+## To Do's
+
+The following items are currently on the docket for future development:
+
+- ~~iOS Support~~ (Added 5/20/12)
+- Objective-J syntax for defining dynamic Objective-C classes and categories
+
+
 ## Code Usage
 
 Mocha utilizes some code and ideas from the following projects:
