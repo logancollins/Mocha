@@ -6,6 +6,34 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		EA73C85D157B170500760AA1 /* FrameworkComplete */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = EA73C860157B170500760AA1 /* Build configuration list for PBXAggregateTarget "FrameworkComplete" */;
+			buildPhases = (
+				EA73C869157B20DB00760AA1 /* Copy Executables */,
+			);
+			dependencies = (
+				EA73C863157B171400760AA1 /* PBXTargetDependency */,
+				EA73C868157B1F6300760AA1 /* PBXTargetDependency */,
+			);
+			name = FrameworkComplete;
+			productName = FrameworkComplete;
+		};
+		EA73C873157B2CF800760AA1 /* InstallPackage */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = EA73C874157B2CF800760AA1 /* Build configuration list for PBXAggregateTarget "InstallPackage" */;
+			buildPhases = (
+				EA73C879157B2D0000760AA1 /* Build Install Package */,
+			);
+			dependencies = (
+				EA73C878157B2CFF00760AA1 /* PBXTargetDependency */,
+			);
+			name = InstallPackage;
+			productName = InstallPackage;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		02112323155D7BD000415471 /* MOUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112321155D7BD000415471 /* MOUtilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02112327155D973100415471 /* MOBridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112325155D973100415471 /* MOBridgeSupportController.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -129,6 +157,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		EA73C862157B171400760AA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA45E02155CE44B00F93E40;
+			remoteInfo = Mocha;
+		};
+		EA73C867157B1F6300760AA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA45E70155EE5AF00F93E40;
+			remoteInfo = moc;
+		};
+		EA73C877157B2CFF00760AA1 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EA73C85D157B170500760AA1;
+			remoteInfo = FrameworkComplete;
+		};
 		EAA3503815647DEA00B62244 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
@@ -661,6 +710,8 @@
 				EAA45E02155CE44B00F93E40 /* Mocha */,
 				EAA45E70155EE5AF00F93E40 /* moc */,
 				EAA34FC715647AD700B62244 /* libMocha (iOS) */,
+				EA73C85D157B170500760AA1 /* FrameworkComplete */,
+				EA73C873157B2CF800760AA1 /* InstallPackage */,
 			);
 		};
 /* End PBXProject section */
@@ -675,6 +726,37 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		EA73C869157B20DB00760AA1 /* Copy Executables */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Executables";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp $BUILT_PRODUCTS_DIR/moc $BUILT_PRODUCTS_DIR/Mocha.framework/Resources/";
+		};
+		EA73C879157B2D0000760AA1 /* Build Install Package */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Install Package";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p ${DSTROOT}/Library/Frameworks/\ncp -R ${BUILT_PRODUCTS_DIR}/Mocha.framework ${DSTROOT}/Library/Frameworks/\npkgbuild --root ${DSTROOT} ${BUILT_PRODUCTS_DIR}/Mocha.pkg";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EAA34FC415647AD700B62244 /* Sources */ = {
@@ -747,6 +829,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		EA73C863157B171400760AA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA45E02155CE44B00F93E40 /* Mocha */;
+			targetProxy = EA73C862157B171400760AA1 /* PBXContainerItemProxy */;
+		};
+		EA73C868157B1F6300760AA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA45E70155EE5AF00F93E40 /* moc */;
+			targetProxy = EA73C867157B1F6300760AA1 /* PBXContainerItemProxy */;
+		};
+		EA73C878157B2CFF00760AA1 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EA73C85D157B170500760AA1 /* FrameworkComplete */;
+			targetProxy = EA73C877157B2CFF00760AA1 /* PBXContainerItemProxy */;
+		};
 		EAA3503915647DEA00B62244 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EAA45E02155CE44B00F93E40 /* Mocha */;
@@ -766,6 +863,34 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		EA73C85E157B170500760AA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EA73C85F157B170500760AA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		EA73C875157B2CF800760AA1 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		EA73C876157B2CF800760AA1 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		EAA34FD115647AD700B62244 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -897,6 +1022,7 @@
 				GCC_PREFIX_HEADER = "moc/moc-Prefix.pch";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../ @loader_path/";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Debug;
 		};
@@ -907,12 +1033,29 @@
 				GCC_PREFIX_HEADER = "moc/moc-Prefix.pch";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../ @loader_path/";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		EA73C860157B170500760AA1 /* Build configuration list for PBXAggregateTarget "FrameworkComplete" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA73C85E157B170500760AA1 /* Debug */,
+				EA73C85F157B170500760AA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		EA73C874157B2CF800760AA1 /* Build configuration list for PBXAggregateTarget "InstallPackage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EA73C875157B2CF800760AA1 /* Debug */,
+				EA73C876157B2CF800760AA1 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
 		EAA34FD015647AD700B62244 /* Build configuration list for PBXNativeTarget "libMocha (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

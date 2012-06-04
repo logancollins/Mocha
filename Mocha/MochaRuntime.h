@@ -159,6 +159,23 @@
  */
 - (BOOL)loadFrameworkWithName:(NSString *)frameworkName inDirectory:(NSString *)directory;
 
+/*!
+ * @property frameworkSearchPaths
+ * @abstract Gets the array of search paths to check when loading a framework
+ * 
+ * @result An NSArray of NSString objects
+ */
+@property (copy, readonly) NSArray *frameworkSearchPaths;
+
+/*!
+ * @method addFrameworkSearchPath:
+ * @abstract Adds a path to the array of framework search paths
+ * 
+ * @param path
+ * The path to add
+ */
+- (void)addFrameworkSearchPath:(NSString *)path;
+
 
 /*!
  * @property globalSymbolNames

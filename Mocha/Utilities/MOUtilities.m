@@ -314,6 +314,11 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         selector = [function selector];
         Class klass = [target class];
         
+        if ([klass isSubclassOfClass:[NSProxy class]]) {
+            // Override for Distributed Objects
+            return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
+        }
+        
         Method method = NULL;
         BOOL classMethod = (target == klass);
         
