@@ -15,6 +15,7 @@
 #import "MOClosure_Private.h"
 #import "MOFunctionArgument.h"
 #import "MOUndefined.h"
+#import "MOJavaScriptObject.h"
 
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
@@ -98,7 +99,7 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
     
     NSUInteger methodArgumentCount = [methodSignature numberOfArguments] - 2;
     if (methodArgumentCount != argumentCount) {
-        NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %d arguments", NSStringFromSelector(selector), methodArgumentCount, (methodArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+        NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), methodArgumentCount, (methodArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
         NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
         if (exception != NULL) {
             *exception = [runtime JSValueForObject:e];
@@ -362,7 +363,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if ((variadic && (callAddressArgumentCount > argumentCount))
             || (!variadic && (callAddressArgumentCount != argumentCount)))
         {
-            NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %d arguments", NSStringFromSelector(selector), callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
@@ -392,7 +393,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         callAddressArgumentCount = [argumentEncodings count] - 2;
         
         if (callAddressArgumentCount != argumentCount) {
-            NSString *reason = [NSString stringWithFormat:@"Block requires %lu %@, but JavaScript passed %d arguments", callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSString *reason = [NSString stringWithFormat:@"Block requires %lu %@, but JavaScript passed %zd %@", callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
@@ -468,7 +469,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if ((variadic && (callAddressArgumentCount > argumentCount))
             || (!variadic && (callAddressArgumentCount != argumentCount)))
         {
-            NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %d arguments", functionName, callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %zd %@", functionName, callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
@@ -849,4 +850,75 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName) {
     else {
         return nil;
     }
+}
+
+
+#pragma mark -
+#pragma mark Blocks
+
+typedef id (^MOJavaScriptClosureBlock)(id obj, ...);
+
+id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *argCount) {
+    JSObjectRef jsFunction = [function JSObject];
+    JSContextRef ctx = [function JSContext];
+    
+    if (argCount != NULL) {
+        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
+        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
+        JSStringRelease(lengthString);
+        
+        *argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+    }
+    
+    MOJavaScriptClosureBlock newBlock = (id)^(id obj, ...) {
+        // JavaScript functions
+        JSObjectRef jsFunction = [function JSObject];
+        JSContextRef ctx = [function JSContext];
+        Mocha *runtime = [Mocha runtimeWithContext:ctx];
+        
+        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
+        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
+        JSStringRelease(lengthString);
+        
+        NSUInteger argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+        
+        JSValueRef exception = NULL;
+        
+        va_list args;
+        va_start(args, obj);
+        
+        id arg = obj;
+        JSValueRef jsValue = [runtime JSValueForObject:obj];
+        JSObjectRef jsObject = JSValueToObject(ctx, jsValue, &exception);
+        if (jsObject == NULL) {
+            [runtime throwJSException:exception];
+            return nil;
+        }
+        
+        JSValueRef *jsArguments = (JSValueRef *)malloc(sizeof(JSValueRef) * (argCount - 1));
+        
+        // Handle passed arguments
+        arg = va_arg(args, id);
+        for (NSUInteger i=0; i<argCount; i++) {
+            jsArguments[i] = [runtime JSValueForObject:arg];
+            arg = va_arg(args, id);
+        }
+        
+        va_end(args);
+        
+        JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunction, jsObject, argCount, jsArguments, &exception);
+        id returnValue = [runtime objectForJSValue:jsReturnValue];
+        
+        if (jsArguments != NULL) {
+            free(jsArguments);
+        }
+        
+        if (exception != NULL) {
+            [runtime throwJSException:exception];
+            return nil;
+        }
+        
+        return (void*)returnValue;
+    };
+    return [[newBlock copy] autorelease];
 }

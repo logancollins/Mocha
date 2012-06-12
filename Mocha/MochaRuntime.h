@@ -212,6 +212,14 @@
 + (BOOL)isSelectorExcludedFromMochaScript:(SEL)selector;
 
 /*!
+ * @method selectorForMochaScriptPropertyName:
+ * @abstract Gets the selector for a specified runtime property name
+ * 
+ * @result A SEL value
+ */
++ (SEL)selectorForMochaPropertyName:(NSString *)propertyName;
+
+/*!
  * @method finalizeForMochaScript
  * @abstract Invoked before the object is dereferenced in the runtime
  * 

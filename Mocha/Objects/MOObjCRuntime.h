@@ -9,7 +9,20 @@
 #import <Foundation/Foundation.h>
 
 
-@class MOProtocol;
+/*!
+ * @enum MOObjcOwnershipRule
+ * @abstract Objective-C ownership rules
+ * 
+ * @constant MOObjCOwnershipRuleAssign      Assigned (unretained)
+ * @constant MOObjCOwnershipRuleRetain      Retained
+ * @constant MOObjCOwnershipRuleCopy        Copied/retained
+ */
+enum {
+    MOObjCOwnershipRuleAssign = 0,
+    MOObjCOwnershipRuleRetain,
+    MOObjCOwnershipRuleCopy,
+};
+typedef NSUInteger MOObjCOwnershipRule;
 
 
 /*!
@@ -64,21 +77,5 @@
  * @result An NSArray of NSString objects
  */
 @property (copy, readonly) NSArray *protocols;
-
-/*!
- * @method protocolWithName:
- * @abstract Gets the protocol with a specified name
- * 
- * @param name
- * The name of the protocol
- * 
- * @discusion
- * This method returns an MOProtocol object, which is a thin wrapper around
- * an Objective-C Protocol object. See MOProtocol.h for more details.
- * As such, this method is not equivalent to NSProtocolFromString(name).
- * 
- * @result An MOProtocol object
- */
-- (MOProtocol *)protocolWithName:(NSString *)name;
 
 @end

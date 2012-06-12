@@ -9,22 +9,13 @@
 #import <Foundation/Foundation.h>
 
 
+@class MOClassDescription;
+
+
 @interface NSObject (MochaAdditions)
 
 + (void)mo_swizzleAdditions;
 
-+ (NSArray *)mo_ancestors;
-
-+ (NSArray *)mo_instanceMethods;
-+ (NSArray *)mo_instanceMethodsWithAncestors;
-
-+ (NSArray *)mo_classMethods;
-+ (NSArray *)mo_classMethodsWithAncestors;
-
-+ (NSArray *)mo_properties;
-+ (NSArray *)mo_propertiesWithAncestors;
-
-+ (NSArray *)mo_protocols;
-+ (NSArray *)mo_protocolsWithAncestors;
++ (MOClassDescription *)mo_mocha;
 
 @end

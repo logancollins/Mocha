@@ -6,6 +6,10 @@
 //  Copyright (c) 2012 Sunflower Softworks. All rights reserved.
 //
 
+// 
+// Note: A lot of this code is based on code from the PyObjC and JSCocoa projects.
+//
+
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 

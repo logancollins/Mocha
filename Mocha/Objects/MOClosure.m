@@ -16,6 +16,10 @@
 
 @synthesize block=_block;
 
+//
+// The following two structs are taken from clang's source.
+//
+
 struct Block_descriptor {
     unsigned long reserved;
     unsigned long size;

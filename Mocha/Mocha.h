@@ -9,5 +9,10 @@
 #import <Mocha/MochaDefines.h>
 #import <Mocha/MochaRuntime.h>
 #import <Mocha/MOMethod.h>
-#import <Mocha/MOProtocol.h>
 #import <Mocha/MOUndefined.h>
+
+#import <Mocha/MOClassDescription.h>
+#import <Mocha/MOInstanceVariableDescription.h>
+#import <Mocha/MOMethodDescription.h>
+#import <Mocha/MOPropertyDescription.h>
+#import <Mocha/MOProtocolDescription.h>

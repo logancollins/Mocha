@@ -6,6 +6,34 @@
 	objectVersion = 46;
 	objects = {
 
+/* Begin PBXAggregateTarget section */
+		023EB3801587A31A0072EC4E /* FrameworkComplete */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 023EB3811587A31A0072EC4E /* Build configuration list for PBXAggregateTarget "FrameworkComplete" */;
+			buildPhases = (
+				023EB38D1587A33A0072EC4E /* Copy Executables */,
+			);
+			dependencies = (
+				023EB3891587A3300072EC4E /* PBXTargetDependency */,
+				023EB38B1587A3320072EC4E /* PBXTargetDependency */,
+			);
+			name = FrameworkComplete;
+			productName = FrameworkComplete;
+		};
+		023EB3841587A3210072EC4E /* InstallPackage */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 023EB3851587A3210072EC4E /* Build configuration list for PBXAggregateTarget "InstallPackage" */;
+			buildPhases = (
+				023EB3901587A3520072EC4E /* Build Install Package */,
+			);
+			dependencies = (
+				023EB38F1587A34F0072EC4E /* PBXTargetDependency */,
+			);
+			name = InstallPackage;
+			productName = InstallPackage;
+		};
+/* End PBXAggregateTarget section */
+
 /* Begin PBXBuildFile section */
 		02112323155D7BD000415471 /* MOUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112321155D7BD000415471 /* MOUtilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02112327155D973100415471 /* MOBridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112325155D973100415471 /* MOBridgeSupportController.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -14,8 +42,24 @@
 		02112342155DB9A100415471 /* MOBridgeSupportParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112340155DB9A100415471 /* MOBridgeSupportParser.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA037E701560B4C100D3E7C8 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA1A1232156160F200A1F1A4 /* libffi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A1231156160F200A1F1A4 /* libffi.dylib */; };
-		EA31AF7A1567064B001F8BE0 /* MOProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = EA31AF781567064B001F8BE0 /* MOProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA31AF7B1567064B001F8BE0 /* MOProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = EA31AF791567064B001F8BE0 /* MOProtocol.m */; };
+		EA2DE2F91571904D0017EF88 /* MOClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE2F71571904D0017EF88 /* MOClassDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE2FA1571904D0017EF88 /* MOClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE2F71571904D0017EF88 /* MOClassDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE2FB1571904D0017EF88 /* MOClassDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE2F81571904D0017EF88 /* MOClassDescription.m */; };
+		EA2DE2FC1571904D0017EF88 /* MOClassDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE2F81571904D0017EF88 /* MOClassDescription.m */; };
+		EA2DE303157191280017EF88 /* MOMethodDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE301157191280017EF88 /* MOMethodDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE304157191280017EF88 /* MOMethodDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE301157191280017EF88 /* MOMethodDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE305157191280017EF88 /* MOMethodDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE302157191280017EF88 /* MOMethodDescription.m */; };
+		EA2DE306157191280017EF88 /* MOMethodDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE302157191280017EF88 /* MOMethodDescription.m */; };
+		EA2DE309157191CA0017EF88 /* MOInstanceVariableDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE307157191CA0017EF88 /* MOInstanceVariableDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE30A157191CA0017EF88 /* MOInstanceVariableDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE307157191CA0017EF88 /* MOInstanceVariableDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE30B157191CA0017EF88 /* MOInstanceVariableDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE308157191CA0017EF88 /* MOInstanceVariableDescription.m */; };
+		EA2DE30C157191CA0017EF88 /* MOInstanceVariableDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE308157191CA0017EF88 /* MOInstanceVariableDescription.m */; };
+		EA2DE30F157195000017EF88 /* MOPropertyDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE30D157195000017EF88 /* MOPropertyDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE310157195000017EF88 /* MOPropertyDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE30D157195000017EF88 /* MOPropertyDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA2DE311157195000017EF88 /* MOPropertyDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE30E157195000017EF88 /* MOPropertyDescription.m */; };
+		EA2DE312157195000017EF88 /* MOPropertyDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA2DE30E157195000017EF88 /* MOPropertyDescription.m */; };
+		EA31AF7A1567064B001F8BE0 /* MOProtocolDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA31AF781567064B001F8BE0 /* MOProtocolDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA31AF7B1567064B001F8BE0 /* MOProtocolDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA31AF791567064B001F8BE0 /* MOProtocolDescription.m */; };
 		EA33A2621569B47D00B4A27D /* ffi-iphone.c in Sources */ = {isa = PBXBuildFile; fileRef = EA33A2511569B47D00B4A27D /* ffi-iphone.c */; };
 		EA33A2631569B47D00B4A27D /* ffi-iphone.h in Headers */ = {isa = PBXBuildFile; fileRef = EA33A2521569B47D00B4A27D /* ffi-iphone.h */; };
 		EA33A2641569B47D00B4A27D /* ffi-iphonesimulator.c in Sources */ = {isa = PBXBuildFile; fileRef = EA33A2531569B47D00B4A27D /* ffi-iphonesimulator.c */; };
@@ -41,8 +85,8 @@
 		EA33A29C1569B81800B4A27D /* JSValueRef.h in Headers */ = {isa = PBXBuildFile; fileRef = EA33A2921569B81800B4A27D /* JSValueRef.h */; };
 		EA33A29D1569B81800B4A27D /* WebKitAvailability.h in Headers */ = {isa = PBXBuildFile; fileRef = EA33A2931569B81800B4A27D /* WebKitAvailability.h */; };
 		EA33A29E1569B81800B4A27D /* libiOSJavaScriptCore.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EA33A2941569B81800B4A27D /* libiOSJavaScriptCore.a */; };
-		EA33A2D71569BACC00B4A27D /* MOProtocol.h in Headers */ = {isa = PBXBuildFile; fileRef = EA31AF781567064B001F8BE0 /* MOProtocol.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EA33A2D81569BAD500B4A27D /* MOProtocol.m in Sources */ = {isa = PBXBuildFile; fileRef = EA31AF791567064B001F8BE0 /* MOProtocol.m */; };
+		EA33A2D71569BACC00B4A27D /* MOProtocolDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA31AF781567064B001F8BE0 /* MOProtocolDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EA33A2D81569BAD500B4A27D /* MOProtocolDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = EA31AF791567064B001F8BE0 /* MOProtocolDescription.m */; };
 		EA33A2DA1569BB0900B4A27D /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA33A2D91569BB0900B4A27D /* libstdc++.dylib */; };
 		EA33A2DC1569BB0E00B4A27D /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA33A2DB1569BB0E00B4A27D /* libicucore.dylib */; };
 		EA33A2E31569BB8500B4A27D /* NSObject+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EABA262A15658AA3005CF076 /* NSObject+MochaAdditions.m */; };
@@ -120,6 +164,16 @@
 		EAA59E9115686C8600368A96 /* MOClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA59E8F15686C8600368A96 /* MOClosure.m */; };
 		EAA59E9415686CEA00368A96 /* MOClosure_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA59E9315686CEA00368A96 /* MOClosure_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA59E991568786000368A96 /* MOClosure.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA59E8F15686C8600368A96 /* MOClosure.m */; };
+		EAB4B144157413F900F4342D /* MOInstanceVariableDescription_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B143157413F900F4342D /* MOInstanceVariableDescription_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B145157413F900F4342D /* MOInstanceVariableDescription_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B143157413F900F4342D /* MOInstanceVariableDescription_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B148157418B300F4342D /* MOMethodDescription_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B147157418B300F4342D /* MOMethodDescription_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B149157418B300F4342D /* MOMethodDescription_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B147157418B300F4342D /* MOMethodDescription_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B14B15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B14A15742EE000F4342D /* MOProtocolDescription_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B14C15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B14A15742EE000F4342D /* MOProtocolDescription_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B14F15743E1F00F4342D /* MOJavaScriptObject.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B14D15743E1F00F4342D /* MOJavaScriptObject.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B15015743E1F00F4342D /* MOJavaScriptObject.h in Headers */ = {isa = PBXBuildFile; fileRef = EAB4B14D15743E1F00F4342D /* MOJavaScriptObject.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAB4B15115743E1F00F4342D /* MOJavaScriptObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4B14E15743E1F00F4342D /* MOJavaScriptObject.m */; };
+		EAB4B15215743E1F00F4342D /* MOJavaScriptObject.m in Sources */ = {isa = PBXBuildFile; fileRef = EAB4B14E15743E1F00F4342D /* MOJavaScriptObject.m */; };
 		EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EABA262715657747005CF076 /* NSOrderedSet+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EABA262515657747005CF076 /* NSOrderedSet+MochaAdditions.m */; };
 		EABA262B15658AA3005CF076 /* NSObject+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -129,6 +183,27 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		023EB3881587A3300072EC4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA45E02155CE44B00F93E40;
+			remoteInfo = Mocha;
+		};
+		023EB38A1587A3320072EC4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA45E70155EE5AF00F93E40;
+			remoteInfo = moc;
+		};
+		023EB38E1587A34F0072EC4E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 023EB3801587A31A0072EC4E;
+			remoteInfo = FrameworkComplete;
+		};
 		EAA3503815647DEA00B62244 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
@@ -161,11 +236,21 @@
 		0211233D155DB8F800415471 /* MOBridgeSupportLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportLibrary.m; sourceTree = "<group>"; };
 		02112340155DB9A100415471 /* MOBridgeSupportParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBridgeSupportParser.h; sourceTree = "<group>"; };
 		02112341155DB9A100415471 /* MOBridgeSupportParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportParser.m; sourceTree = "<group>"; };
+		023EB37E1587A2D40072EC4E /* postinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = postinstall; sourceTree = "<group>"; };
+		023EB37F1587A2D40072EC4E /* preinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = preinstall; sourceTree = "<group>"; };
 		EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionArgument.h; sourceTree = "<group>"; };
 		EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionArgument.m; sourceTree = "<group>"; };
 		EA1A1231156160F200A1F1A4 /* libffi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffi.dylib; path = usr/lib/libffi.dylib; sourceTree = SDKROOT; };
-		EA31AF781567064B001F8BE0 /* MOProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOProtocol.h; sourceTree = "<group>"; };
-		EA31AF791567064B001F8BE0 /* MOProtocol.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOProtocol.m; sourceTree = "<group>"; };
+		EA2DE2F71571904D0017EF88 /* MOClassDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOClassDescription.h; sourceTree = "<group>"; };
+		EA2DE2F81571904D0017EF88 /* MOClassDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOClassDescription.m; sourceTree = "<group>"; };
+		EA2DE301157191280017EF88 /* MOMethodDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMethodDescription.h; sourceTree = "<group>"; };
+		EA2DE302157191280017EF88 /* MOMethodDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMethodDescription.m; sourceTree = "<group>"; };
+		EA2DE307157191CA0017EF88 /* MOInstanceVariableDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOInstanceVariableDescription.h; sourceTree = "<group>"; };
+		EA2DE308157191CA0017EF88 /* MOInstanceVariableDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOInstanceVariableDescription.m; sourceTree = "<group>"; };
+		EA2DE30D157195000017EF88 /* MOPropertyDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOPropertyDescription.h; sourceTree = "<group>"; };
+		EA2DE30E157195000017EF88 /* MOPropertyDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOPropertyDescription.m; sourceTree = "<group>"; };
+		EA31AF781567064B001F8BE0 /* MOProtocolDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOProtocolDescription.h; sourceTree = "<group>"; };
+		EA31AF791567064B001F8BE0 /* MOProtocolDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOProtocolDescription.m; sourceTree = "<group>"; };
 		EA33A2511569B47D00B4A27D /* ffi-iphone.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "ffi-iphone.c"; sourceTree = "<group>"; };
 		EA33A2521569B47D00B4A27D /* ffi-iphone.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ffi-iphone.h"; sourceTree = "<group>"; };
 		EA33A2531569B47D00B4A27D /* ffi-iphonesimulator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = "ffi-iphonesimulator.c"; sourceTree = "<group>"; };
@@ -215,7 +300,6 @@
 		EAA45E22155CE57600F93E40 /* MochaRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime.h; sourceTree = "<group>"; wrapsLines = 1; };
 		EAA45E23155CE57600F93E40 /* MochaRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochaRuntime.m; sourceTree = "<group>"; };
 		EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime_Private.h; sourceTree = "<group>"; };
-		EAA45E49155E5DB100F93E40 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		EAA45E4C155E5DB100F93E40 /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = System/Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
 		EAA45E4D155E5DB100F93E40 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = System/Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
 		EAA45E4E155E5DB100F93E40 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -233,6 +317,11 @@
 		EAA59E8E15686C8600368A96 /* MOClosure.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOClosure.h; sourceTree = "<group>"; };
 		EAA59E8F15686C8600368A96 /* MOClosure.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOClosure.m; sourceTree = "<group>"; };
 		EAA59E9315686CEA00368A96 /* MOClosure_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOClosure_Private.h; sourceTree = "<group>"; };
+		EAB4B143157413F900F4342D /* MOInstanceVariableDescription_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOInstanceVariableDescription_Private.h; sourceTree = "<group>"; };
+		EAB4B147157418B300F4342D /* MOMethodDescription_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMethodDescription_Private.h; sourceTree = "<group>"; };
+		EAB4B14A15742EE000F4342D /* MOProtocolDescription_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOProtocolDescription_Private.h; sourceTree = "<group>"; };
+		EAB4B14D15743E1F00F4342D /* MOJavaScriptObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOJavaScriptObject.h; sourceTree = "<group>"; };
+		EAB4B14E15743E1F00F4342D /* MOJavaScriptObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOJavaScriptObject.m; sourceTree = "<group>"; };
 		EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSOrderedSet+MochaAdditions.h"; sourceTree = "<group>"; };
 		EABA262515657747005CF076 /* NSOrderedSet+MochaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSOrderedSet+MochaAdditions.m"; sourceTree = "<group>"; };
 		EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+MochaAdditions.h"; sourceTree = "<group>"; };
@@ -292,6 +381,69 @@
 				0211232B155D99F600415471 /* MOBridgeSupportSymbol.m */,
 			);
 			path = BridgeSupport;
+			sourceTree = "<group>";
+		};
+		023EB37B1587A2AE0072EC4E /* InstallPackage */ = {
+			isa = PBXGroup;
+			children = (
+				023EB37D1587A2BD0072EC4E /* Scripts */,
+			);
+			path = InstallPackage;
+			sourceTree = "<group>";
+		};
+		023EB37D1587A2BD0072EC4E /* Scripts */ = {
+			isa = PBXGroup;
+			children = (
+				023EB37F1587A2D40072EC4E /* preinstall */,
+				023EB37E1587A2D40072EC4E /* postinstall */,
+			);
+			path = Scripts;
+			sourceTree = "<group>";
+		};
+		EA2DE2FE157190F70017EF88 /* Objective-C Runtime */ = {
+			isa = PBXGroup;
+			children = (
+				EA2DE2F71571904D0017EF88 /* MOClassDescription.h */,
+				EA2DE2F81571904D0017EF88 /* MOClassDescription.m */,
+				EA31AF781567064B001F8BE0 /* MOProtocolDescription.h */,
+				EAB4B14A15742EE000F4342D /* MOProtocolDescription_Private.h */,
+				EA31AF791567064B001F8BE0 /* MOProtocolDescription.m */,
+				EA2DE307157191CA0017EF88 /* MOInstanceVariableDescription.h */,
+				EAB4B143157413F900F4342D /* MOInstanceVariableDescription_Private.h */,
+				EA2DE308157191CA0017EF88 /* MOInstanceVariableDescription.m */,
+				EA2DE301157191280017EF88 /* MOMethodDescription.h */,
+				EAB4B147157418B300F4342D /* MOMethodDescription_Private.h */,
+				EA2DE302157191280017EF88 /* MOMethodDescription.m */,
+				EA2DE30D157195000017EF88 /* MOPropertyDescription.h */,
+				EA2DE30E157195000017EF88 /* MOPropertyDescription.m */,
+			);
+			name = "Objective-C Runtime";
+			sourceTree = "<group>";
+		};
+		EA2DE2FF157191030017EF88 /* Callables */ = {
+			isa = PBXGroup;
+			children = (
+				EAA45E86155EE97200F93E40 /* MOMethod.h */,
+				EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */,
+				EAA45E87155EE97200F93E40 /* MOMethod.m */,
+				EAA59E8E15686C8600368A96 /* MOClosure.h */,
+				EAA59E9315686CEA00368A96 /* MOClosure_Private.h */,
+				EAA59E8F15686C8600368A96 /* MOClosure.m */,
+			);
+			name = Callables;
+			sourceTree = "<group>";
+		};
+		EA2DE3001571910F0017EF88 /* Types */ = {
+			isa = PBXGroup;
+			children = (
+				EAB4B14D15743E1F00F4342D /* MOJavaScriptObject.h */,
+				EAB4B14E15743E1F00F4342D /* MOJavaScriptObject.m */,
+				EAA34FA11563986F00B62244 /* MOStruct.h */,
+				EAA34FA21563986F00B62244 /* MOStruct.m */,
+				EAA34F9C156304A800B62244 /* MOUndefined.h */,
+				EAA34F9D156304A800B62244 /* MOUndefined.m */,
+			);
+			name = Types;
 			sourceTree = "<group>";
 		};
 		EA33A2501569B47D00B4A27D /* libffi */ = {
@@ -365,8 +517,9 @@
 			isa = PBXGroup;
 			children = (
 				EAA45E0C155CE44B00F93E40 /* Mocha */,
-				EAA45E74155EE5AF00F93E40 /* moc */,
 				EAA34FCA15647AD700B62244 /* libMocha (iOS) */,
+				EAA45E74155EE5AF00F93E40 /* moc */,
+				023EB37B1587A2AE0072EC4E /* InstallPackage */,
 				EAA45E05155CE44B00F93E40 /* Frameworks */,
 				EAA45E04155CE44B00F93E40 /* Products */,
 			);
@@ -385,9 +538,8 @@
 		EAA45E05155CE44B00F93E40 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */,
 				EAA45E0B155CE44B00F93E40 /* Foundation.framework */,
-				EAA45E49155E5DB100F93E40 /* Cocoa.framework */,
+				EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */,
 				EA1A1231156160F200A1F1A4 /* libffi.dylib */,
 				EAA45EAA155F0B4600F93E40 /* libreadline.dylib */,
 				EA33A2DB1569BB0E00B4A27D /* libicucore.dylib */,
@@ -430,20 +582,11 @@
 			children = (
 				EAA45E92155EEB9400F93E40 /* MOBox.h */,
 				EAA45E93155EEB9400F93E40 /* MOBox.m */,
-				EAA45E86155EE97200F93E40 /* MOMethod.h */,
-				EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */,
-				EAA45E87155EE97200F93E40 /* MOMethod.m */,
-				EAA59E8E15686C8600368A96 /* MOClosure.h */,
-				EAA59E9315686CEA00368A96 /* MOClosure_Private.h */,
-				EAA59E8F15686C8600368A96 /* MOClosure.m */,
-				EAA34FA11563986F00B62244 /* MOStruct.h */,
-				EAA34FA21563986F00B62244 /* MOStruct.m */,
-				EAA34F9C156304A800B62244 /* MOUndefined.h */,
-				EAA34F9D156304A800B62244 /* MOUndefined.m */,
+				EA2DE3001571910F0017EF88 /* Types */,
+				EA2DE2FF157191030017EF88 /* Callables */,
 				EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */,
 				EAA34FB71563B3A500B62244 /* MOObjCRuntime.m */,
-				EA31AF781567064B001F8BE0 /* MOProtocol.h */,
-				EA31AF791567064B001F8BE0 /* MOProtocol.m */,
+				EA2DE2FE157190F70017EF88 /* Objective-C Runtime */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
@@ -545,9 +688,17 @@
 				EA33A29B1569B81800B4A27D /* JSStringRefCF.h in Headers */,
 				EA33A29C1569B81800B4A27D /* JSValueRef.h in Headers */,
 				EA33A29D1569B81800B4A27D /* WebKitAvailability.h in Headers */,
-				EA33A2D71569BACC00B4A27D /* MOProtocol.h in Headers */,
+				EA33A2D71569BACC00B4A27D /* MOProtocolDescription.h in Headers */,
 				EA33A2E41569BB8800B4A27D /* NSObject+MochaAdditions.h in Headers */,
 				EA33A2E51569BB9300B4A27D /* NSOrderedSet+MochaAdditions.h in Headers */,
+				EA2DE2FA1571904D0017EF88 /* MOClassDescription.h in Headers */,
+				EA2DE304157191280017EF88 /* MOMethodDescription.h in Headers */,
+				EA2DE30A157191CA0017EF88 /* MOInstanceVariableDescription.h in Headers */,
+				EA2DE310157195000017EF88 /* MOPropertyDescription.h in Headers */,
+				EAB4B145157413F900F4342D /* MOInstanceVariableDescription_Private.h in Headers */,
+				EAB4B149157418B300F4342D /* MOMethodDescription_Private.h in Headers */,
+				EAB4B14C15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */,
+				EAB4B15015743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -575,9 +726,17 @@
 				EAA34FB81563B3A500B62244 /* MOObjCRuntime.h in Headers */,
 				EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */,
 				EABA262B15658AA3005CF076 /* NSObject+MochaAdditions.h in Headers */,
-				EA31AF7A1567064B001F8BE0 /* MOProtocol.h in Headers */,
+				EA31AF7A1567064B001F8BE0 /* MOProtocolDescription.h in Headers */,
 				EAA59E9015686C8600368A96 /* MOClosure.h in Headers */,
 				EAA59E9415686CEA00368A96 /* MOClosure_Private.h in Headers */,
+				EA2DE2F91571904D0017EF88 /* MOClassDescription.h in Headers */,
+				EA2DE303157191280017EF88 /* MOMethodDescription.h in Headers */,
+				EA2DE309157191CA0017EF88 /* MOInstanceVariableDescription.h in Headers */,
+				EA2DE30F157195000017EF88 /* MOPropertyDescription.h in Headers */,
+				EAB4B144157413F900F4342D /* MOInstanceVariableDescription_Private.h in Headers */,
+				EAB4B148157418B300F4342D /* MOMethodDescription_Private.h in Headers */,
+				EAB4B14B15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */,
+				EAB4B14F15743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -643,7 +802,7 @@
 		EAA45DF9155CE44B00F93E40 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0430;
+				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Sunflower Softworks";
 			};
 			buildConfigurationList = EAA45DFC155CE44B00F93E40 /* Build configuration list for PBXProject "Mocha" */;
@@ -659,8 +818,10 @@
 			projectRoot = "";
 			targets = (
 				EAA45E02155CE44B00F93E40 /* Mocha */,
-				EAA45E70155EE5AF00F93E40 /* moc */,
 				EAA34FC715647AD700B62244 /* libMocha (iOS) */,
+				EAA45E70155EE5AF00F93E40 /* moc */,
+				023EB3801587A31A0072EC4E /* FrameworkComplete */,
+				023EB3841587A3210072EC4E /* InstallPackage */,
 			);
 		};
 /* End PBXProject section */
@@ -675,6 +836,37 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		023EB38D1587A33A0072EC4E /* Copy Executables */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Executables";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cp $BUILT_PRODUCTS_DIR/moc $BUILT_PRODUCTS_DIR/Mocha.framework/Resources/";
+		};
+		023EB3901587A3520072EC4E /* Build Install Package */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Build Install Package";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "rm -r ${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders/\nrm ${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders\nrm -r ${DSTROOT}\nmkdir -p ${DSTROOT}/Library/Frameworks/\ncp -R ${BUILT_PRODUCTS_DIR}/Mocha.framework ${DSTROOT}/Library/Frameworks/\nchmod -R 755 ${SRCROOT}/InstallPackage/Scripts/\npkgbuild --root ${DSTROOT} ${BUILT_PRODUCTS_DIR}/Mocha.pkg --scripts ${SRCROOT}/InstallPackage/Scripts";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		EAA34FC415647AD700B62244 /* Sources */ = {
@@ -704,8 +896,13 @@
 				EA33A26E1569B47D00B4A27D /* prep_cif.c in Sources */,
 				EA33A26F1569B47D00B4A27D /* raw_api.c in Sources */,
 				EA33A2701569B47D00B4A27D /* types.c in Sources */,
-				EA33A2D81569BAD500B4A27D /* MOProtocol.m in Sources */,
+				EA33A2D81569BAD500B4A27D /* MOProtocolDescription.m in Sources */,
 				EA33A2E31569BB8500B4A27D /* NSObject+MochaAdditions.m in Sources */,
+				EA2DE2FC1571904D0017EF88 /* MOClassDescription.m in Sources */,
+				EA2DE306157191280017EF88 /* MOMethodDescription.m in Sources */,
+				EA2DE30C157191CA0017EF88 /* MOInstanceVariableDescription.m in Sources */,
+				EA2DE312157195000017EF88 /* MOPropertyDescription.m in Sources */,
+				EAB4B15215743E1F00F4342D /* MOJavaScriptObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -730,8 +927,13 @@
 				EAA3503615647DAD00B62244 /* NSDictionary+MochaAdditions.m in Sources */,
 				EABA262715657747005CF076 /* NSOrderedSet+MochaAdditions.m in Sources */,
 				EABA262C15658AA3005CF076 /* NSObject+MochaAdditions.m in Sources */,
-				EA31AF7B1567064B001F8BE0 /* MOProtocol.m in Sources */,
+				EA31AF7B1567064B001F8BE0 /* MOProtocolDescription.m in Sources */,
 				EAA59E9115686C8600368A96 /* MOClosure.m in Sources */,
+				EA2DE2FB1571904D0017EF88 /* MOClassDescription.m in Sources */,
+				EA2DE305157191280017EF88 /* MOMethodDescription.m in Sources */,
+				EA2DE30B157191CA0017EF88 /* MOInstanceVariableDescription.m in Sources */,
+				EA2DE311157195000017EF88 /* MOPropertyDescription.m in Sources */,
+				EAB4B15115743E1F00F4342D /* MOJavaScriptObject.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -747,6 +949,21 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		023EB3891587A3300072EC4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA45E02155CE44B00F93E40 /* Mocha */;
+			targetProxy = 023EB3881587A3300072EC4E /* PBXContainerItemProxy */;
+		};
+		023EB38B1587A3320072EC4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA45E70155EE5AF00F93E40 /* moc */;
+			targetProxy = 023EB38A1587A3320072EC4E /* PBXContainerItemProxy */;
+		};
+		023EB38F1587A34F0072EC4E /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 023EB3801587A31A0072EC4E /* FrameworkComplete */;
+			targetProxy = 023EB38E1587A34F0072EC4E /* PBXContainerItemProxy */;
+		};
 		EAA3503915647DEA00B62244 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EAA45E02155CE44B00F93E40 /* Mocha */;
@@ -766,6 +983,34 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		023EB3821587A31A0072EC4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		023EB3831587A31A0072EC4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		023EB3861587A3210072EC4E /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		023EB3871587A3210072EC4E /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
 		EAA34FD115647AD700B62244 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -820,6 +1065,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -846,6 +1092,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ARCHS = "$(ARCHS_STANDARD_64_BIT)";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -913,6 +1160,24 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		023EB3811587A31A0072EC4E /* Build configuration list for PBXAggregateTarget "FrameworkComplete" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				023EB3821587A31A0072EC4E /* Debug */,
+				023EB3831587A31A0072EC4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		023EB3851587A3210072EC4E /* Build configuration list for PBXAggregateTarget "InstallPackage" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				023EB3861587A3210072EC4E /* Debug */,
+				023EB3871587A3210072EC4E /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		EAA34FD015647AD700B62244 /* Build configuration list for PBXNativeTarget "libMocha (iOS)" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

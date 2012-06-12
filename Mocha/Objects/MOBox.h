@@ -12,13 +12,13 @@
 
 /*!
  * @class MOBox
- * @abstract A boxed ObjC object
+ * @abstract A boxed Objective-C object
  */
 @interface MOBox : NSObject
 
 /*!
  * @property representedObject
- * @abstract The boxed ObjC object
+ * @abstract The boxed Objective-C object
  * 
  * @result An object
  */

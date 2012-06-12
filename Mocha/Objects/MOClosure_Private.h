@@ -11,11 +11,4 @@
 
 @interface MOClosure ()
 
-- (id)initWithBlock:(id)block;
-
-@property (copy, readwrite) id block;
-
-@property (readonly) void * callAddress;
-@property (readonly) const char * typeEncoding;
-
 @end

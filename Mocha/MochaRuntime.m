@@ -13,6 +13,7 @@
 #import "MOUndefined.h"
 #import "MOMethod_Private.h"
 #import "MOClosure_Private.h"
+#import "MOJavaScriptObject.h"
 #import "MOUtilities.h"
 #import "MOFunctionArgument.h"
 
@@ -303,6 +304,12 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
         }
 	}
 	else {
+        BOOL isFunction = JSObjectIsFunction(ctx, jsObject);
+        if (isFunction) {
+            // Function
+            return [MOJavaScriptObject objectWithJSObject:jsObject context:ctx];
+        }
+        
 		// Normal JS object
 		JSStringRef scriptJS = JSStringCreateWithUTF8CString("return arguments[0].constructor == Array.prototype.constructor");
 		JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
@@ -337,7 +344,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 
 	for (NSUInteger i=0; i<length; i++) {
 		id obj = nil;
-		JSValueRef jsValue = JSObjectGetPropertyAtIndex(ctx, arrayValue, i, &exception);
+		JSValueRef jsValue = JSObjectGetPropertyAtIndex(ctx, arrayValue, (unsigned int)i, &exception);
 		if (exception != NULL) {
 			return nil;
 		}
@@ -839,6 +846,10 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     return NO;
 }
 
++ (SEL)selectorForMochaPropertyName:(NSString *)propertyName {
+    return MOSelectorFromPropertyName(propertyName);
+}
+
 - (void)finalizeForMochaScript {
     // no-op
 }
@@ -1045,7 +1056,13 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 	}
 	
 	// Method
-    SEL selector = MOSelectorFromPropertyName(propertyName);
+    SEL selector = NULL;
+    if (class_respondsToSelector(object_getClass(objectClass), @selector(selectorForMochaPropertyName:))) {
+        selector = [objectClass selectorForMochaPropertyName:propertyName];
+    }
+    else {
+        selector = MOSelectorFromPropertyName(propertyName);
+    }
     if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
 		return YES;
 	}
@@ -1098,7 +1115,13 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         }
         
         // Method
-        SEL selector = MOSelectorFromPropertyName(propertyName);
+        SEL selector = NULL;
+        if (class_respondsToSelector(object_getClass(objectClass), @selector(selectorForMochaPropertyName:))) {
+            selector = [objectClass selectorForMochaPropertyName:propertyName];
+        }
+        else {
+            selector = MOSelectorFromPropertyName(propertyName);
+        }
         if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
             MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
             return [runtime JSValueForObject:function];
