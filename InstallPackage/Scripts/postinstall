@@ -1,0 +1,15 @@
+#!/usr/bin/python
+
+import os
+
+
+MOC_SYMLINK_SRC = "/Library/Frameworks/Mocha.framework/Resources/moc"
+MOC_SYMLINK_DEST = "/usr/local/bin/moc"
+
+
+# Create symbolic links
+try:
+    os.makedirs('/usr/local/bin')
+except OSError:
+    pass
+os.symlink(MOC_SYMLINK_SRC, MOC_SYMLINK_DEST)

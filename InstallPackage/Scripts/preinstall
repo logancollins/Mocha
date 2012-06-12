@@ -1,0 +1,11 @@
+#!/usr/bin/python
+
+import os
+
+
+MOC_SYMLINK_PATH = "/usr/local/bin/moc"
+
+
+# Remove moc symlink
+if os.path.exists(MOC_SYMLINK_PATH):
+    os.remove(MOC_SYMLINK_PATH)
