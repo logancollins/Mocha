@@ -1065,17 +1065,6 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 	}
 	
 	// Method
-<<<<<<< HEAD
-    SEL selector = NULL;
-    if (class_respondsToSelector(object_getClass(objectClass), @selector(selectorForMochaPropertyName:))) {
-        selector = [objectClass selectorForMochaPropertyName:propertyName];
-    }
-    else {
-        selector = MOSelectorFromPropertyName(propertyName);
-    }
-    if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
-		return YES;
-=======
     SEL selector = MOSelectorFromPropertyName(propertyName);
 	NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
     if (methodSignature != nil) {
@@ -1087,8 +1076,7 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 		else {
 			return YES;
 		}
->>>>>>> 7463235d22495bddf9ec7ecab2fc5e7db7356fde
-	}
+    }
     
     // Indexed subscript
     if ([object respondsToSelector:@selector(objectForIndexedSubscript:)]) {
@@ -1138,18 +1126,6 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         }
         
         // Method
-<<<<<<< HEAD
-        SEL selector = NULL;
-        if (class_respondsToSelector(object_getClass(objectClass), @selector(selectorForMochaPropertyName:))) {
-            selector = [objectClass selectorForMochaPropertyName:propertyName];
-        }
-        else {
-            selector = MOSelectorFromPropertyName(propertyName);
-        }
-        if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
-            MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
-            return [runtime JSValueForObject:function];
-=======
         SEL selector = MOSelectorFromPropertyName(propertyName);
 		NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
         if (methodSignature != nil) {
@@ -1166,7 +1142,6 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
 				MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
 				return [runtime JSValueForObject:function];
 			}
->>>>>>> 7463235d22495bddf9ec7ecab2fc5e7db7356fde
         }
         
         // Indexed subscript
