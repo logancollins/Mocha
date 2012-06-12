@@ -69,6 +69,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     JSGlobalContextRef _ctx;
     BOOL _ownsContext;
     NSMutableDictionary *_exportedObjects;
+    NSMutableArray *_frameworkSearchPaths;
 }
 
 @synthesize delegate=_delegate;
@@ -188,6 +189,11 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         _ctx = ctx;
         _exportedObjects = [[NSMutableDictionary alloc] init];
         
+        _frameworkSearchPaths = [[NSMutableArray alloc] initWithObjects:
+                                 @"/System/Library/Frameworks",
+                                 @"/Library/Frameworks",
+                                 nil];
+        
         // Add the runtime as a property of the context
         [self setObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
         
@@ -211,6 +217,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     JSGlobalContextRelease(_ctx);
     
     [_exportedObjects release];
+    [_frameworkSearchPaths release];
     
     [super dealloc];
 }
@@ -726,19 +733,10 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 #pragma mark Frameworks
 
 - (BOOL)loadFrameworkWithName:(NSString *)frameworkName {
-    static NSArray *searchDirectories = nil;
-    if (searchDirectories == nil) {
-        searchDirectories = [[NSArray alloc] initWithObjects:
-                             @"/System/Library/Frameworks",
-                             @"/Library/Frameworks",
-                             nil];
-    }
-    
     BOOL success = NO;
-    
     NSFileManager *fileManager = [NSFileManager defaultManager];
     
-    for (NSString *path in searchDirectories) {
+    for (NSString *path in _frameworkSearchPaths) {
         NSString *frameworkPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework", frameworkName]];
         if ([fileManager fileExistsAtPath:frameworkPath]) {
             success = [self loadFrameworkWithName:frameworkName inDirectory:path];
@@ -767,7 +765,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 	NSError *error = nil;
     if (![[MOBridgeSupportController sharedController] loadBridgeSupportAtURL:[NSURL fileURLWithPath:bridgeSupportPath] error:&error]) {
 		//NSLog(@"ERROR: Failed to load BridgeSupport for framework at path: %@. Error: %@", bridgeSupportPath, error);
-		return NO;
+		//return NO;
 	}
     
     // Load the extras BridgeSupport dylib
@@ -775,6 +773,14 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     dlopen([dylibPath UTF8String], RTLD_LAZY);
     
     return YES;
+}
+
+- (NSArray *)frameworkSearchPaths {
+    return _frameworkSearchPaths;
+}
+
+- (void)addFrameworkSearchPath:(NSString *)path {
+    [_frameworkSearchPaths addObject:path];
 }
 
 
@@ -792,6 +798,9 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 - (void)installBuiltins {
     MOMethod *loadFramework = [MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)];
     [self setValue:loadFramework forKey:@"framework"];
+    
+    MOMethod *addFrameworkSearchPath = [MOMethod methodWithTarget:self selector:@selector(addFrameworkSearchPath:)];
+    [self setValue:addFrameworkSearchPath forKey:@"addFrameworkSearchPath"];
     
     [self setValue:[MOObjCRuntime sharedRuntime] forKey:@"objc"];
 }
@@ -1056,6 +1065,7 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
 	}
 	
 	// Method
+<<<<<<< HEAD
     SEL selector = NULL;
     if (class_respondsToSelector(object_getClass(objectClass), @selector(selectorForMochaPropertyName:))) {
         selector = [objectClass selectorForMochaPropertyName:propertyName];
@@ -1065,6 +1075,19 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     }
     if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
 		return YES;
+=======
+    SEL selector = MOSelectorFromPropertyName(propertyName);
+	NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
+    if (methodSignature != nil) {
+		if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
+			if (![objectClass isSelectorExcludedFromMochaScript:selector]) {
+				return YES;
+			}
+		}
+		else {
+			return YES;
+		}
+>>>>>>> 7463235d22495bddf9ec7ecab2fc5e7db7356fde
 	}
     
     // Indexed subscript
@@ -1115,6 +1138,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         }
         
         // Method
+<<<<<<< HEAD
         SEL selector = NULL;
         if (class_respondsToSelector(object_getClass(objectClass), @selector(selectorForMochaPropertyName:))) {
             selector = [objectClass selectorForMochaPropertyName:propertyName];
@@ -1125,6 +1149,24 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
             MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
             return [runtime JSValueForObject:function];
+=======
+        SEL selector = MOSelectorFromPropertyName(propertyName);
+		NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
+        if (methodSignature != nil) {
+			BOOL implements = NO;
+            if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
+				if (![objectClass isSelectorExcludedFromMochaScript:selector]) {
+					implements = YES;
+				}
+			}
+			else {
+				implements = YES;
+			}
+			if (implements) {
+				MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
+				return [runtime JSValueForObject:function];
+			}
+>>>>>>> 7463235d22495bddf9ec7ecab2fc5e7db7356fde
         }
         
         // Indexed subscript
