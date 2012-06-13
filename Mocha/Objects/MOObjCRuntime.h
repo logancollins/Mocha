@@ -53,20 +53,6 @@ typedef NSUInteger MOObjCOwnershipRule;
 @property (copy, readonly) NSArray *classes;
 
 /*!
- * @method classWithName:
- * @abstract Gets the class with a specified name
- * 
- * @param name
- * The name of the class
- * 
- * @discusion
- * This method is equivalent to NSClassFromString(name)
- * 
- * @result A Class object
- */
-- (Class)classWithName:(NSString *)name;
-
-/*!
  * @property protocols
  * @abstract Gets the names of all protocols registered with the runtime
  * 

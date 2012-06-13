@@ -77,11 +77,6 @@ static MOObjCRuntime * sharedRuntime = nil;
     return classes;
 }
 
-- (Class)classWithName:(NSString *)name {
-    Class klass = objc_getClass([name UTF8String]);
-    return klass;
-}
-
 - (NSArray *)protocols {
     unsigned int count;
     Protocol **protocolList = objc_copyProtocolList(&count);
