@@ -37,8 +37,8 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 - `Boolean` is converted to `NSNumber`, `bool`, or `_Bool`, depending on context
 - `Array` is converted to `NSArray`
 - **JavaScript functions** are boxed within an opaque class
-- All other `Object` types are converted to `NSDictionary`
 - **All boxed types** are unboxed
+- All other pure `Object` types are converted to `NSDictionary`
 
 
 ## Callables
