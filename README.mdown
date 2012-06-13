@@ -95,7 +95,7 @@ Method name conversion follow a similar pattern to PyObjC. The following steps a
 
 As such, a selector such as `executeOperation:withObject:error:` is converted to the function name `executeOperation_withObject_error_()`. The reverse is done to convert the property name back into an Objective-C selector.
 
-If you wish to change this behavior (for example, to shorten an Objective-C method name for ease of use), you can. Use the `+selectorForMochaPropertyName:` method, defined within a category of NSObject. Objects implementing this method can return the selector for a give JavaScript property name, which will cause the runtime to forward invocations of that property to the appropriate method selector.
+If you wish to change this behavior (for example, to shorten an Objective-C method name for ease of use), you can. Use the `+selectorForMochaPropertyName:` method, defined within a category on NSObject. Objects implementing this method can return the selector for a give JavaScript property name, which will cause the runtime to forward invocations of that property to the appropriate method selector.
 
 #### Example:
 <pre>
