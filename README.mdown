@@ -16,7 +16,6 @@ When arguments are passed between the Objective-C and JavaScript sides of the br
 
 ### Objective-C to JavaScript
 - `nil` is converted to `null`
-- `NSNull` is converted to `null`
 - `MOUndefined` is converted to `undefined`
 - `char*` is converted to `String`
 - **Objective-C methods** are converted to `MOMethod`, and are callable
@@ -33,9 +32,10 @@ Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as
 ### JavaScript to Objective-C
 - `String` is converted to `NSString` or `char*`, depending on context
 - `Number` is converted to `NSNumber` or a **C numeric primitive**, depending on context
-- `Boolean` is converted to `NSNumber`, `bool` or `_Bool`, depending on context
+- `Boolean` is converted to `NSNumber`, `bool`, or `_Bool`, depending on context
 - `Array` is converted to `NSArray`
-- `Object` is converted to `NSDictionary`
+- **JavaScript functions** are boxed within an opaque class
+- All other `Object` types are converted to `NSDictionary`
 - `null` is converted to `nil` (when bare) or `NSNull` (when placed in a container)
 - `undefined` is converted to `MOUndefined`
 - **All boxed types** are unboxed
@@ -190,9 +190,15 @@ Implementing `-objectForKeyedSubscript:` allows an object to use the `object['ke
 
 ## Introspecting the Objective-C Runtime
 
-Mocha adds several facilities for introspecting the Objective-C runtime. The built-in object `objc` can be used to query various attributes about the Objective-C runtime. Use the `-classes` and `-classWithName:` methods to get information about classes registered with the runtime, or `-protocols` and `-protocolWithName:` to get information about protocols registered with the runtime.
+Mocha adds several facilities for introspecting the Objective-C runtime. The built-in object `objc` can be used to query various attributes about the Objective-C runtime. Use the `-classes` method to get a list of classes registered with the runtime, or `-protocols` method to get a list of protocols registered with the runtime.
 
-An NSObject category is also added by the Mocha runtime to add additional introspection abilities to class objects. Use the `+ancestors` method to get a list of a class's superclass chain. Use the `+classMethods`, `+instanceMethods`, `+properties`, and `+protocols` methods to query information about a class's class methods, instance methods, properties, and protocols, respectively. Note that these methods only return methods, properties and protocols defined by the class itself. As a convenience, Mocha also provides the following methods to query for the entire superclass chain: `+classMethodsWithAncestors`, `+instanceMethodsWithAncestors`, `+propertiesWithAncestors`, and `+protocolsWithAncestors`.
+An NSObject category is also added by the Mocha runtime to add additional introspection abilities to class objects. Use the `+mocha` method on any class object to get an MOClassDescription object, which is used in describing the class's abilities and layout.
+
+MOClassDescription gives access to a class's instance variables, class and instance methods, properties and conformed protocols. Use the `+ancestors` method to get a list of a class's superclass chain. Use the `+classMethods`, `+instanceMethods`, `+properties`, and `+protocols` methods to query information about a class's class methods, instance methods, properties, and protocols, respectively. Note that these methods only return methods, properties and protocols defined by the class itself. As a convenience, Mocha also provides the following methods to query for the entire superclass chain: `+classMethodsWithAncestors`, `+instanceMethodsWithAncestors`, `+propertiesWithAncestors`, and `+protocolsWithAncestors`.
+
+In addition, MOClassDescription has the ability to add methods to existing classes, or even to define and register complete new classes from within the Mocha runtime.
+
+Facilities are also provided for introspecting Objective-C protocols through the MOProtocolDescription class in a similar way to class introspection. Similarly, new protocols can be defined and existing protocols can be amended.
 
 
 ## Exceptions

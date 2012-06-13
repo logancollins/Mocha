@@ -258,7 +258,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
 	}
     
     if (JSValueIsNull(ctx, value)) {
-        return [NSNull null];
+        return nil;
     }
 	
 	if (JSValueIsString(ctx, value)) {
@@ -413,7 +413,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
         MOClosure *closure = [MOClosure closureWithBlock:object];
         value = [self boxedJSObjectForObject:closure];
     }
-	else if (object == nil || [object isKindOfClass:[NSNull class]]) {
+	else if (object == nil/* || [object isKindOfClass:[NSNull class]]*/) {
 		value = JSValueMakeNull(_ctx);
 	}
     else if (object == [MOUndefined undefined]) {
