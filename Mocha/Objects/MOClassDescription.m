@@ -97,12 +97,16 @@
     return [NSString stringWithUTF8String:class_getName(_class)];
 }
 
-- (Class)superclass {
-    return class_getSuperclass(_class);
+- (Class)descriptedClass {
+    return _class;
 }
 
-- (MOClassDescription *)superclassDescription {
-    return [MOClassDescription descriptionForClass:class_getSuperclass(_class)];
+- (MOClassDescription *)superclass {
+    Class superclass = class_getSuperclass(_class);
+    if (superclass != Nil) {
+        return [MOClassDescription descriptionForClass:superclass];
+    }
+    return nil;
 }
 
 
@@ -114,7 +118,7 @@
     MOClassDescription *description = self;
     while (description != nil) {
         [array addObjectsFromArray:[description instanceVariables]];
-        description = description.superclassDescription;
+        description = description.superclass;
     }
     return array;
 }
@@ -195,7 +199,7 @@
     MOClassDescription *description = self;
     while (description != nil) {
         [array addObjectsFromArray:[description classMethods]];
-        description = description.superclassDescription;
+        description = description.superclass;
     }
     return array;
 }
@@ -209,7 +213,7 @@
     MOClassDescription *description = self;
     while (description != nil) {
         [array addObjectsFromArray:[description instanceMethods]];
-        description = description.superclassDescription;
+        description = description.superclass;
     }
     return array;
 }
@@ -343,7 +347,7 @@
     MOClassDescription *description = self;
     while (description != nil) {
         [array addObjectsFromArray:[description properties]];
-        description = description.superclassDescription;
+        description = description.superclass;
     }
     return array;
 }
@@ -509,7 +513,7 @@
     MOClassDescription *description = self;
     while (description != nil) {
         [array addObjectsFromArray:[description protocols]];
-        description = description.superclassDescription;
+        description = description.superclass;
     }
     return array;
 }

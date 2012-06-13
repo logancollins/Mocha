@@ -97,20 +97,20 @@
 @property (copy, readonly) NSString *name;
 
 /*!
- * @property superclass
- * @abstract The superclass of the class backing the description
+ * @property descriptedClass
+ * @abstract The class backing the description
  * 
  * @result A Class object, or Nil
  */
-@property (readonly) Class superclass;
+@property (readonly) Class descriptedClass;
 
 /*!
- * @property superclassDescription
+ * @property superclass
  * @abstract The description of the superclass of the class backing the description
  * 
  * @result An MOClassDescription object, or nil
  */
-@property (readonly) MOClassDescription *superclassDescription;
+@property (readonly) MOClassDescription *superclass;
 
 
 /*!

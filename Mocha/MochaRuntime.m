@@ -235,10 +235,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 }
 
 - (void)setValue:(id)value forUndefinedKey:(NSString *)key {
-    if ([value isKindOfClass:NSClassFromString(@"__NSStackBlock__")]) {
-        // Automatically move stack-based blocks to the heap
-        value = [[value copy] autorelease];
-    }
     [_exportedObjects setObject:value forKey:key];
 }
 
