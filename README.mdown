@@ -30,14 +30,14 @@ When arguments are passed between the Objective-C and JavaScript sides of the br
 Note: `BOOL`, unlike `bool`, is converted to `Number`, as `BOOL` is typedef'd as an `unsigned char` in Objective-C.
 
 ### JavaScript to Objective-C
+- `null` is converted to `nil` (when bare) or `NSNull` (when placed in a container)
+- `undefined` is converted to `MOUndefined`
 - `String` is converted to `NSString` or `char*`, depending on context
 - `Number` is converted to `NSNumber` or a **C numeric primitive**, depending on context
 - `Boolean` is converted to `NSNumber`, `bool`, or `_Bool`, depending on context
 - `Array` is converted to `NSArray`
 - **JavaScript functions** are boxed within an opaque class
 - All other `Object` types are converted to `NSDictionary`
-- `null` is converted to `nil` (when bare) or `NSNull` (when placed in a container)
-- `undefined` is converted to `MOUndefined`
 - **All boxed types** are unboxed
 
 
