@@ -165,7 +165,7 @@
  * 
  * @result An NSArray of NSString objects
  */
-@property (copy, readonly) NSArray *frameworkSearchPaths;
+@property (copy) NSArray *frameworkSearchPaths;
 
 /*!
  * @method addFrameworkSearchPath:
@@ -175,6 +175,27 @@
  * The path to add
  */
 - (void)addFrameworkSearchPath:(NSString *)path;
+
+/*!
+ * @method insertFrameworkSearchPath:atIndex:
+ * @abstract Inserts a path into the array of framework search paths
+ * 
+ * @param path
+ * The path to add
+ * 
+ * @param idx
+ * The index at which to add the path
+ */
+- (void)insertFrameworkSearchPath:(NSString *)path atIndex:(NSUInteger)idx;
+
+/*!
+ * @method removeFrameworkSearchPathAtIndex:
+ * @abstract Removes a path in the array of framework search paths
+ *
+ * @param idx
+ * The index at which to remove the path
+ */
+- (void)removeFrameworkSearchPathAtIndex:(NSUInteger)idx;
 
 
 /*!

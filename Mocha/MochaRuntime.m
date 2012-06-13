@@ -779,8 +779,20 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
     return _frameworkSearchPaths;
 }
 
+- (void)setFrameworkSearchPaths:(NSArray *)frameworkSearchPaths {
+    [_frameworkSearchPaths setArray:frameworkSearchPaths];
+}
+
 - (void)addFrameworkSearchPath:(NSString *)path {
-    [_frameworkSearchPaths addObject:path];
+    [self insertFrameworkSearchPath:path atIndex:[_frameworkSearchPaths count]];
+}
+
+- (void)insertFrameworkSearchPath:(NSString *)path atIndex:(NSUInteger)idx {
+    [_frameworkSearchPaths insertObject:path atIndex:idx];
+}
+
+- (void)removeFrameworkSearchPathAtIndex:(NSUInteger)idx {
+    [_frameworkSearchPaths removeObjectAtIndex:idx];
 }
 
 
