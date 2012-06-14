@@ -269,7 +269,7 @@ The following items are currently on the docket for future development:
 
 - ~~iOS Support~~ (Added 5/20/12)
 - Runtime support for creating and modifying Objective-C classes
-- Objective-J syntax for defining Objective-C classes and categories
+- Objective-J/JSTalk-style syntax for defining Objective-C classes and categories
 
 
 ## Code Usage
