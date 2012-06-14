@@ -274,7 +274,7 @@ The following items are currently on the docket for future development:
 
 ## Code Usage
 
-Mocha utilizes some code and ideas from the following projects:
+Mocha utilizes code and ideas from the following projects:
 
 - PyObjC (http://pyobjc.sourceforge.net/, MIT license)
 - JSCocoa (http://inexdo.com/JSCocoa, MIT license)
