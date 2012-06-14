@@ -217,7 +217,7 @@ An NSObject category is also added by the Mocha runtime to add additional intros
 
 MOClassDescription gives access to a class's instance variables, class and instance methods, properties and conformed protocols. Use the `+ancestors` method to get a list of a class's superclass chain. Use the `+classMethods`, `+instanceMethods`, `+properties`, and `+protocols` methods to query information about a class's class methods, instance methods, properties, and protocols, respectively. Note that these methods only return methods, properties and protocols defined by the class itself. As a convenience, Mocha also provides the following methods to query for the entire superclass chain: `+classMethodsWithAncestors`, `+instanceMethodsWithAncestors`, `+propertiesWithAncestors`, and `+protocolsWithAncestors`.
 
-In addition, MOClassDescription has the ability to add methods to existing classes, or even to define and register complete new classes from within the Mocha runtime.
+In addition, MOClassDescription has the ability to add methods to existing classes, or even to define and register completly new classes from within the Mocha runtime.
 
 Facilities are also provided for introspecting Objective-C protocols through the MOProtocolDescription class in a similar way to class introspection. Similarly, new protocols can be defined and existing protocols can be amended.
 
