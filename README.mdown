@@ -278,6 +278,7 @@ Mocha utilizes some code and ideas from the following projects:
 
 - PyObjC (http://pyobjc.sourceforge.net/, MIT license)
 - JSCocoa (http://inexdo.com/JSCocoa, MIT license)
+- JavaScriptCore (http://www.webkit.org/projects/javascript/index.html, WebKit license).
 - libffi-iphone (https://github.com/parmanoir/libffi-iphone, MIT license)
 - JavaScriptCore-iOS (http://www.phoboslab.org/log/2011/06/javascriptcore-project-files-for-ios, WebKit license).
 
