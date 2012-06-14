@@ -53,7 +53,7 @@ All three of these constructs are automatically converted across the bridge. The
 // ObjC
 typedef NSString * (^UppercaseBlock)(NSString *);
 UppercaseBlock toUppercaseBlock = [myObject toUppercaseBlock];
-theBlock(@"Hello, World!");
+toUppercaseBlock(@"Hello, World!");
 >>> "HELLO, WORLD!"
 
 // JavaScript
