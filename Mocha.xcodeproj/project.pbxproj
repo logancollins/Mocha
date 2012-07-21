@@ -836,7 +836,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp $BUILT_PRODUCTS_DIR/moc $BUILT_PRODUCTS_DIR/Mocha.framework/Resources/";
+			shellScript = "cp \"${BUILT_PRODUCTS_DIR}/moc\" \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Resources/\"";
 		};
 		023EB3901587A3520072EC4E /* Build Install Package */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -850,7 +850,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -r ${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders/\nrm ${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders\nrm -r ${DSTROOT}\nmkdir -p ${DSTROOT}/Library/Frameworks/\ncp -R ${BUILT_PRODUCTS_DIR}/Mocha.framework ${DSTROOT}/Library/Frameworks/\nchmod -R 755 ${SRCROOT}/InstallPackage/Scripts/\npkgbuild --root ${DSTROOT} ${BUILT_PRODUCTS_DIR}/Mocha.pkg --scripts ${SRCROOT}/InstallPackage/Scripts";
+			shellScript = "rm -r \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders/\"\nrm \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders\"\nrm -r \"${DSTROOT}\"\nmkdir -p \"${DSTROOT}/Library/Frameworks/\"\ncp -R \"${BUILT_PRODUCTS_DIR}/Mocha.framework\" \"${DSTROOT}/Library/Frameworks/\"\nchmod -R 755 \"${SRCROOT}/InstallPackage/Scripts/\"\npkgbuild --root \"${DSTROOT}\" \"${BUILT_PRODUCTS_DIR}/Mocha.pkg\" --scripts \"${SRCROOT}/InstallPackage/Scripts\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
