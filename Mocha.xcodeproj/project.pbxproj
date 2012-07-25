@@ -109,7 +109,7 @@
 		EAA34FA31563986F00B62244 /* MOStruct.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34FA11563986F00B62244 /* MOStruct.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA34FB81563B3A500B62244 /* MOObjCRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA34FC915647AD700B62244 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E0B155CE44B00F93E40 /* Foundation.framework */; };
-		EAA34FE415647BAE00B62244 /* MochaRuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EAA34FE415647BAE00B62244 /* MochaRuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */; settings = {ATTRIBUTES = (); }; };
 		EAA34FE615647BB700B62244 /* MochaRuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E22155CE57600F93E40 /* MochaRuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA34FE715647BBC00B62244 /* Mocha.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E13155CE44B00F93E40 /* Mocha.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA34FEA15647BC300B62244 /* MochaDefines.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E1B155CE46000F93E40 /* MochaDefines.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -717,34 +717,34 @@
 				EAA45E1C155CE46000F93E40 /* MochaDefines.h in Headers */,
 				EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */,
 				EAA45E24155CE57600F93E40 /* MochaRuntime.h in Headers */,
+				EAA45E88155EE97200F93E40 /* MOMethod.h in Headers */,
+				EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */,
+				EA31AF7A1567064B001F8BE0 /* MOProtocolDescription.h in Headers */,
+				EA2DE2F91571904D0017EF88 /* MOClassDescription.h in Headers */,
+				EA2DE303157191280017EF88 /* MOMethodDescription.h in Headers */,
+				EA2DE309157191CA0017EF88 /* MOInstanceVariableDescription.h in Headers */,
 				EAA45E27155CE66600F93E40 /* MochaRuntime_Private.h in Headers */,
 				02112323155D7BD000415471 /* MOUtilities.h in Headers */,
 				02112327155D973100415471 /* MOBridgeSupportController.h in Headers */,
 				0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */,
 				0211233E155DB8F800415471 /* MOBridgeSupportLibrary.h in Headers */,
 				02112342155DB9A100415471 /* MOBridgeSupportParser.h in Headers */,
-				EAA45E88155EE97200F93E40 /* MOMethod.h in Headers */,
 				EAA45E8B155EEA3000F93E40 /* MOMethod_Private.h in Headers */,
 				EAA45E94155EEB9500F93E40 /* MOBox.h in Headers */,
 				EAC8BFC4155F3E01003653BA /* NSArray+MochaAdditions.h in Headers */,
 				EAC8BFC9155F3ECD003653BA /* NSDictionary+MochaAdditions.h in Headers */,
 				EA037E701560B4C100D3E7C8 /* MOFunctionArgument.h in Headers */,
-				EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */,
 				EAA34FA31563986F00B62244 /* MOStruct.h in Headers */,
 				EAA34FB81563B3A500B62244 /* MOObjCRuntime.h in Headers */,
 				EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */,
 				EABA262B15658AA3005CF076 /* NSObject+MochaAdditions.h in Headers */,
-				EA31AF7A1567064B001F8BE0 /* MOProtocolDescription.h in Headers */,
 				EAA59E9015686C8600368A96 /* MOClosure.h in Headers */,
 				EAA59E9415686CEA00368A96 /* MOClosure_Private.h in Headers */,
-				EA2DE2F91571904D0017EF88 /* MOClassDescription.h in Headers */,
-				EA2DE303157191280017EF88 /* MOMethodDescription.h in Headers */,
-				EA2DE309157191CA0017EF88 /* MOInstanceVariableDescription.h in Headers */,
-				EA2DE30F157195000017EF88 /* MOPropertyDescription.h in Headers */,
 				EAB4B144157413F900F4342D /* MOInstanceVariableDescription_Private.h in Headers */,
 				EAB4B148157418B300F4342D /* MOMethodDescription_Private.h in Headers */,
 				EAB4B14B15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */,
 				EAB4B14F15743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
+				EA2DE30F157195000017EF88 /* MOPropertyDescription.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1068,7 +1068,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"${SRCROOT}/libMocha (iOS)/JavaScriptCore\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/libMocha (iOS)/JavaScriptCore\"",
@@ -1092,7 +1091,6 @@
 				HEADER_SEARCH_PATHS = (
 					"\"${SRCROOT}/libMocha (iOS)/JavaScriptCore\"",
 				);
-				IPHONEOS_DEPLOYMENT_TARGET = 5.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/libMocha (iOS)/JavaScriptCore\"",
@@ -1127,6 +1125,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
@@ -1147,6 +1146,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				SDKROOT = macosx;
 			};
