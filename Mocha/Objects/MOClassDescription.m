@@ -38,7 +38,7 @@
 }
 
 + (MOClassDescription *)descriptionForClass:(Class)aClass {
-    return [[[self alloc] initWithClass:aClass registered:YES] autorelease];
+    return [[self alloc] initWithClass:aClass registered:YES];
 }
 
 + (MOClassDescription *)allocateDescriptionForClassWithName:(NSString *)name superclass:(Class)superclass {
@@ -57,7 +57,7 @@
         return nil;
     }
     
-    return [[[self alloc] initWithClass:aClass registered:NO] autorelease];
+    return [[self alloc] initWithClass:aClass registered:NO];
 }
 
 - (id)initWithClass:(Class)aClass registered:(BOOL)isRegistered {
@@ -67,11 +67,6 @@
         _registered = isRegistered;
     }
     return self;
-}
-
-- (void)dealloc {
-    
-    [super dealloc];
 }
 
 - (Class)registerClass {
@@ -280,7 +275,7 @@
             objc_property_t property = properties[i];
             NSString *name = [NSString stringWithUTF8String:property_getName(property)];
             
-            MOPropertyDescription *propertyDesc = [[[MOPropertyDescription alloc] init] autorelease];
+            MOPropertyDescription *propertyDesc = [[MOPropertyDescription alloc] init];
             propertyDesc.name = name;
             
             unsigned int attributeCount = 0;
@@ -489,7 +484,7 @@
 
 - (NSArray *)protocols {
     unsigned int count;
-    Protocol **protocols = class_copyProtocolList(_class, &count);
+    Protocol *__unsafe_unretained *protocols = class_copyProtocolList(_class, &count);
     
     if (protocols == NULL) {
         return [NSArray array];

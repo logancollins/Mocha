@@ -26,14 +26,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[_name release];
-	[_URL release];
-	[_dependencies release];
-	[_symbols release];
-	[super dealloc];
-}
-
 
 #pragma mark -
 #pragma mark Dependencies

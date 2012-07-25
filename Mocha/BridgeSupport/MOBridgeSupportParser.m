@@ -37,8 +37,6 @@
 	_parser = nil;
 	_library = nil;
 	_symbolStack = nil;
-	
-	[super dealloc];
 }
 
 - (MOBridgeSupportLibrary *)libraryWithBridgeSupportURL:(NSURL *)aURL error:(NSError **)outError {
@@ -47,7 +45,6 @@
 	
 	BOOL success = [_parser parse];
 	if (!success) {
-		[_library release];
 		_library = nil;
 	}
 	
@@ -56,9 +53,9 @@
 		*outError = error;
 	}
 	
-	[_parser release], _parser = nil;
+	_parser = nil;
 	
-	return [_library autorelease];
+	return _library;
 }
 
 
@@ -79,7 +76,7 @@
 	NSLog(@"Parser didEndDocument");
 #endif
 	
-	[_symbolStack release], _symbolStack = nil;
+	_symbolStack = nil;
 }
 
 - (void)parser:(NSXMLParser *)parser didStartElement:(NSString *)elementName namespaceURI:(NSString *)namespaceURI qualifiedName:(NSString *)qName attributes:(NSDictionary *)attributeDict {
@@ -98,7 +95,7 @@
 	}
 	else if ([elementName isEqualToString:@"struct"]) {
 		// Struct
-		MOBridgeSupportStruct *symbol = [[[MOBridgeSupportStruct alloc] init] autorelease];
+		MOBridgeSupportStruct *symbol = [[MOBridgeSupportStruct alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		symbol.type = [attributeDict objectForKey:@"type"];
 		symbol.type64 = [attributeDict objectForKey:@"type64"];
@@ -107,7 +104,7 @@
 	}
 	else if ([elementName isEqualToString:@"cftype"]) {
 		// CFType
-		MOBridgeSupportCFType *symbol = [[[MOBridgeSupportCFType alloc] init] autorelease];
+		MOBridgeSupportCFType *symbol = [[MOBridgeSupportCFType alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		symbol.type = [attributeDict objectForKey:@"type"];
 		symbol.type64 = [attributeDict objectForKey:@"type64"];
@@ -117,7 +114,7 @@
 	}
 	else if ([elementName isEqualToString:@"opaque"]) {
 		// Opaque
-		MOBridgeSupportOpaque *symbol = [[[MOBridgeSupportOpaque alloc] init] autorelease];
+		MOBridgeSupportOpaque *symbol = [[MOBridgeSupportOpaque alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		symbol.type = [attributeDict objectForKey:@"type"];
 		symbol.type64 = [attributeDict objectForKey:@"type64"];
@@ -125,7 +122,7 @@
 	}
 	else if ([elementName isEqualToString:@"constant"]) {
 		// Constant
-		MOBridgeSupportConstant *symbol = [[[MOBridgeSupportConstant alloc] init] autorelease];
+		MOBridgeSupportConstant *symbol = [[MOBridgeSupportConstant alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		symbol.type = [attributeDict objectForKey:@"type"];
 		symbol.type64 = [attributeDict objectForKey:@"type64"];
@@ -134,7 +131,7 @@
 	}
 	else if ([elementName isEqualToString:@"string_constant"]) {
 		// String constant
-		MOBridgeSupportStringConstant *symbol = [[[MOBridgeSupportStringConstant alloc] init] autorelease];
+		MOBridgeSupportStringConstant *symbol = [[MOBridgeSupportStringConstant alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		symbol.value = [attributeDict objectForKey:@"value"];
 		symbol.hasNSString = [[attributeDict objectForKey:@"nsstring"] isEqualToString:@"true"];
@@ -142,7 +139,7 @@
 	}
 	else if ([elementName isEqualToString:@"enum"]) {
 		// Enum
-		MOBridgeSupportEnum *symbol = [[[MOBridgeSupportEnum alloc] init] autorelease];
+		MOBridgeSupportEnum *symbol = [[MOBridgeSupportEnum alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		if ([attributeDict objectForKey:@"value"]) {
 			symbol.value = [NSNumber numberWithInteger:[[attributeDict objectForKey:@"value"] integerValue]];
@@ -156,7 +153,7 @@
 	}
 	else if ([elementName isEqualToString:@"function"]) {
 		// Function
-		MOBridgeSupportFunction *symbol = [[[MOBridgeSupportFunction alloc] init] autorelease];
+		MOBridgeSupportFunction *symbol = [[MOBridgeSupportFunction alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		symbol.variadic = [[attributeDict objectForKey:@"variadic"] isEqualToString:@"true"];
 		if ([attributeDict objectForKey:@"sentinel"]) {
@@ -169,28 +166,28 @@
 	}
 	else if ([elementName isEqualToString:@"function_alias"]) {
 		// Function alias
-		MOBridgeSupportFunctionAlias *symbol = [[[MOBridgeSupportFunctionAlias alloc] init] autorelease];
+		MOBridgeSupportFunctionAlias *symbol = [[MOBridgeSupportFunctionAlias alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		symbol.original = [attributeDict objectForKey:@"original"];
 		[_library setSymbol:symbol forName:symbol.name];
 	}
 	else if ([elementName isEqualToString:@"class"]) {
 		// Class
-		MOBridgeSupportClass *symbol = [[[MOBridgeSupportClass alloc] init] autorelease];
+		MOBridgeSupportClass *symbol = [[MOBridgeSupportClass alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		[_library setSymbol:symbol forName:symbol.name];
 		[_symbolStack addObject:symbol];
 	}
 	else if ([elementName isEqualToString:@"informal_protocol"]) {
 		// Informal protocol
-		MOBridgeSupportInformalProtocol *symbol = [[[MOBridgeSupportInformalProtocol alloc] init] autorelease];
+		MOBridgeSupportInformalProtocol *symbol = [[MOBridgeSupportInformalProtocol alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		[_library setSymbol:symbol forName:symbol.name];
 		[_symbolStack addObject:symbol];
 	}
 	else if ([elementName isEqualToString:@"method"]) {
 		// Method
-		MOBridgeSupportMethod *symbol = [[[MOBridgeSupportMethod alloc] init] autorelease];
+		MOBridgeSupportMethod *symbol = [[MOBridgeSupportMethod alloc] init];
 		symbol.name = [attributeDict objectForKey:@"name"];
 		if ([attributeDict objectForKey:@"selector"]) {
 			symbol.selector = NSSelectorFromString([attributeDict objectForKey:@"selector"]);
@@ -215,7 +212,7 @@
 	}
 	else if ([elementName isEqualToString:@"arg"]) {
 		// Argument
-		MOBridgeSupportArgument *argument = [[[MOBridgeSupportArgument alloc] init] autorelease];
+		MOBridgeSupportArgument *argument = [[MOBridgeSupportArgument alloc] init];
 		argument.cArrayLengthInArg = [attributeDict objectForKey:@"c_array_length_in_arg"];
 		argument.cArrayOfFixedLength = [[attributeDict objectForKey:@"c_array_of_fixed_length"] isEqualToString:@"true"];
 		argument.cArrayDelimitedByNull = [[attributeDict objectForKey:@"c_array_delimited_by_null"] isEqualToString:@"true"];
@@ -246,7 +243,7 @@
 	}
 	else if ([elementName isEqualToString:@"retval"]) {
 		// Return value
-		MOBridgeSupportArgument *argument = [[[MOBridgeSupportArgument alloc] init] autorelease];
+		MOBridgeSupportArgument *argument = [[MOBridgeSupportArgument alloc] init];
 		argument.cArrayLengthInArg = [attributeDict objectForKey:@"c_array_length_in_arg"];
 		argument.cArrayOfFixedLength = [[attributeDict objectForKey:@"c_array_of_fixed_length"] isEqualToString:@"true"];
 		argument.cArrayDelimitedByNull = [[attributeDict objectForKey:@"c_array_delimited_by_null"] isEqualToString:@"true"];

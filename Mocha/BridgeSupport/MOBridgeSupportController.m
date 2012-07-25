@@ -41,14 +41,6 @@
 	return self;
 }
 
-- (void)dealloc {
-	[_loadedURLs release];
-	[_loadedLibraries release];
-	[_symbols release];
-	[_parser release];
-	[super dealloc];
-}
-
 
 #pragma mark -
 #pragma mark Loading

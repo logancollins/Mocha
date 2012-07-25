@@ -13,11 +13,6 @@
 
 @synthesize name=_name;
 
-- (void)dealloc {
-	[_name release];
-	[super dealloc];
-}
-
 @end
 
 
@@ -26,12 +21,6 @@
 @synthesize type=_type;
 @synthesize type64=_type64;
 @synthesize opaque=_opaque;
-
-- (void)dealloc {
-	[_type release];
-	[_type64 release];
-	[super dealloc];
-}
 
 @end
 
@@ -44,14 +33,6 @@
 @synthesize tollFreeBridgedClassName=_tollFreeBridgedClassName;
 @synthesize getTypeIDFunctionName=_getTypeIDFunctionName;
 
-- (void)dealloc {
-	[_type release];
-	[_type64 release];
-	[_tollFreeBridgedClassName release];
-	[_getTypeIDFunctionName release];
-	[super dealloc];
-}
-
 @end
 
 
@@ -61,12 +42,6 @@
 @synthesize type64=_type64;
 
 @synthesize hasMagicCookie=_hasMagicCookie;
-
-- (void)dealloc {
-	[_type release];
-	[_type64 release];
-	[super dealloc];
-}
 
 @end
 
@@ -78,12 +53,6 @@
 
 @synthesize hasMagicCookie=_hasMagicCookie;
 
-- (void)dealloc {
-	[_type release];
-	[_type64 release];
-	[super dealloc];
-}
-
 @end
 
 
@@ -91,11 +60,6 @@
 
 @synthesize value=_value;
 @synthesize hasNSString=_hasNSString;
-
-- (void)dealloc {
-	[_value release];
-	[super dealloc];
-}
 
 @end
 
@@ -107,13 +71,6 @@
 
 @synthesize ignored=_ignored;
 @synthesize suggestion=_suggestion;
-
-- (void)dealloc {
-	[_value release];
-	[_value64 release];
-	[_suggestion release];
-	[super dealloc];
-}
 
 @end
 
@@ -136,19 +93,12 @@
     return self;
 }
 
-- (void)dealloc {
-	[_sentinel release];
-    [_arguments release];
-    [_returnValue release];
-	[super dealloc];
-}
-
 
 #pragma mark -
 #pragma mark Arguments
 
 - (NSArray *)arguments {
-	return [[_arguments copy] autorelease];
+	return [_arguments copy];
 }
 
 - (void)setArguments:(NSArray *)arguments {
@@ -174,11 +124,6 @@
 
 @synthesize original=_original;
 
-- (void)dealloc {
-	[_original release];
-	[super dealloc];
-}
-
 @end
 
 
@@ -192,11 +137,6 @@
 		_methods = [[NSMutableArray alloc] init];
 	}
 	return self;
-}
-
-- (void)dealloc {
-	[_methods release];
-	[super dealloc];
 }
 
 
@@ -246,11 +186,6 @@
 		_methods = [[NSMutableArray alloc] init];
 	}
 	return self;
-}
-
-- (void)dealloc {
-	[_methods release];
-	[super dealloc];
 }
 
 
@@ -317,22 +252,12 @@
 	return self;
 }
 
-- (void)dealloc {
-	[_type release];
-	[_type64 release];
-	[_arguments release];
-	[_returnValue release];
-	[_sentinel release];
-	[_suggestion release];
-	[super dealloc];
-}
-
 
 #pragma mark -
 #pragma mark Arguments
 
 - (NSArray *)arguments {
-	return [[_arguments copy] autorelease];
+	return [_arguments copy];
 }
 
 - (void)setArguments:(NSArray *)arguments {
@@ -390,22 +315,12 @@
     return self;
 }
 
-- (void)dealloc {
-	[_type release];
-	[_type64 release];
-	[_typeModifier release];
-	[_signature release];
-	[_signature64 release];
-	[_cArrayLengthInArg release];
-	[super dealloc];
-}
-
 
 #pragma mark -
 #pragma mark Arguments
 
 - (NSArray *)arguments {
-	return [[_arguments copy] autorelease];
+	return [_arguments copy];
 }
 
 - (void)setArguments:(NSArray *)arguments {

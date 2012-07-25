@@ -12,15 +12,10 @@
 
 
 int main(int argc, const char * argv[]) {
-    NSAutoreleasePool *pool = [[NSAutoreleasePool alloc] init];
-    
-    MOCInterpreter *interpreter = [[MOCInterpreter alloc] init];
-    [interpreter run];
-    
-    [interpreter release];
-    
-    [pool drain];
-    
+    @autoreleasepool {
+		MOCInterpreter *interpreter = [[MOCInterpreter alloc] init];
+        [interpreter run];
+    }
     return 0;
 }
 

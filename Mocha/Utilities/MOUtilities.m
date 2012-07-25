@@ -21,6 +21,7 @@
 #import "MOBridgeSupportSymbol.h"
 
 #import "MOBox.h"
+#import "MOAllocator.h"
 
 #import <objc/runtime.h>
 #import <objc/message.h>
@@ -37,13 +38,13 @@
 #pragma mark Values
 
 JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, JSValueRef *exception) {
-    MOBox *box = JSObjectGetPrivate(objectJS);
+    MOBox *box = (__bridge MOBox *)(JSObjectGetPrivate(objectJS));
     if (box != nil) {
         // Boxed object
         id object = [box representedObject];
         
         if ([object isKindOfClass:[NSString class]]) {
-            JSStringRef string = JSStringCreateWithCFString((CFStringRef)object);
+            JSStringRef string = JSStringCreateWithCFString((__bridge CFStringRef)object);
             JSValueRef value = JSValueMakeString(ctx, string);
             JSStringRelease(string);
             return value;
@@ -55,7 +56,7 @@ JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, 
         
         // Convert the object's description to a string as a last ditch effort
         NSString *description = [object description];
-        JSStringRef string = JSStringCreateWithCFString((CFStringRef)description);
+        JSStringRef string = JSStringCreateWithCFString((__bridge CFStringRef)description);
         JSValueRef value = JSValueMakeString(ctx, string);
         JSStringRelease(string);
         return value;
@@ -69,7 +70,7 @@ NSString * MOJSValueToString(JSContextRef ctx, JSValueRef value, JSValueRef *exc
         return nil;
     }
 	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, exception);
-	NSString *resultString = [(NSString *)JSStringCopyCFString(kCFAllocatorDefault, resultStringJS) autorelease];
+	NSString *resultString = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, resultStringJS));
 	JSStringRelease(resultStringJS);
 	return resultString;
 }
@@ -99,14 +100,14 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
     // Build arguments
     for (size_t i=0; i<argumentCount; i++) {
         JSValueRef argument = arguments[i];
-        id object = [runtime objectForJSValue:argument unboxObjects:NO];
+        __unsafe_unretained id object = [runtime objectForJSValue:argument unboxObjects:NO];
         
         NSUInteger argIndex = i + 2;
         const char * argType = [methodSignature getArgumentTypeAtIndex:argIndex];
         
         // MOBox
         if ([object isKindOfClass:[MOBox class]]) {
-            id value = [object representedObject];
+            __unsafe_unretained id value = [object representedObject];
             [invocation setArgument:&value atIndex:argIndex];
             //id representedObject = [object representedObject];
             //if ([representedObject isKindOfClass:[MOBox class]]) {
@@ -191,7 +192,7 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
     // id
     else if (strcmp(returnType, @encode(id)) == 0
              || strcmp(returnType, @encode(Class)) == 0) {
-        id object = nil;
+        __unsafe_unretained id object = nil;
         [invocation getReturnValue:&object];
         returnValue = [runtime JSValueForObject:object];
     }
@@ -303,6 +304,13 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         target = [function target];
         selector = [function selector];
         Class klass = [target class];
+        
+        if (selector == @selector(alloc)) {
+            // Override for -alloc
+            MOAllocator *allocator = [MOAllocator allocator];
+            allocator.objectClass = klass;
+            return [runtime JSValueForObject:allocator];
+        }
         
         if ([klass isSubclassOfClass:[NSProxy class]]) {
             // Override for Distributed Objects
@@ -432,7 +440,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         }
         else {
             // void return
-            returnArg = [[[MOFunctionArgument alloc] init] autorelease];
+            returnArg = [[MOFunctionArgument alloc] init];
             [returnArg setTypeEncoding:_C_VOID];
         }
         [returnArg setReturnValue:YES];
@@ -514,7 +522,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             
             MOFunctionArgument *arg = nil;
             if (variadic && i >= callAddressArgumentCount) {
-				arg = [[[MOFunctionArgument alloc] init] autorelease];
+				arg = [[MOFunctionArgument alloc] init];
 				[arg setTypeEncoding:_C_ID];
 			}
             else {
@@ -625,7 +633,7 @@ BOOL MOSelectorIsVariadic(Class klass, SEL selector) {
 }
 
 MOFunctionArgument * MOFunctionArgumentForTypeEncoding(NSString *typeEncoding) {
-    MOFunctionArgument *argument = [[[MOFunctionArgument alloc] init] autorelease];
+    MOFunctionArgument *argument = [[MOFunctionArgument alloc] init];
     
     char typeEncodingChar = [typeEncoding UTF8String][0];
     
@@ -683,9 +691,7 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
                     
                     [argumentEncoding setStructureTypeEncoding:encoding];
                     [argumentEncodings addObject:argumentEncoding];
-                    [argumentEncoding release];
                     
-                    [encoding release];
                     argsParser += count - 1;
                 }
                 else {
@@ -707,14 +713,12 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
                     if (*typeStart == _C_PTR) {
                         NSString *encoding = [[NSString alloc] initWithBytes:typeStart length:argsParser-typeStart encoding:NSUTF8StringEncoding];
                         [argumentEncoding setPointerTypeEncoding:encoding];
-                        [encoding release];
                     }
                     else {
                         @try {
                             [argumentEncoding setTypeEncoding:*typeStart];
                         }
                         @catch (NSException *e) {
-                            [argumentEncoding release];
                             return nil;
                         }
                         
@@ -725,7 +729,6 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
                     }
                     
                     [argumentEncodings addObject:argumentEncoding];
-                    [argumentEncoding release];
                 }
             }
         }
@@ -892,10 +895,9 @@ id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *arg
         JSValueRef *jsArguments = (JSValueRef *)malloc(sizeof(JSValueRef) * (argCount - 1));
         
         // Handle passed arguments
-        arg = va_arg(args, id);
         for (NSUInteger i=0; i<argCount; i++) {
-            jsArguments[i] = [runtime JSValueForObject:arg];
             arg = va_arg(args, id);
+            jsArguments[i] = [runtime JSValueForObject:arg];
         }
         
         va_end(args);
@@ -912,7 +914,7 @@ id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *arg
             return nil;
         }
         
-        return (void*)returnValue;
+        return (__bridge void*)returnValue;
     };
-    return [[newBlock copy] autorelease];
+    return [newBlock copy];
 }

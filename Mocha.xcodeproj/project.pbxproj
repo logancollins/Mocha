@@ -56,6 +56,9 @@
 		0282F68F1588F6940085FDC7 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0282F68E1588F6940085FDC7 /* libicucore.dylib */; };
 		0282F6911588F69A0085FDC7 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0282F6901588F69A0085FDC7 /* libstdc++.dylib */; };
 		028D628615C0650600C12842 /* Mocha.hdoc in Resources */ = {isa = PBXBuildFile; fileRef = 028D628515C0650600C12842 /* Mocha.hdoc */; };
+		02B1AE1C15C07A80000E2008 /* MOAllocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B1AE1A15C07A80000E2008 /* MOAllocator.m */; };
+		02B1AE1E15C07A88000E2008 /* MOAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B1AE1915C07A80000E2008 /* MOAllocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02B1AE1F15C07A88000E2008 /* MOAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B1AE1915C07A80000E2008 /* MOAllocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA037E701560B4C100D3E7C8 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA1A1232156160F200A1F1A4 /* libffi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A1231156160F200A1F1A4 /* libffi.dylib */; };
 		EA2DE2F91571904D0017EF88 /* MOClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE2F71571904D0017EF88 /* MOClassDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -262,6 +265,8 @@
 		0282F68E1588F6940085FDC7 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libicucore.dylib; sourceTree = DEVELOPER_DIR; };
 		0282F6901588F69A0085FDC7 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libstdc++.dylib"; sourceTree = DEVELOPER_DIR; };
 		028D628515C0650600C12842 /* Mocha.hdoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Mocha.hdoc; sourceTree = "<group>"; };
+		02B1AE1915C07A80000E2008 /* MOAllocator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOAllocator.h; sourceTree = "<group>"; };
+		02B1AE1A15C07A80000E2008 /* MOAllocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAllocator.m; sourceTree = "<group>"; };
 		EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionArgument.h; sourceTree = "<group>"; };
 		EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionArgument.m; sourceTree = "<group>"; };
 		EA1A1231156160F200A1F1A4 /* libffi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffi.dylib; path = usr/lib/libffi.dylib; sourceTree = SDKROOT; };
@@ -601,6 +606,8 @@
 			children = (
 				EAA45E92155EEB9400F93E40 /* MOBox.h */,
 				EAA45E93155EEB9400F93E40 /* MOBox.m */,
+				02B1AE1915C07A80000E2008 /* MOAllocator.h */,
+				02B1AE1A15C07A80000E2008 /* MOAllocator.m */,
 				EA2DE3001571910F0017EF88 /* Types */,
 				EA2DE2FF157191030017EF88 /* Callables */,
 				EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */,
@@ -708,6 +715,7 @@
 				EAB4B149157418B300F4342D /* MOMethodDescription_Private.h in Headers */,
 				EAB4B14C15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */,
 				EAB4B15015743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
+				02B1AE1F15C07A88000E2008 /* MOAllocator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -746,6 +754,7 @@
 				EAB4B14B15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */,
 				EAB4B14F15743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
 				EA2DE30F157195000017EF88 /* MOPropertyDescription.h in Headers */,
+				02B1AE1E15C07A88000E2008 /* MOAllocator.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -973,6 +982,7 @@
 				EA2DE30B157191CA0017EF88 /* MOInstanceVariableDescription.m in Sources */,
 				EA2DE311157195000017EF88 /* MOPropertyDescription.m in Sources */,
 				EAB4B15115743E1F00F4342D /* MOJavaScriptObject.m in Sources */,
+				02B1AE1C15C07A80000E2008 /* MOAllocator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1170,6 +1180,7 @@
 		EAA45E19155CE44B00F93E40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1186,6 +1197,7 @@
 		EAA45E1A155CE44B00F93E40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
@@ -1202,6 +1214,7 @@
 		EAA45E7C155EE5AF00F93E40 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "moc/moc-Prefix.pch";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../ @loader_path/";
@@ -1212,6 +1225,7 @@
 		EAA45E7D155EE5AF00F93E40 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "moc/moc-Prefix.pch";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../ @loader_path/";

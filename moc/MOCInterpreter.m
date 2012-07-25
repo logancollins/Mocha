@@ -69,7 +69,7 @@ static char ** runtimeCompletion(const char * text, int start, int end);
                 JSValueRef value = [runtime evalJSString:string];
                 if (value != NULL) {
                     JSStringRef string = JSValueToStringCopy([runtime context], value, NULL);
-                    NSString *description = [(NSString *)JSStringCopyCFString(NULL, string) autorelease];
+                    NSString *description = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, string));
                     JSStringRelease(string);
                     printf("%s\n", [description UTF8String]);
                 }

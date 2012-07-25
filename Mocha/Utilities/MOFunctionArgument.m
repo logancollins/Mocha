@@ -56,12 +56,6 @@
 	if (_structureType.elements != NULL) {
         free(_structureType.elements);
     }
-    
-    [_structureTypeEncoding release];
-    [_pointerTypeEncoding release];
-    [_customData release];
-    
-    [super dealloc];
 }
 
 - (NSString *)description {
@@ -107,7 +101,6 @@
 - (void)setPointerTypeEncoding:(NSString *)pointerTypeEncoding withCustomStorage:(void *)storagePtr {
     _typeEncoding = _C_PTR;
     
-    [_pointerTypeEncoding release];
     _pointerTypeEncoding = [pointerTypeEncoding copy];
     
 	if (storagePtr != NULL) {
@@ -127,7 +120,6 @@
 - (void)setStructureTypeEncoding:(NSString *)structureTypeEncoding withCustomStorage:(void *)storagePtr {
 	_typeEncoding = _C_STRUCT_B;
     
-    [_structureTypeEncoding release];
     _structureTypeEncoding = [structureTypeEncoding copy];
 	
 	if (storagePtr != NULL) {
@@ -287,7 +279,7 @@
         }
     }
     else {
-        *(id *)_storage = nil;
+        *(void**)_storage = NULL;
     }
 }
 
@@ -299,7 +291,7 @@
  * __alignOf__ returns 8 for double, but its struct align is 4
  * use dummy structures to get struct alignment, each having a byte as first element
  */
-typedef	struct { char a; id b; } struct_C_ID;
+typedef	struct { char a; void* b; } struct_C_ID;
 typedef	struct { char a; char b; } struct_C_CHR;
 typedef	struct { char a; short b; } struct_C_SHT;
 typedef	struct { char a; int b; } struct_C_INT;
@@ -458,7 +450,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 	while (*c2 && *c2 != '=') {
         c2++;
     }
-	return [[[NSString alloc] initWithBytes:c length:(c2-c) encoding:NSUTF8StringEncoding] autorelease];
+	return [[NSString alloc] initWithBytes:c length:(c2-c) encoding:NSUTF8StringEncoding];
 }
 
 + (NSString *)structureFullTypeEncodingFromStructureTypeEncoding:(NSString *)encoding {
@@ -542,7 +534,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 c2++;
             }
             
-			NSString *propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding] autorelease];
+			NSString *propertyName = [[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding];
 			c = c2;
             
 			// Skip '"'
@@ -680,7 +672,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
         case _C_ID:	
 		case _C_CLASS: {
 			id object = [runtime objectForJSValue:value];
-            *(id *)ptr = object;
+            *(void**)ptr = (__bridge void*)object;
             return YES;
 		}
         
@@ -762,7 +754,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 *(void**)ptr = pointer;
             }
             else {
-                *(id*)ptr = object;
+                *(void**)ptr = (__bridge void *)object;
             }
             return YES;
         }
@@ -781,7 +773,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     switch (typeEncoding) {
         case _C_ID:	
 		case _C_CLASS: {
-			id object = *(id*)ptr;
+			id object = (__bridge id)(*(void**)ptr);
             *value = [runtime JSValueForObject:object];
             return YES;
 		}
@@ -832,7 +824,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
         case _C_SEL: {
 			SEL sel = *(SEL*)ptr;
 			id str = NSStringFromSelector(sel);
-			JSStringRef	jsName = JSStringCreateWithCFString((CFStringRef)str);
+			JSStringRef	jsName = JSStringCreateWithCFString((__bridge CFStringRef)str);
 			*value = JSValueMakeString(ctx, jsName);
 			JSStringRelease(jsName);
 			return YES;
@@ -852,7 +844,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
             
 			// Convert to NSString and then to Javascript string
 			NSString *name = [NSString stringWithUTF8String:charPtr];
-			JSStringRef	jsName = JSStringCreateWithCFString((CFStringRef)name);
+			JSStringRef	jsName = JSStringCreateWithCFString((__bridge CFStringRef)name);
 			*value = JSValueMakeString(ctx, jsName);
 			JSStringRelease(jsName);
             
@@ -906,7 +898,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 c2++;
             }
             
-			NSString *propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding] autorelease];
+			NSString *propertyName = [[NSString alloc] initWithBytes:c+1 length:(c2-c-1) encoding:NSUTF8StringEncoding];
 			c = c2;
 			
 			// Skip '"'
@@ -982,7 +974,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 c2++;
             }
             
-			NSString *propertyName = [[[NSString alloc] initWithBytes:c+1 length:(c2 - c - 1) encoding:NSUTF8StringEncoding] autorelease];
+			NSString *propertyName = [[NSString alloc] initWithBytes:c+1 length:(c2 - c - 1) encoding:NSUTF8StringEncoding];
 			c = c2;
             
 			// Skip '"'
