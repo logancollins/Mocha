@@ -12,6 +12,7 @@
 			buildConfigurationList = 023EB3811587A31A0072EC4E /* Build configuration list for PBXAggregateTarget "FrameworkComplete" */;
 			buildPhases = (
 				023EB38D1587A33A0072EC4E /* Copy Executables */,
+				028D628B15C0677000C12842 /* Generate Bridge Support Metadata */,
 			);
 			dependencies = (
 				023EB3891587A3300072EC4E /* PBXTargetDependency */,
@@ -890,6 +891,20 @@
 			shellPath = /bin/sh;
 			shellScript = "mkdir -p \"${BUILT_PRODUCTS_DIR}/MochaDocumentation\"\nheaderdoc2html -C -g -u -o \"${BUILT_PRODUCTS_DIR}/MochaDocumentation\" \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Headers\" \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Resources/Mocha.hdoc\"\ngatherheaderdoc \"${BUILT_PRODUCTS_DIR}/MochaDocumentation\"";
 		};
+		028D628B15C0677000C12842 /* Generate Bridge Support Metadata */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Bridge Support Metadata";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "PATH=\"$PATH:/usr/local/bin\"\nmkdir -p \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Resources/BridgeSupport/\"\ngen_bridge_metadata --64-bit -f \"${BUILT_PRODUCTS_DIR}/Mocha.framework/\" -o \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Resources/BridgeSupport/Mocha.bridgesupport\"";
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1232,6 +1247,7 @@
 				028D627F15C064AF00C12842 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EAA34FD015647AD700B62244 /* Build configuration list for PBXNativeTarget "libMocha (iOS)" */ = {
 			isa = XCConfigurationList;
