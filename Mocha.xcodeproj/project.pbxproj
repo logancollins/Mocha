@@ -32,6 +32,18 @@
 			name = InstallPackage;
 			productName = InstallPackage;
 		};
+		028D627D15C064AF00C12842 /* Documentation */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 028D628015C064AF00C12842 /* Build configuration list for PBXAggregateTarget "Documentation" */;
+			buildPhases = (
+				028D628415C064C400C12842 /* Generate Documentation */,
+			);
+			dependencies = (
+				028D628315C064BC00C12842 /* PBXTargetDependency */,
+			);
+			name = Documentation;
+			productName = Documentation;
+		};
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
@@ -42,6 +54,7 @@
 		02112342155DB9A100415471 /* MOBridgeSupportParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112340155DB9A100415471 /* MOBridgeSupportParser.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0282F68F1588F6940085FDC7 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0282F68E1588F6940085FDC7 /* libicucore.dylib */; };
 		0282F6911588F69A0085FDC7 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0282F6901588F69A0085FDC7 /* libstdc++.dylib */; };
+		028D628615C0650600C12842 /* Mocha.hdoc in Resources */ = {isa = PBXBuildFile; fileRef = 028D628515C0650600C12842 /* Mocha.hdoc */; };
 		EA037E701560B4C100D3E7C8 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA1A1232156160F200A1F1A4 /* libffi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A1231156160F200A1F1A4 /* libffi.dylib */; };
 		EA2DE2F91571904D0017EF88 /* MOClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE2F71571904D0017EF88 /* MOClassDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -204,6 +217,13 @@
 			remoteGlobalIDString = 023EB3801587A31A0072EC4E;
 			remoteInfo = FrameworkComplete;
 		};
+		028D628215C064BC00C12842 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA45E02155CE44B00F93E40;
+			remoteInfo = Mocha;
+		};
 		EAA3503815647DEA00B62244 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
@@ -240,6 +260,7 @@
 		023EB37F1587A2D40072EC4E /* preinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = preinstall; sourceTree = "<group>"; };
 		0282F68E1588F6940085FDC7 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libicucore.dylib; sourceTree = DEVELOPER_DIR; };
 		0282F6901588F69A0085FDC7 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libstdc++.dylib"; sourceTree = DEVELOPER_DIR; };
+		028D628515C0650600C12842 /* Mocha.hdoc */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = Mocha.hdoc; sourceTree = "<group>"; };
 		EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionArgument.h; sourceTree = "<group>"; };
 		EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionArgument.m; sourceTree = "<group>"; };
 		EA1A1231156160F200A1F1A4 /* libffi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffi.dylib; path = usr/lib/libffi.dylib; sourceTree = SDKROOT; };
@@ -569,6 +590,7 @@
 				EAA45E0E155CE44B00F93E40 /* Mocha-Info.plist */,
 				EAA45E0F155CE44B00F93E40 /* InfoPlist.strings */,
 				EAA45E12155CE44B00F93E40 /* Mocha-Prefix.pch */,
+				028D628515C0650600C12842 /* Mocha.hdoc */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -808,6 +830,7 @@
 				EAA45E70155EE5AF00F93E40 /* moc */,
 				023EB3801587A31A0072EC4E /* FrameworkComplete */,
 				023EB3841587A3210072EC4E /* InstallPackage */,
+				028D627D15C064AF00C12842 /* Documentation */,
 			);
 		};
 /* End PBXProject section */
@@ -818,6 +841,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				EAA45E11155CE44B00F93E40 /* InfoPlist.strings in Resources */,
+				028D628615C0650600C12842 /* Mocha.hdoc in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -851,6 +875,20 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "rm -r \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders/\"\nrm \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders\"\nrm -r \"${DSTROOT}\"\nmkdir -p \"${DSTROOT}/Library/Frameworks/\"\ncp -R \"${BUILT_PRODUCTS_DIR}/Mocha.framework\" \"${DSTROOT}/Library/Frameworks/\"\nchmod -R 755 \"${SRCROOT}/InstallPackage/Scripts/\"\npkgbuild --root \"${DSTROOT}\" \"${BUILT_PRODUCTS_DIR}/Mocha.pkg\" --scripts \"${SRCROOT}/InstallPackage/Scripts\"";
+		};
+		028D628415C064C400C12842 /* Generate Documentation */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Generate Documentation";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "mkdir -p \"${BUILT_PRODUCTS_DIR}/MochaDocumentation\"\nheaderdoc2html -C -g -u -o \"${BUILT_PRODUCTS_DIR}/MochaDocumentation\" \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Headers\" \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Resources/Mocha.hdoc\"\ngatherheaderdoc \"${BUILT_PRODUCTS_DIR}/MochaDocumentation\"";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -950,6 +988,11 @@
 			target = 023EB3801587A31A0072EC4E /* FrameworkComplete */;
 			targetProxy = 023EB38E1587A34F0072EC4E /* PBXContainerItemProxy */;
 		};
+		028D628315C064BC00C12842 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA45E02155CE44B00F93E40 /* Mocha */;
+			targetProxy = 028D628215C064BC00C12842 /* PBXContainerItemProxy */;
+		};
 		EAA3503915647DEA00B62244 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = EAA45E02155CE44B00F93E40 /* Mocha */;
@@ -997,6 +1040,20 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				COMBINE_HIDPI_IMAGES = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		028D627E15C064AF00C12842 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		028D627F15C064AF00C12842 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
@@ -1167,6 +1224,14 @@
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
+		};
+		028D628015C064AF00C12842 /* Build configuration list for PBXAggregateTarget "Documentation" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				028D627E15C064AF00C12842 /* Debug */,
+				028D627F15C064AF00C12842 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
 		};
 		EAA34FD015647AD700B62244 /* Build configuration list for PBXNativeTarget "libMocha (iOS)" */ = {
 			isa = XCConfigurationList;
