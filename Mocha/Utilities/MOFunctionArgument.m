@@ -80,8 +80,8 @@
 }
 
 - (void)setTypeEncoding:(char)typeEncoding withCustomStorage:(void *)storagePtr {
-	if ([MOFunctionArgument sizeOfTypeEncoding:typeEncoding] == -1)	{
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Bad type encoding: %c", typeEncoding] userInfo:nil];
+	if ([MOFunctionArgument getSize:NULL ofTypeEncoding:typeEncoding]) {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Invalid type encoding: %c", typeEncoding] userInfo:nil];
 	};
     
 	_typeEncoding = typeEncoding;
@@ -209,9 +209,10 @@
 		// +4 for tail padding
         // size = [MOFunctionArgument sizeOfStructureTypeEncoding:_structureTypeEncoding] + 16 + 4;
         size = [MOFunctionArgument sizeOfStructureTypeEncoding:_structureTypeEncoding] + 4;
+		success = YES;
 	}
     else {
-        size = [MOFunctionArgument sizeOfTypeEncoding:_typeEncoding];
+        success = [MOFunctionArgument getSize:&size ofTypeEncoding:_typeEncoding];
     }
     
     if (success) {
@@ -231,21 +232,34 @@
 
 // This	destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
 + (void)alignPtr:(void**)ptr accordingToEncoding:(char)encoding {
-	int alignOnSize = [MOFunctionArgument alignmentOfTypeEncoding:encoding];
+	size_t alignOnSize = 0;
+	BOOL success = [MOFunctionArgument getAlignment:&alignOnSize ofTypeEncoding:encoding];
 	
-	long address = (long)*ptr;
-	if ((address % alignOnSize) != 0) {
-		address = (address + alignOnSize) & ~(alignOnSize - 1);
+	if (success) {
+		long address = (long)*ptr;
+		if ((address % alignOnSize) != 0) {
+			address = (address + alignOnSize) & ~(alignOnSize - 1);
+		}
+		
+		*ptr = (void*)address;
+	}
+    else {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to align pointer for argument type %c", encoding] userInfo:nil];
     }
-    
-	*ptr = (void*)address;
 }
 
 // This	destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
 + (void)advancePtr:(void**)ptr accordingToEncoding:(char)encoding {
 	long address = (long)*ptr;
-	address += [MOFunctionArgument sizeOfTypeEncoding:encoding];
-	*ptr = (void*)address;
+	size_t size = 0;
+	BOOL success = [MOFunctionArgument getSize:&size ofTypeEncoding:encoding];
+	if (success) {
+		address += size;
+		*ptr = (void*)address;
+	}
+    else {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to advance pointer for argument type %c", encoding] userInfo:nil];
+    }
 }
 
 
