@@ -80,7 +80,7 @@ static char ** runtimeCompletion(const char * text, int start, int end);
 					[runtime setValue:object forKey:@"_"];
 				}
 				else {
-					[runtime setValue:[NSNull null] forKey:@"_"];
+					[runtime setNilValueForKey:@"_"];
 				}
             }
             @catch (NSException *e) {

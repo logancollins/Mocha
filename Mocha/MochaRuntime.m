@@ -233,6 +233,10 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     [_exportedObjects setObject:value forKey:key];
 }
 
+- (void)setNilValueForKey:(NSString *)key {
+	[_exportedObjects removeObjectForKey:key];
+}
+
 
 #pragma mark -
 #pragma mark Object Conversion
