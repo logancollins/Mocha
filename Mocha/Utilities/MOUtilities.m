@@ -704,6 +704,7 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
                     }
                     
                     MOFunctionArgument *argumentEncoding = [[MOFunctionArgument alloc] init];
+                    
                     // Set return value
                     if ([argumentEncodings count] == 0) {
                         [argumentEncoding setReturnValue:YES];
@@ -711,7 +712,7 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
                     
                     // If pointer, copy pointer type (^i, ^{NSRect}) to the argumentEncoding
                     if (*typeStart == _C_PTR) {
-                        NSString *encoding = [[NSString alloc] initWithBytes:typeStart length:argsParser-typeStart encoding:NSUTF8StringEncoding];
+                        NSString *encoding = [[NSString alloc] initWithBytes:typeStart length:(argsParser - typeStart) encoding:NSUTF8StringEncoding];
                         [argumentEncoding setPointerTypeEncoding:encoding];
                     }
                     else {

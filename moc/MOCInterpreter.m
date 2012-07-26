@@ -73,6 +73,10 @@ static char ** runtimeCompletion(const char * text, int start, int end);
                     JSStringRelease(string);
                     printf("%s\n", [description UTF8String]);
                 }
+				
+				// Set the last result as the special variable "_"
+				id object = [runtime objectForJSValue:value];
+				[runtime setValue:object forKey:@"_"];
             }
             @catch (NSException *e) {
                 if ([e userInfo] != nil) {

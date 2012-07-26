@@ -48,6 +48,10 @@
 /* End PBXAggregateTarget section */
 
 /* Begin PBXBuildFile section */
+		020FB3DD15C1EAE300B003DC /* MOPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 020FB3DB15C1EAE300B003DC /* MOPointer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		020FB3DE15C1EAE300B003DC /* MOPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 020FB3DB15C1EAE300B003DC /* MOPointer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		020FB3DF15C1EAE300B003DC /* MOPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 020FB3DC15C1EAE300B003DC /* MOPointer.m */; };
+		020FB3E015C1EAE300B003DC /* MOPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 020FB3DC15C1EAE300B003DC /* MOPointer.m */; };
 		02112323155D7BD000415471 /* MOUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112321155D7BD000415471 /* MOUtilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02112327155D973100415471 /* MOBridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112325155D973100415471 /* MOBridgeSupportController.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211232A155D99F600415471 /* MOBridgeSupportSymbol.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -256,6 +260,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		020FB3DB15C1EAE300B003DC /* MOPointer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOPointer.h; sourceTree = "<group>"; };
+		020FB3DC15C1EAE300B003DC /* MOPointer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOPointer.m; sourceTree = "<group>"; };
 		02112321155D7BD000415471 /* MOUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOUtilities.h; sourceTree = "<group>"; };
 		02112322155D7BD000415471 /* MOUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOUtilities.m; sourceTree = "<group>"; usesTabs = 0; };
 		02112325155D973100415471 /* MOBridgeSupportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBridgeSupportController.h; sourceTree = "<group>"; };
@@ -519,8 +525,12 @@
 		EA2DE3001571910F0017EF88 /* Types */ = {
 			isa = PBXGroup;
 			children = (
+				02B1AE1915C07A80000E2008 /* MOAllocator.h */,
+				02B1AE1A15C07A80000E2008 /* MOAllocator.m */,
 				EAB4B14D15743E1F00F4342D /* MOJavaScriptObject.h */,
 				EAB4B14E15743E1F00F4342D /* MOJavaScriptObject.m */,
+				020FB3DB15C1EAE300B003DC /* MOPointer.h */,
+				020FB3DC15C1EAE300B003DC /* MOPointer.m */,
 				EAA34FA11563986F00B62244 /* MOStruct.h */,
 				EAA34FA21563986F00B62244 /* MOStruct.m */,
 				EAA34F9C156304A800B62244 /* MOUndefined.h */,
@@ -670,8 +680,6 @@
 			children = (
 				EAA45E92155EEB9400F93E40 /* MOBox.h */,
 				EAA45E93155EEB9400F93E40 /* MOBox.m */,
-				02B1AE1915C07A80000E2008 /* MOAllocator.h */,
-				02B1AE1A15C07A80000E2008 /* MOAllocator.m */,
 				EA2DE3001571910F0017EF88 /* Types */,
 				EA2DE2FF157191030017EF88 /* Callables */,
 				EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */,
@@ -780,6 +788,7 @@
 				EAB4B14C15742EE000F4342D /* MOProtocolDescription_Private.h in Headers */,
 				EAB4B15015743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
 				02B1AE1F15C07A88000E2008 /* MOAllocator.h in Headers */,
+				020FB3DE15C1EAE300B003DC /* MOPointer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -819,6 +828,7 @@
 				EAB4B14F15743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
 				EA2DE30F157195000017EF88 /* MOPropertyDescription.h in Headers */,
 				02B1AE1E15C07A88000E2008 /* MOAllocator.h in Headers */,
+				020FB3DD15C1EAE300B003DC /* MOPointer.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1064,6 +1074,7 @@
 				EA2DE30C157191CA0017EF88 /* MOInstanceVariableDescription.m in Sources */,
 				EA2DE312157195000017EF88 /* MOPropertyDescription.m in Sources */,
 				EAB4B15215743E1F00F4342D /* MOJavaScriptObject.m in Sources */,
+				020FB3E015C1EAE300B003DC /* MOPointer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1096,6 +1107,7 @@
 				EA2DE311157195000017EF88 /* MOPropertyDescription.m in Sources */,
 				EAB4B15115743E1F00F4342D /* MOJavaScriptObject.m in Sources */,
 				02B1AE1C15C07A80000E2008 /* MOAllocator.m in Sources */,
+				020FB3DF15C1EAE300B003DC /* MOPointer.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1427,6 +1439,7 @@
 				02BF151D15C096070004CA2C /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		EAA34FD015647AD700B62244 /* Build configuration list for PBXNativeTarget "libMocha (iOS)" */ = {
 			isa = XCConfigurationList;

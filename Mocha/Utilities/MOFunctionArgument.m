@@ -11,6 +11,7 @@
 // 
 
 #import "MochaRuntime_Private.h"
+#import "MOPointer.h"
 #import "MOStruct.h"
 #import "MOFunctionArgument.h"
 #import "MOBridgeSupportController.h"
@@ -59,7 +60,11 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@: %p : typeEncoding=%c %@, returnValue=%@, storage=%p>", [self class], self, _typeEncoding, (_structureTypeEncoding != nil ? _structureTypeEncoding : @""), (_returnValue ? @"YES" : @"NO"), _storage];
+	NSString *fullTypeEncoding = (_structureTypeEncoding != nil ? _structureTypeEncoding : @"");
+	if ([fullTypeEncoding length] == 0) {
+		fullTypeEncoding = (_pointerTypeEncoding != nil ? _pointerTypeEncoding : @"");
+	}
+    return [NSString stringWithFormat:@"<%@: %p : typeEncoding=%c %@, returnValue=%@, storage=%p>", [self class], self, _typeEncoding, fullTypeEncoding, (_returnValue ? @"YES" : @"NO"), _storage];
 }
 
 
@@ -99,12 +104,14 @@
 
 - (void)setPointerTypeEncoding:(NSString *)pointerTypeEncoding withCustomStorage:(void *)storagePtr {
     _typeEncoding = _C_PTR;
-    
     _pointerTypeEncoding = [pointerTypeEncoding copy];
     
 	if (storagePtr != NULL) {
 		_storage = storagePtr;
 	}
+	else {
+        [self allocateStorage];
+    }
 }
 
 - (NSString *)structureTypeEncoding {
@@ -165,7 +172,7 @@
 #pragma mark -
 #pragma mark Storage
 
-- (void **)storage {
+- (void**)storage {
     if (_typeEncoding == _C_STRUCT_B) {
         if (_pointerTypeEncoding) {
             return &_storage;
@@ -746,7 +753,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
             if ([object isKindOfClass:[NSNull class]]) {
                 *(void**)ptr = NULL;
             }
-            else if ([object isKindOfClass:[NSValue class]]) {
+            else if ([object isKindOfClass:[MOPointer class]]) {
                 void* pointer = [object pointerValue];
                 *(void**)ptr = pointer;
             }
@@ -860,7 +867,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
             }
             else {
 				void* pointer = *(void**)ptr;
-                NSValue *object = [NSValue valueWithPointer:pointer];
+                MOPointer *object = [[MOPointer alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding];
                 *value = [runtime JSValueForObject:object];
             }
 			return YES;
