@@ -76,7 +76,12 @@ static char ** runtimeCompletion(const char * text, int start, int end);
 				
 				// Set the last result as the special variable "_"
 				id object = [runtime objectForJSValue:value];
-				[runtime setValue:object forKey:@"_"];
+				if (object != nil) {
+					[runtime setValue:object forKey:@"_"];
+				}
+				else {
+					[runtime setValue:[NSNull null] forKey:@"_"];
+				}
             }
             @catch (NSException *e) {
                 if ([e userInfo] != nil) {
