@@ -13,6 +13,10 @@
 
 @synthesize name=_name;
 
+- (NSString *)description {
+	return [NSString stringWithFormat:@"<%@: %p : name=%@>", [self class], self, self.name];
+}
+
 @end
 
 
@@ -91,6 +95,35 @@
         _arguments = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (NSString *)description {
+	NSString *returnEncoding = nil;
+	if (self.returnValue != nil) {
+#if __LP64__
+		returnEncoding = (self.returnValue.type64 ? self.returnValue.type64 : self.returnValue.type);
+#else
+		returnEncoding = self.returnValue.type;
+#endif
+		if (returnEncoding == nil) {
+			returnEncoding = @"?";
+		}
+	}
+	else {
+		returnEncoding = @"v";
+	}
+	
+	NSMutableArray *argumentEncodings = [NSMutableArray arrayWithCapacity:[[self arguments] count]];
+	for (MOBridgeSupportArgument *arg in self.arguments) {
+#if __LP64__
+		NSString *encoding = (arg.type64 ? arg.type64 : arg.type);
+#else
+		NSString *encoding = arg.type;
+#endif
+		[argumentEncodings addObject:(encoding ? encoding : @"?")];
+	}
+	
+	return [NSString stringWithFormat:@"<%@: %p : name=%@, variadic=%@, argTypes=%@, returnType=%@>", [self class], self, self.name, (self.variadic ? @"YES" : @"NO"), [argumentEncodings componentsJoinedByString:@","], returnEncoding];
 }
 
 
@@ -313,6 +346,15 @@
         _arguments = [[NSMutableArray alloc] init];
     }
     return self;
+}
+
+- (NSString *)description {
+	if (self.typeModifier != nil) {
+		return [NSString stringWithFormat:@"<%@: %p : type=%@, typeModifier=%@>", [self class], self, (self.type64 ? self.type64 : self.type), self.typeModifier];
+	}
+	else {
+		return [NSString stringWithFormat:@"<%@: %p : type=%@>", [self class], self, (self.type64 ? self.type64 : self.type)];
+	}
 }
 
 
