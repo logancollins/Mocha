@@ -42,7 +42,7 @@
     self = [super init];
     if (self) {
         _storage = NULL;
-        _ownsStorage = YES;
+        _ownsStorage = NO;
     }
     return self;
 }
@@ -82,7 +82,6 @@
 	_typeEncoding = typeEncoding;
     
 	if (storagePtr != NULL) {
-		_ownsStorage = NO;
 		_storage = storagePtr;
 	}
 	else {
@@ -104,7 +103,6 @@
     _pointerTypeEncoding = [pointerTypeEncoding copy];
     
 	if (storagePtr != NULL) {
-		_ownsStorage = NO;
 		_storage = storagePtr;
 	}
 }
@@ -123,7 +121,6 @@
     _structureTypeEncoding = [structureTypeEncoding copy];
 	
 	if (storagePtr != NULL) {
-		_ownsStorage = NO;
 		_storage = storagePtr;
 	}
 	else {
@@ -213,6 +210,7 @@
         if (self.returnValue && size < minimalReturnSize) {
             size = minimalReturnSize;
         }
+        _ownsStorage = YES;
         _storage = malloc(size);
     }
     else {
@@ -637,7 +635,6 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 				}
 				c--;
 			}
-			else c++;
 		}
 	}
     
@@ -750,9 +747,13 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 *(void**)ptr = NULL;
             }
             else if ([object isKindOfClass:[NSValue class]]) {
-                void *pointer = [object pointerValue];
+                void* pointer = [object pointerValue];
                 *(void**)ptr = pointer;
             }
+			else if ([object isKindOfClass:[MOStruct class]]) {
+				JSObjectRef object = JSValueToObject(ctx, value, NULL);
+				[self structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[fullTypeEncoding UTF8String] storage:ptr];
+			}
             else {
                 *(void**)ptr = (__bridge void *)object;
             }

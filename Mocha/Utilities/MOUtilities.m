@@ -413,7 +413,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         // If the function cannot be found, raise an exception (instead of crashing)
         if (callAddress == NULL) {
             if (exception != NULL) {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to find function name: %@", functionName] userInfo:nil];
+                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to find function with name: %@", functionName] userInfo:nil];
                 *exception = [runtime JSValueForObject:e];
             }
             return NULL;
