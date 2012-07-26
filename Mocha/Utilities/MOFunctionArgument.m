@@ -146,7 +146,7 @@
 	_structureType.type	= FFI_TYPE_STRUCT;
 	_structureType.elements = malloc(sizeof(ffi_type *) * (elementCount + 1)); // +1 is trailing NULL
     
-	int i = 0;
+	NSUInteger i = 0;
 	for (NSString *type in types) {
 		char charEncoding = *(char*)[type UTF8String];
 		_structureType.elements[i++] = [MOFunctionArgument ffiTypeForTypeEncoding:charEncoding];
@@ -196,7 +196,8 @@
         @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No type encoding set in %@", self] userInfo:nil];
     }
     
-    int size = -1;
+	BOOL success = NO;
+    size_t size = 0;
     
     // Special case for structs
     if (self.typeEncoding == _C_STRUCT_B) {
@@ -213,7 +214,7 @@
         size = [MOFunctionArgument sizeOfTypeEncoding:_typeEncoding];
     }
     
-    if (size >= 0) {
+    if (success) {
         int	minimalReturnSize = sizeof(long);
         if (self.returnValue && size < minimalReturnSize) {
             size = minimalReturnSize;
@@ -307,28 +308,65 @@ typedef	struct { char a; float b; } struct_C_FLT;
 typedef	struct { char a; double b; } struct_C_DBL;
 typedef	struct { char a; BOOL b; } struct_C_BOOL;
 
-+ (int)alignmentOfTypeEncoding:(char)encoding {
++ (BOOL)getAlignment:(size_t *)alignmentPtr ofTypeEncoding:(char)encoding {
+	BOOL success = YES;
+	size_t alignment = 0;
 	switch (encoding) {
-		case _C_ID:         return offsetof(struct_C_ID, b);
-		case _C_CLASS:      return offsetof(struct_C_ID, b);
-		case _C_SEL:        return offsetof(struct_C_ID, b);
-		case _C_CHR:        return offsetof(struct_C_CHR, b);
-		case _C_UCHR:       return offsetof(struct_C_CHR, b);
-		case _C_SHT:        return offsetof(struct_C_SHT, b);
-		case _C_USHT:       return offsetof(struct_C_SHT, b);
-		case _C_INT:        return offsetof(struct_C_INT, b);
-		case _C_UINT:       return offsetof(struct_C_INT, b);
-		case _C_LNG:        return offsetof(struct_C_LNG, b);
-		case _C_ULNG:       return offsetof(struct_C_LNG, b);
-		case _C_LNG_LNG:    return offsetof(struct_C_LNG_LNG, b);
-		case _C_ULNG_LNG:   return offsetof(struct_C_LNG_LNG, b);
-		case _C_FLT:        return offsetof(struct_C_FLT, b);
-		case _C_DBL:        return offsetof(struct_C_DBL, b);
-		case _C_BOOL:       return offsetof(struct_C_BOOL, b);
-		case _C_PTR:        return offsetof(struct_C_ID, b);
-		case _C_CHARPTR:    return offsetof(struct_C_ID, b);
+		case _C_ID:         alignment = offsetof(struct_C_ID, b); break;
+		case _C_CLASS:      alignment = offsetof(struct_C_ID, b); break;
+		case _C_SEL:        alignment = offsetof(struct_C_ID, b); break;
+		case _C_CHR:        alignment = offsetof(struct_C_CHR, b); break;
+		case _C_UCHR:       alignment = offsetof(struct_C_CHR, b); break;
+		case _C_SHT:        alignment = offsetof(struct_C_SHT, b); break;
+		case _C_USHT:       alignment = offsetof(struct_C_SHT, b); break;
+		case _C_INT:        alignment = offsetof(struct_C_INT, b); break;
+		case _C_UINT:       alignment = offsetof(struct_C_INT, b); break;
+		case _C_LNG:        alignment = offsetof(struct_C_LNG, b); break;
+		case _C_ULNG:       alignment = offsetof(struct_C_LNG, b); break;
+		case _C_LNG_LNG:    alignment = offsetof(struct_C_LNG_LNG, b); break;
+		case _C_ULNG_LNG:   alignment = offsetof(struct_C_LNG_LNG, b); break;
+		case _C_FLT:        alignment = offsetof(struct_C_FLT, b); break;
+		case _C_DBL:        alignment = offsetof(struct_C_DBL, b); break;
+		case _C_BOOL:       alignment = offsetof(struct_C_BOOL, b); break;
+		case _C_PTR:        alignment = offsetof(struct_C_ID, b); break;
+		case _C_CHARPTR:    alignment = offsetof(struct_C_ID, b); break;
+		default:			success = NO; break;
 	}
-	return -1;
+	if (success && alignmentPtr != NULL) {
+		*alignmentPtr = alignment;
+	}
+	return success;
+}
+
++ (BOOL)getSize:(size_t *)sizePtr ofTypeEncoding:(char)encoding {
+	BOOL success = YES;
+	size_t size = 0;
+    switch (encoding) {
+        case _C_ID:         size = sizeof(id); break;
+        case _C_CLASS:      size = sizeof(Class); break;
+        case _C_SEL:        size = sizeof(SEL); break;
+        case _C_PTR:        size = sizeof(void*); break;
+        case _C_CHARPTR:    size = sizeof(char*); break;
+        case _C_CHR:        size = sizeof(char); break;
+        case _C_UCHR:       size = sizeof(unsigned char); break;
+        case _C_SHT:        size = sizeof(short); break;
+        case _C_USHT:       size = sizeof(unsigned short); break;
+        case _C_INT:        size = sizeof(int); break;
+        case _C_LNG:        size = sizeof(long); break;
+        case _C_UINT:       size = sizeof(unsigned int); break;
+        case _C_ULNG:       size = sizeof(unsigned long); break;
+        case _C_LNG_LNG:    size = sizeof(long long); break;
+        case _C_ULNG_LNG:   size = sizeof(unsigned long long); break;
+        case _C_FLT:        size = sizeof(float); break;
+        case _C_DBL:        size = sizeof(double); break;
+        case _C_BOOL:       size = sizeof(bool); break;
+        case _C_VOID:       size = sizeof(void); break;
+		default:			success = NO; break;
+    }
+	if (success && sizePtr != NULL) {
+		*sizePtr = size;
+	}
+    return success;
 }
 
 + (ffi_type *)ffiTypeForTypeEncoding:(char)encoding {
@@ -354,31 +392,6 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
         case _C_VOID:       return &ffi_type_void;
     }
     return NULL;
-}
-
-+ (int)sizeOfTypeEncoding:(char)encoding {
-    switch (encoding) {
-        case _C_ID:         return sizeof(id);
-        case _C_CLASS:      return sizeof(Class);
-        case _C_SEL:        return sizeof(SEL);
-        case _C_PTR:        return sizeof(void*);
-        case _C_CHARPTR:    return sizeof(char*);
-        case _C_CHR:        return sizeof(char);
-        case _C_UCHR:       return sizeof(unsigned char);
-        case _C_SHT:        return sizeof(short);
-        case _C_USHT:       return sizeof(unsigned short);
-        case _C_INT:        return sizeof(int);
-        case _C_LNG:        return sizeof(long);
-        case _C_UINT:       return sizeof(unsigned int);
-        case _C_ULNG:       return sizeof(unsigned long);
-        case _C_LNG_LNG:    return sizeof(long long);
-        case _C_ULNG_LNG:   return sizeof(unsigned long long);
-        case _C_FLT:        return sizeof(float);
-        case _C_DBL:        return sizeof(double);
-        case _C_BOOL:       return sizeof(bool);
-        case _C_VOID:       return sizeof(void);
-    }
-    return -1;
 }
 
 + (NSString *)descriptionOfTypeEncoding:(char)encoding {
@@ -568,9 +581,9 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 	return c - c0 - 1;
 }
 
-+ (int)sizeOfStructureTypeEncoding:(NSString *)encoding {
++ (size_t)sizeOfStructureTypeEncoding:(NSString *)encoding {
     NSArray *types = [self typeEncodingsFromStructureTypeEncoding:encoding];
-	int computedSize = 0;
+	size_t computedSize = 0;
 	void** ptr = (void**)&computedSize;
 	for (NSString *type in types) {
 		char charEncoding = *(char*)[type UTF8String];
