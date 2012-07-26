@@ -24,10 +24,14 @@
 
 - (void)testUsingTestScripts {
 	NSURL *testScriptURL = [[NSBundle bundleForClass:[MOUnitTests class]] URLForResource:@"Tests" withExtension:@""];
-	NSFileManager *fileManager = [[NSFileManager alloc] init];
-	
-	NSArray *contents = [fileManager contentsOfDirectoryAtURL:testScriptURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
-	for (NSURL *URL in contents) {
+//	NSFileManager *fileManager = [[NSFileManager alloc] init];
+//	NSArray *contents = [fileManager contentsOfDirectoryAtURL:testScriptURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
+    NSArray *contents = @[
+        @"MemoryAllocation.js",
+    ];
+    
+	for (NSString *path in contents) {
+        NSURL *URL = [testScriptURL URLByAppendingPathComponent:path];
 		Mocha *runtime = [[Mocha alloc] init];
 		
 		NSError *error = nil;

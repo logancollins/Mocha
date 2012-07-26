@@ -9,10 +9,10 @@
 function main() {
 	var iterations = 100000;
 	
-	var array = NSMutableArray.alloc().init();
+	var array = NSMutableArray.alloc().init().autorelease();
 	
 	for (var i=0; i<iterations; i++) {
-		var dict = NSMutableDictionary.alloc().init();
+		var dict = NSMutableDictionary.alloc().init().autorelease();
 		
 		dict.setObject_forKey_("foobar", "string");
 		dict.setObject_forKey_(100, "integer");
@@ -20,14 +20,9 @@ function main() {
 		dict.setObject_forKey_(NSDate.date(), "date");
 		
 		array.addObject_(dict);
-		
-		dict.release();
 	}
 	
 	var count = array.count();
-	
-	array.release();
-	array = null;
 	
 	var result = null;
 	if (count == iterations) {

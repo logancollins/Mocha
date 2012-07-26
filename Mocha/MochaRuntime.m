@@ -450,7 +450,7 @@ static NSString * const MOMochaRuntimeObjectBoxKey = @"MOMochaRuntimeObjectBoxKe
         jsObject = JSObjectMake(_ctx, MOFunctionClass, (__bridge void *)(box));
     }
     else {
-        jsObject = JSObjectMake(_ctx, MOBoxedObjectClass, (__bridge void *)(box));;
+        jsObject = JSObjectMake(_ctx, MOBoxedObjectClass, (__bridge void *)(box));
     }
     
     box.JSObject = jsObject;
