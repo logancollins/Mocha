@@ -80,7 +80,7 @@
 }
 
 - (void)setTypeEncoding:(char)typeEncoding withCustomStorage:(void *)storagePtr {
-	if ([MOFunctionArgument getSize:NULL ofTypeEncoding:typeEncoding]) {
+	if (![MOFunctionArgument getSize:NULL ofTypeEncoding:typeEncoding]) {
         @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Invalid type encoding: %c", typeEncoding] userInfo:nil];
 	};
     
