@@ -59,7 +59,7 @@
 }
 
 - (NSString *)description {
-    return [NSString stringWithFormat:@"<%@: %p : typeEncoding=%c %@, returnValue=%@, storage=%p", [self class], self, _typeEncoding, (_structureTypeEncoding != nil ? _structureTypeEncoding : @""), (_returnValue ? @"YES" : @"NO"), _storage];
+    return [NSString stringWithFormat:@"<%@: %p : typeEncoding=%c %@, returnValue=%@, storage=%p>", [self class], self, _typeEncoding, (_structureTypeEncoding != nil ? _structureTypeEncoding : @""), (_returnValue ? @"YES" : @"NO"), _storage];
 }
 
 
@@ -668,7 +668,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     switch (typeEncoding) {
         case _C_ID:	
 		case _C_CLASS: {
-			id object = [runtime objectForJSValue:value];
+			id __autoreleasing object = [runtime objectForJSValue:value];
             *(void**)ptr = (__bridge void*)object;
             return YES;
 		}
@@ -742,7 +742,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 			return YES;
         }
         case _C_PTR: {
-			id object = [runtime objectForJSValue:value];
+			id __autoreleasing object = [runtime objectForJSValue:value];
             if ([object isKindOfClass:[NSNull class]]) {
                 *(void**)ptr = NULL;
             }
@@ -774,7 +774,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     switch (typeEncoding) {
         case _C_ID:	
 		case _C_CLASS: {
-			id object = (__bridge id)(*(void**)ptr);
+			id __autoreleasing object = (__bridge id)(*(void**)ptr);
             *value = [runtime JSValueForObject:object];
             return YES;
 		}

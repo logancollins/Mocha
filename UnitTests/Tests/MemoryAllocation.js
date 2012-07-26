@@ -13,12 +13,12 @@ function main() {
 	
 	for (var i=0; i<iterations; i++) {
 		var dict = NSMutableDictionary.alloc().init().autorelease();
-		
+
 		dict.setObject_forKey_("foobar", "string");
 		dict.setObject_forKey_(100, "integer");
 		dict.setObject_forKey_(true, "boolean");
 		dict.setObject_forKey_(NSDate.date(), "date");
-		
+
 		array.addObject_(dict);
 	}
 	
