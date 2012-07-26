@@ -763,7 +763,7 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
 #endif
 
 BOOL MOInvocationShouldUseStret(NSArray *arguments) {
-	int resultSize = 0;
+	size_t resultSize = 0;
 	char returnEncoding = [(MOFunctionArgument *)[arguments objectAtIndex:0] typeEncoding];
 	if (returnEncoding == _C_STRUCT_B) {
         resultSize = [MOFunctionArgument sizeOfStructureTypeEncoding:[[arguments objectAtIndex:0] structureTypeEncoding]];

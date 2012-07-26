@@ -21,11 +21,6 @@
 #import <objc/runtime.h>
 
 
-@interface MOFunctionArgument ()
-
-@end
-
-
 @implementation MOFunctionArgument {
     char _typeEncoding;
     void *_storage;
