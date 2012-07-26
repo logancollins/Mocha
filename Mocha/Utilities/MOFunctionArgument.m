@@ -85,6 +85,8 @@
 	};
     
 	_typeEncoding = typeEncoding;
+	_pointerTypeEncoding = nil;
+	_structureTypeEncoding = nil;
     
 	if (storagePtr != NULL) {
 		_storage = storagePtr;
@@ -105,6 +107,7 @@
 - (void)setPointerTypeEncoding:(NSString *)pointerTypeEncoding withCustomStorage:(void *)storagePtr {
     _typeEncoding = _C_PTR;
     _pointerTypeEncoding = [pointerTypeEncoding copy];
+	_structureTypeEncoding = nil;
     
 	if (storagePtr != NULL) {
 		_storage = storagePtr;
@@ -124,7 +127,7 @@
 
 - (void)setStructureTypeEncoding:(NSString *)structureTypeEncoding withCustomStorage:(void *)storagePtr {
 	_typeEncoding = _C_STRUCT_B;
-    
+	_pointerTypeEncoding = nil;
     _structureTypeEncoding = [structureTypeEncoding copy];
 	
 	if (storagePtr != NULL) {
@@ -173,10 +176,8 @@
 #pragma mark Storage
 
 - (void**)storage {
-    if (_typeEncoding == _C_STRUCT_B) {
-        if (_pointerTypeEncoding) {
-            return &_storage;
-        }
+    if (_typeEncoding == _C_STRUCT_B && _pointerTypeEncoding) {
+		return &_storage;
     }
     
     if (self.outArgument) {
@@ -474,6 +475,9 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
     
 #if __LP64__
 	id type = ([symbol respondsToSelector:@selector(type64)] ? [symbol type64] : nil);
+	if (type == nil) {
+		type = ([symbol respondsToSelector:@selector(type)] ? [symbol type] : nil);
+	}
 #else
 	id type = ([symbol respondsToSelector:@selector(type)] ? [symbol type] : nil);
 #endif
@@ -727,10 +731,9 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
             }
             
 			JSObjectRef object = JSValueToObject(ctx, value, NULL);
-			void *p = ptr;
 			NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
 			
-            NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char*)[type UTF8String] storage:&p];
+            NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char*)[type UTF8String] storage:&ptr];
 			return numParsed;
         }
         case _C_SEL: {
@@ -754,14 +757,17 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
                 *(void**)ptr = NULL;
             }
             else if ([object isKindOfClass:[MOPointer class]]) {
-                void* pointer = [object pointerValue];
-                *(void**)ptr = pointer;
+                *(void**)ptr = [object pointerValue];
             }
 			else if ([object isKindOfClass:[MOStruct class]]) {
+				if (!JSValueIsObject(ctx, value)) {
+					return NO;
+				}
+				
 				JSObjectRef object = JSValueToObject(ctx, value, NULL);
-				void *p = ptr;
 				NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:[fullTypeEncoding substringFromIndex:1]];
-				NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[type UTF8String] storage:&p];
+				
+				NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[type UTF8String] storage:&ptr];
 				return numParsed;
 			}
             else {
@@ -846,14 +852,14 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 			return YES;
 		}
 		case _C_CHARPTR: {
-			// Return Javascript null if char* is null
+			// Return JavaScript null if char* is null
 			char* charPtr = *(char**)ptr;
 			if (charPtr == NULL) {
 				*value = JSValueMakeNull(ctx);
 				return YES;
 			}
             
-			// Convert to NSString and then to Javascript string
+			// Convert to NSString and then to JavaScript string
 			NSString *name = [NSString stringWithUTF8String:charPtr];
 			JSStringRef	jsName = JSStringCreateWithCFString((__bridge CFStringRef)name);
 			*value = JSValueMakeString(ctx, jsName);
@@ -863,7 +869,7 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
 		}
 		case _C_PTR: {
             if (ptr == NULL) {
-                *value = [runtime JSValueForObject:[NSNull null]];
+                *value = JSValueMakeNull(ctx);
             }
             else {
 				void* pointer = *(void**)ptr;
