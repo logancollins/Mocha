@@ -752,7 +752,10 @@ typedef	struct { char a; BOOL b; } struct_C_BOOL;
             }
 			else if ([object isKindOfClass:[MOStruct class]]) {
 				JSObjectRef object = JSValueToObject(ctx, value, NULL);
-				[self structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[fullTypeEncoding UTF8String] storage:ptr];
+				void *p = ptr;
+				NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:[fullTypeEncoding substringFromIndex:1]];
+				NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[type UTF8String] storage:&p];
+				return numParsed;
 			}
             else {
                 *(void**)ptr = (__bridge void *)object;

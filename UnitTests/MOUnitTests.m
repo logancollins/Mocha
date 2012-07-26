@@ -27,6 +27,7 @@
 //	NSFileManager *fileManager = [[NSFileManager alloc] init];
 //	NSArray *contents = [fileManager contentsOfDirectoryAtURL:testScriptURL includingPropertiesForKeys:nil options:NSDirectoryEnumerationSkipsHiddenFiles error:nil];
     NSArray *contents = @[
+		//@"CoreGraphics.js",
         @"MemoryAllocation.js",
     ];
     

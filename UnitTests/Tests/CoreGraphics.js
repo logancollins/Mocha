@@ -15,7 +15,7 @@ function main() {
 	var rect = CGRectMake(0.0, 0.0, 100.0, 100.0);
 	var c = CGPDFContextCreateWithURL(url, rect, null);
 	
-	CGPDFContextBeginPage(c, rect);
+	CGPDFContextBeginPage(c, null);
 	
 	var redColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
 	CGContextSetFillColorWithColor(c, redColor);
