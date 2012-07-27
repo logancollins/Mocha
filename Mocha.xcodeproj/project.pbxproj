@@ -618,6 +618,7 @@
 				EAA45E04155CE44B00F93E40 /* Products */,
 			);
 			sourceTree = "<group>";
+			usesTabs = 0;
 		};
 		EAA45E04155CE44B00F93E40 /* Products */ = {
 			isa = PBXGroup;
@@ -912,6 +913,7 @@
 		EAA45DF9155CE44B00F93E40 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				CLASSPREFIX = MO;
 				LastUpgradeCheck = 0450;
 				ORGANIZATIONNAME = "Sunflower Softworks";
 			};

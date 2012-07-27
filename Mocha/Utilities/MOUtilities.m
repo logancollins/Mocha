@@ -66,13 +66,13 @@ JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, 
 }
 
 NSString * MOJSValueToString(JSContextRef ctx, JSValueRef value, JSValueRef *exception) {
-	if (value == NULL || JSValueIsNull(ctx, value)) {
+    if (value == NULL || JSValueIsNull(ctx, value)) {
         return nil;
     }
-	JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, exception);
-	NSString *resultString = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, resultStringJS));
-	JSStringRelease(resultStringJS);
-	return resultString;
+    JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, exception);
+    NSString *resultString = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, resultStringJS));
+    JSStringRelease(resultStringJS);
+    return resultString;
 }
 
 
@@ -349,11 +349,11 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             return NULL;
         }
         
-		// Function arguments are all arguments minus return value and [instance, selector] params to objc_send
-		callAddressArgumentCount = [argumentEncodings count] - 3;
+        // Function arguments are all arguments minus return value and [instance, selector] params to objc_send
+        callAddressArgumentCount = [argumentEncodings count] - 3;
         
-		// Get call address
-		callAddress = MOInvocationGetObjCCallAddressForArguments(argumentEncodings);
+        // Get call address
+        callAddress = MOInvocationGetObjCCallAddressForArguments(argumentEncodings);
         
         if (variadic) {
             if (argumentCount > 0 && !JSValueIsNull(ctx, arguments[argumentCount - 1])) {
@@ -464,8 +464,8 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
         argumentEncodings = args;
         
-		// Function arguments are all arguments minus return value
-		callAddressArgumentCount = [args count] - 1;
+        // Function arguments are all arguments minus return value
+        callAddressArgumentCount = [args count] - 1;
         
         // Raise if the argument counts don't match
         if ((variadic && (callAddressArgumentCount > argumentCount))
@@ -482,12 +482,12 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     
     
     // Prepare ffi
-	ffi_cif cif;
-	ffi_type** args = NULL;
-	void** values = NULL;
+    ffi_cif cif;
+    ffi_type** args = NULL;
+    void** values = NULL;
     
     // Build the arguments
-	NSUInteger effectiveArgumentCount = argumentCount;
+    NSUInteger effectiveArgumentCount = argumentCount;
     if (objCCall) {
         effectiveArgumentCount += 2;
     }
@@ -495,18 +495,18 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         effectiveArgumentCount += 1;
     }
     
-	if (effectiveArgumentCount > 0) {
-		args = malloc(sizeof(ffi_type *) * effectiveArgumentCount);
-		values = malloc(sizeof(void *) * effectiveArgumentCount);
+    if (effectiveArgumentCount > 0) {
+        args = malloc(sizeof(ffi_type *) * effectiveArgumentCount);
+        values = malloc(sizeof(void *) * effectiveArgumentCount);
         
         NSUInteger j = 0;
         
         // ObjC calls include the target and selector as the first two arguments
         if (objCCall) {
             args[0] = &ffi_type_pointer;
-			args[1] = &ffi_type_pointer;
-			values[0] = (void *)&target;
-			values[1] = (void *)&selector;
+            args[1] = &ffi_type_pointer;
+            values[0] = (void *)&target;
+            values[1] = (void *)&selector;
             j = 2;
         }
         
@@ -522,9 +522,9 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             
             MOFunctionArgument *arg = nil;
             if (variadic && i >= callAddressArgumentCount) {
-				arg = [[MOFunctionArgument alloc] init];
-				[arg setTypeEncoding:_C_ID];
-			}
+                arg = [[MOFunctionArgument alloc] init];
+                [arg setTypeEncoding:_C_ID];
+            }
             else {
                 arg = [argumentEncodings objectAtIndex:j+1];
             }
@@ -547,20 +547,20 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             values[j] = [arg storage];
         }
     }
-	
-	// Get return value holder
-	returnValue = [argumentEncodings objectAtIndex:0];
+    
+    // Get return value holder
+    returnValue = [argumentEncodings objectAtIndex:0];
     
     // Prep
     ffi_status prep_status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, (unsigned int)effectiveArgumentCount, [returnValue ffiType], args);
     
-	// Allocate return value storage if it's a pointer
-	if ([returnValue typeEncoding] == _C_PTR) {
-		[returnValue allocateStorage];
+    // Allocate return value storage if it's a pointer
+    if ([returnValue typeEncoding] == _C_PTR) {
+        [returnValue allocateStorage];
     }
     
     // Call
-	if (prep_status == FFI_OK) {
+    if (prep_status == FFI_OK) {
         void *storage = [returnValue storage];
         
         @try {
@@ -579,10 +579,10 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     }
     
     // Free the arguments
-	if (effectiveArgumentCount > 0) {
-		free(args);
-		free(values);
-	}
+    if (effectiveArgumentCount > 0) {
+        free(args);
+        free(values);
+    }
     
     // Throw an exception if the prep call failed
     if (prep_status != FFI_OK) {
@@ -656,15 +656,15 @@ MOFunctionArgument * MOFunctionArgumentForTypeEncoding(NSString *typeEncoding) {
 }
 
 NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
-	NSMutableArray *argumentEncodings = [NSMutableArray array];
-	char *argsParser = (char *)typeEncoding;
+    NSMutableArray *argumentEncodings = [NSMutableArray array];
+    char *argsParser = (char *)typeEncoding;
     
-	for(; *argsParser; argsParser++) {
-		// Skip ObjC argument order
-		if (*argsParser >= '0' && *argsParser <= '9') {
+    for(; *argsParser; argsParser++) {
+        // Skip ObjC argument order
+        if (*argsParser >= '0' && *argsParser <= '9') {
             continue;
         }
-		else {
+        else {
             // Skip ObjC type qualifiers - except for _C_CONST these are not defined in runtime.h
             if (*argsParser == _C_CONST ||
                 *argsParser == 'n' ||
@@ -734,11 +734,11 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
             }
         }
         
-		if (!*argsParser) {
+        if (!*argsParser) {
             break;
         }
-	}
-	return argumentEncodings;
+    }
+    return argumentEncodings;
 }
 
 
@@ -748,30 +748,30 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding) {
 //
 
 #if defined(__ppc__)
-#   define SMALL_STRUCT_LIMIT	4
+#   define SMALL_STRUCT_LIMIT    4
 #elif defined(__ppc64__)
-#   define SMALL_STRUCT_LIMIT	8
+#   define SMALL_STRUCT_LIMIT    8
 #elif defined(__i386__) 
-#   define SMALL_STRUCT_LIMIT 	8
+#   define SMALL_STRUCT_LIMIT     8
 #elif defined(__x86_64__) 
-#   define SMALL_STRUCT_LIMIT	16
+#   define SMALL_STRUCT_LIMIT    16
 #elif TARGET_OS_IPHONE
 // TOCHECK
-#   define SMALL_STRUCT_LIMIT	4
+#   define SMALL_STRUCT_LIMIT    4
 #else
 #   error "Unsupported MACOSX platform"
 #endif
 
 BOOL MOInvocationShouldUseStret(NSArray *arguments) {
-	size_t resultSize = 0;
-	char returnEncoding = [(MOFunctionArgument *)[arguments objectAtIndex:0] typeEncoding];
-	if (returnEncoding == _C_STRUCT_B) {
+    size_t resultSize = 0;
+    char returnEncoding = [(MOFunctionArgument *)[arguments objectAtIndex:0] typeEncoding];
+    if (returnEncoding == _C_STRUCT_B) {
         resultSize = [MOFunctionArgument sizeOfStructureTypeEncoding:[[arguments objectAtIndex:0] structureTypeEncoding]];
     }
     
-	if (returnEncoding == _C_STRUCT_B && 
+    if (returnEncoding == _C_STRUCT_B && 
         //#ifdef  __ppc64__
-        //			ffi64_stret_needs_ptr(signature_to_ffi_return_type(rettype), NULL, NULL)
+        //            ffi64_stret_needs_ptr(signature_to_ffi_return_type(rettype), NULL, NULL)
         //
         //#else /* !__ppc64__ */
         (resultSize > SMALL_STRUCT_LIMIT
@@ -794,17 +794,17 @@ BOOL MOInvocationShouldUseStret(NSArray *arguments) {
          )
         //#endif /* !__ppc64__ */
         ) {
-        //					callAddress = objc_msgSend_stret;
-        //					usingStret = YES;
+        //                    callAddress = objc_msgSend_stret;
+        //                    usingStret = YES;
         return YES;
     }
     return NO;
 }
 
 void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments) {
-	BOOL usingStret	= MOInvocationShouldUseStret(arguments);
-	void *callAddress = NULL;
-	if (usingStret)	{
+    BOOL usingStret    = MOInvocationShouldUseStret(arguments);
+    void *callAddress = NULL;
+    if (usingStret)    {
         callAddress = objc_msgSend_stret;
     }
     else {
@@ -814,13 +814,13 @@ void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments) {
 #if __i386__
     // If i386 and the return type is float/double, use objc_msgSend_fpret
     // ARM and x86_64 use the standard objc_msgSend
-	char returnEncoding = [[arguments objectAtIndex:0] typeEncoding];
-	if (returnEncoding == 'f' || returnEncoding == 'd') {
-		callAddress = objc_msgSend_fpret;
-	}
+    char returnEncoding = [[arguments objectAtIndex:0] typeEncoding];
+    if (returnEncoding == 'f' || returnEncoding == 'd') {
+        callAddress = objc_msgSend_fpret;
+    }
 #endif
     
-	return callAddress;
+    return callAddress;
 }
 
 

@@ -73,15 +73,15 @@ static char ** runtimeCompletion(const char * text, int start, int end);
                     JSStringRelease(string);
                     printf("%s\n", [description UTF8String]);
                 }
-				
-				// Set the last result as the special variable "_"
-				id object = [runtime objectForJSValue:value];
-				if (object != nil) {
-					[runtime setValue:object forKey:@"_"];
-				}
-				else {
-					[runtime setNilValueForKey:@"_"];
-				}
+                
+                // Set the last result as the special variable "_"
+                id object = [runtime objectForJSValue:value];
+                if (object != nil) {
+                    [runtime setValue:object forKey:@"_"];
+                }
+                else {
+                    [runtime setNilValueForKey:@"_"];
+                }
             }
             @catch (NSException *e) {
                 if ([e userInfo] != nil) {

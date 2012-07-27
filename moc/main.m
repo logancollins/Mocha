@@ -13,7 +13,7 @@
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
-		MOCInterpreter *interpreter = [[MOCInterpreter alloc] init];
+        MOCInterpreter *interpreter = [[MOCInterpreter alloc] init];
         [interpreter run];
     }
     return 0;

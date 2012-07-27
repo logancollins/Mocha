@@ -7,35 +7,35 @@
 //
 
 function main() {
-	var fm = NSFileManager.alloc().init().autorelease();
-	
-	var url = NSURL.fileURLWithPath_("/tmp/foo.pdf");
-	fm.removeItemAtURL_error_(url, null);
-	
-	var rect = CGRectMake(0.0, 0.0, 100.0, 100.0);
-	var c = CGPDFContextCreateWithURL(url, rect, null);
-	
-	CGPDFContextBeginPage(c, null);
-	
-	var redColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
-	CGContextSetFillColorWithColor(c, redColor);
-	CGContextFillRect(c, NSMakeRect(0.0, 0.0, 50.0, 50.0));
-	CGColorRelease(redColor);
-	
-	var greenColor = CGColorCreateGenericRGB(0.0, 1.0, 0.0, 1.0);
-	CGContextSetFillColorWithColor(c, redColor);
-	CGContextFillRect(c, NSMakeRect(50.0, 0.0, 25.0, 50.0));
-	CGColorRelease(greenColor);
-	
-	var blueColor = CGColorCreateGenericRGB(0.0, 0.0, 1.0, 1.0);
-	CGContextSetFillColorWithColor(c, redColor);
-	CGContextFillRect(c, NSMakeRect(25.0, 25.0, 25.0, 25.0));
-	CGColorRelease(blueColor);
-	
-	CGPDFContextEndPage(c);
-	
-	CGPDFContextClose(c);
-	CGContextRelease(c);
-	
-	return [true, null];
+    var fm = NSFileManager.alloc().init().autorelease();
+    
+    var url = NSURL.fileURLWithPath_("/tmp/foo.pdf");
+    fm.removeItemAtURL_error_(url, null);
+    
+    var rect = CGRectMake(0.0, 0.0, 100.0, 100.0);
+    var c = CGPDFContextCreateWithURL(url, rect, null);
+    
+    CGPDFContextBeginPage(c, null);
+    
+    var redColor = CGColorCreateGenericRGB(1.0, 0.0, 0.0, 1.0);
+    CGContextSetFillColorWithColor(c, redColor);
+    CGContextFillRect(c, NSMakeRect(0.0, 0.0, 50.0, 50.0));
+    CGColorRelease(redColor);
+    
+    var greenColor = CGColorCreateGenericRGB(0.0, 1.0, 0.0, 1.0);
+    CGContextSetFillColorWithColor(c, redColor);
+    CGContextFillRect(c, NSMakeRect(50.0, 0.0, 25.0, 50.0));
+    CGColorRelease(greenColor);
+    
+    var blueColor = CGColorCreateGenericRGB(0.0, 0.0, 1.0, 1.0);
+    CGContextSetFillColorWithColor(c, redColor);
+    CGContextFillRect(c, NSMakeRect(25.0, 25.0, 25.0, 25.0));
+    CGColorRelease(blueColor);
+    
+    CGPDFContextEndPage(c);
+    
+    CGPDFContextClose(c);
+    CGContextRelease(c);
+    
+    return [true, null];
 }

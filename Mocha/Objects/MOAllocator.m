@@ -10,24 +10,24 @@
 
 
 @implementation MOAllocator {
-	id _object;
+    id _object;
 }
 
 @synthesize objectClass=_objectClass;
 
 + (MOAllocator *)allocator {
-	return [self alloc];
+    return [self alloc];
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
-	return [[self objectClass] instanceMethodSignatureForSelector:aSelector];
+    return [[self objectClass] instanceMethodSignatureForSelector:aSelector];
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation {
-	if (_object == nil) {
-		_object = [[self objectClass] alloc];
-	}
-	[anInvocation invokeWithTarget:_object];
+    if (_object == nil) {
+        _object = [[self objectClass] alloc];
+    }
+    [anInvocation invokeWithTarget:_object];
 }
 
 @end

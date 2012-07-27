@@ -14,7 +14,7 @@
 @implementation MOObjCRuntime
 
 + (MOObjCRuntime *)sharedRuntime {
-	static MOObjCRuntime * sharedRuntime = nil;
+    static MOObjCRuntime * sharedRuntime = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         sharedRuntime = [[self alloc] init];

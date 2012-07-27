@@ -7,29 +7,29 @@
 //
 
 function main() {
-	var iterations = 100000;
-	
-	var array = NSMutableArray.alloc().init().autorelease();
-	
-	for (var i=0; i<iterations; i++) {
-		var dict = NSMutableDictionary.alloc().init().autorelease();
+    var iterations = 100000;
+    
+    var array = NSMutableArray.alloc().init().autorelease();
+    
+    for (var i=0; i<iterations; i++) {
+        var dict = NSMutableDictionary.alloc().init().autorelease();
 
-		dict.setObject_forKey_("foobar", "string");
-		dict.setObject_forKey_(100, "integer");
-		dict.setObject_forKey_(true, "boolean");
-		dict.setObject_forKey_(NSDate.date(), "date");
+        dict.setObject_forKey_("foobar", "string");
+        dict.setObject_forKey_(100, "integer");
+        dict.setObject_forKey_(true, "boolean");
+        dict.setObject_forKey_(NSDate.date(), "date");
 
-		array.addObject_(dict);
-	}
-	
-	var count = array.count();
-	
-	var result = null;
-	if (count == iterations) {
-		result = [true, null];
-	}
-	else {
-		result = [false, "Number of iterations to created objects is inconsistent"];
-	}
-	return result;
+        array.addObject_(dict);
+    }
+    
+    var count = array.count();
+    
+    var result = null;
+    if (count == iterations) {
+        result = [true, null];
+    }
+    else {
+        result = [false, "Number of iterations to created objects is inconsistent"];
+    }
+    return result;
 }

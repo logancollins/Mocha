@@ -148,22 +148,22 @@
     const char * typeString = [typeEncoding UTF8String];
     
     size_t alignment = 0;
-	size_t size = 0;
-	BOOL success = YES;
-	
+    size_t size = 0;
+    BOOL success = YES;
+    
     success = [MOFunctionArgument getAlignment:&alignment ofTypeEncoding:typeString[0]];
-	if (!success) {
-		@throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to get storage alignment for argument type %c", typeString[0]] userInfo:nil];
-	}
-	
+    if (!success) {
+        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to get storage alignment for argument type %c", typeString[0]] userInfo:nil];
+    }
+    
     if (typeString[0] == _C_STRUCT_B) {
         size = [MOFunctionArgument sizeOfStructureTypeEncoding:typeEncoding];
     }
     else {
         success = [MOFunctionArgument getSize:&size ofTypeEncoding:typeString[0]];
-		if (!success) {
-			@throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to get storage size for argument type %c", typeString[0]] userInfo:nil];
-		}
+        if (!success) {
+            @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to get storage size for argument type %c", typeString[0]] userInfo:nil];
+        }
     }
     
     return class_addIvar(_class, nameString, size, alignment, typeString);
