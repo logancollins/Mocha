@@ -17,7 +17,7 @@ int main(int argc, const char * argv[]) {
         MOCInterpreter *interpreter = [[MOCInterpreter alloc] init];
         
         if (argc > 1) {
-            [interpreter runScriptAtPaht:[NSString stringWithUTF8String:argv[1]]];
+            [interpreter runScriptAtPath:[NSString stringWithUTF8String:argv[1]]];
         }
         else {
             [interpreter run];

@@ -49,7 +49,7 @@ static char ** runtimeCompletion(const char * text, int start, int end);
     [runtime setValue:print forKey:@"print"];
 }
 
-- (void)runScriptAtPaht:(NSString*)path {
+- (void)runScriptAtPath:(NSString*)path {
     
     Mocha *runtime = [Mocha sharedRuntime];
     [runtime setDelegate:self];
