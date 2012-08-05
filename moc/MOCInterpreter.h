@@ -13,5 +13,6 @@
 @interface MOCInterpreter : NSObject <MochaDelegate>
 
 - (void)run;
+- (void)runScriptAtPath:(NSString*)path;
 
 @end

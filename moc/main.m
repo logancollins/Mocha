@@ -13,8 +13,15 @@
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
+        
         MOCInterpreter *interpreter = [[MOCInterpreter alloc] init];
-        [interpreter run];
+        
+        if (argc > 1) {
+            [interpreter runScriptAtPath:[NSString stringWithUTF8String:argv[1]]];
+        }
+        else {
+            [interpreter run];
+        }
     }
     return 0;
 }
