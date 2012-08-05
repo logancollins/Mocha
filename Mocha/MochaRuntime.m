@@ -1072,6 +1072,11 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     // Method
     SEL selector = MOSelectorFromPropertyName(propertyName);
     NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
+    if (!methodSignature) {
+        // Allow the trailing underscore to be left off (issue #7)
+        selector = MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"]);
+        methodSignature = [object methodSignatureForSelector:selector];
+    }
     if (methodSignature != nil) {
         if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
             if (![objectClass isSelectorExcludedFromMochaScript:selector]) {
@@ -1133,6 +1138,11 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
         // Method
         SEL selector = MOSelectorFromPropertyName(propertyName);
         NSMethodSignature *methodSignature = [object methodSignatureForSelector:selector];
+        if (!methodSignature) {
+            // Allow the trailing underscore to be left off (issue #7)
+            selector = MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"]);
+            methodSignature = [object methodSignatureForSelector:selector];
+        }
         if (methodSignature != nil) {
             BOOL implements = NO;
             if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
