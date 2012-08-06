@@ -2,42 +2,56 @@
 //  MOPointer.m
 //  Mocha
 //
-//  Created by Logan Collins on 7/26/12.
+//  Created by Logan Collins on 7/31/12.
 //  Copyright (c) 2012 Sunflower Softworks. All rights reserved.
 //
 
 #import "MOPointer.h"
+#import "MochaRuntime_Private.h"
 
 
-@interface MOPointer ()
+@implementation MOPointer {
+    JSValueRef _JSValue;
+    JSContextRef _JSContext;
+}
 
-@property (readwrite) void * pointerValue;
-@property (copy, readwrite) NSString *typeEncoding;
+@synthesize JSContext=_JSContext;
 
-@end
-
-
-@implementation MOPointer
-
-@synthesize pointerValue=_pointerValue;
-@synthesize typeEncoding=_typeEncoding;
-
-- (id)initWithPointerValue:(void *)pointerValue typeEncoding:(NSString *)typeEncoding {
+- (id)initWithJSValue:(JSValueRef)JSValue context:(JSContextRef)JSContext {
     self = [super init];
     if (self) {
-        self.pointerValue = pointerValue;
-        self.typeEncoding = typeEncoding;
+        [self setJSValue:JSValue JSContext:JSContext];
     }
     return self;
 }
 
-- (NSString *)description {
-    if ([self.typeEncoding length] > 0) {
-        return [NSString stringWithFormat:@"<%p type=%@>", self.pointerValue, self.typeEncoding];
+- (void)dealloc {
+    if (_JSValue != NULL) {
+        JSValueUnprotect(_JSContext, _JSValue);
     }
-    else {
-        return [NSString stringWithFormat:@"<%p>", self.pointerValue];
+}
+
+- (JSValueRef)JSValue {
+    return _JSValue;
+}
+
+- (JSContextRef)JSContext {
+    return _JSContext;
+}
+
+- (void)setJSValue:(JSValueRef)JSValue JSContext:(JSContextRef)JSContext {
+    if (_JSValue != NULL) {
+        JSValueUnprotect(_JSContext, _JSValue);
     }
+    _JSValue = JSValue;
+    _JSContext = JSContext;
+    if (_JSValue != NULL) {
+        JSValueProtect(_JSContext, _JSValue);
+    }
+}
+
+- (id)value {
+    return [[Mocha runtimeWithContext:self.JSContext] objectForJSValue:self.JSValue];
 }
 
 @end

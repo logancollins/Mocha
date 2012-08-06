@@ -2,18 +2,22 @@
 //  MOPointer.h
 //  Mocha
 //
-//  Created by Logan Collins on 7/26/12.
+//  Created by Logan Collins on 7/31/12.
 //  Copyright (c) 2012 Sunflower Softworks. All rights reserved.
 //
 
 #import <Foundation/Foundation.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 
 
 @interface MOPointer : NSObject
 
-- (id)initWithPointerValue:(void *)pointerValue typeEncoding:(NSString *)typeEncoding;
+- (id)initWithJSValue:(JSValueRef)JSValue context:(JSContextRef)JSContext;
 
-@property (readonly) void * pointerValue;
-@property (copy, readonly) NSString *typeEncoding;
+@property (readonly) JSValueRef JSValue;
+@property (readonly) JSContextRef JSContext;
+- (void)setJSValue:(JSValueRef)JSValue JSContext:(JSContextRef)JSContext;
+
+@property (readonly) id value;
 
 @end

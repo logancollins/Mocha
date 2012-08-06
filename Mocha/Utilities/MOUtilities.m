@@ -16,6 +16,7 @@
 #import "MOFunctionArgument.h"
 #import "MOUndefined.h"
 #import "MOJavaScriptObject.h"
+#import "MOPointer.h"
 
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
@@ -305,6 +306,11 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         selector = [function selector];
         Class klass = [target class];
         
+        if ([klass isSubclassOfClass:[NSDistantObject class]]) {
+            // Override for Distributed Objects
+            return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
+        }
+        
         if (selector == @selector(alloc)) {
             // Override for -alloc
             MOAllocator *allocator = [MOAllocator allocator];
@@ -312,9 +318,9 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             return [runtime JSValueForObject:allocator];
         }
         
-        if ([klass isSubclassOfClass:[NSProxy class]]) {
-            // Override for Distributed Objects
-            return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
+        if ([target isKindOfClass:[MOAllocator class]]) {
+            klass = [target objectClass];
+            target = [[target objectClass] alloc];
         }
         
         Method method = NULL;
@@ -516,7 +522,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             values[0] = (void *)&block;
             j = 1;
         }
-        
+         
         for (NSUInteger i=0; i<argumentCount; i++, j++) {
             JSValueRef jsValue = NULL;
             
@@ -537,11 +543,23 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
                 jsValue = arguments[i];
             }
             
+            Mocha *runtime = [Mocha runtimeWithContext:ctx];
+            id object = [runtime objectForJSValue:jsValue];
+            
             if ([arg typeEncoding] == _C_PTR) {
                 [arg allocateStorage];
             }
             
-            [arg setValueAsJSValue:jsValue context:ctx];
+            // Handle pointers
+            if ([object isKindOfClass:[MOPointer class]]) {
+                [arg setPointer:object];
+                
+                JSValueRef outJSValue = [(MOPointer *)object JSValue];
+                [arg setValueAsJSValue:outJSValue context:ctx dereference:YES];
+            }
+            else {
+                [arg setValueAsJSValue:jsValue context:ctx];
+            }
             
             args[j] = [arg ffiType];
             values[j] = [arg storage];
@@ -591,6 +609,15 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             *exception = [runtime JSValueForObject:e];
         }
         return NULL;
+    }
+    
+    // Populate the value of pointers
+    for (MOFunctionArgument *arg in argumentEncodings) {
+        if ([arg pointer] != nil) {
+            MOPointer *pointer = [arg pointer];
+            JSValueRef value = [arg getValueAsJSValueInContext:ctx dereference:YES];
+            [pointer setJSValue:value JSContext:[runtime context]];
+        }
     }
     
     // If the return type is void, the return value should be undefined

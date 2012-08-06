@@ -126,7 +126,7 @@
 
 /*!
  * @method loadFrameworkWithName:
- * @abstract Loads BridgeSupport info and symbols a specified framework
+ * @abstract Loads BridgeSupport info and symbols for a specified framework
  * 
  * @param frameworkName
  * The name of the framework to load
@@ -142,7 +142,7 @@
 
 /*!
  * @method loadFrameworkWithName:inDirectory:
- * @abstract Loads BridgeSupport info and symbols a specified framework
+ * @abstract Loads BridgeSupport info and symbols for a specified framework
  * 
  * @param frameworkName
  * The name of the framework to load
@@ -158,6 +158,17 @@
  * @result A BOOL value
  */
 - (BOOL)loadFrameworkWithName:(NSString *)frameworkName inDirectory:(NSString *)directory;
+
+/*!
+ * @method loadBridgeSupportFilesAtPath:
+ * @abstract Loads BridgeSupport info and symbols at a specified location
+ *
+ * @param path
+ * The path to load
+ *
+ * @result A BOOL value
+ */
+- (BOOL)loadBridgeSupportFilesAtPath:(NSString *)path;
 
 /*!
  * @property frameworkSearchPaths

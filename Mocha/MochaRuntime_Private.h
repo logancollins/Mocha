@@ -54,6 +54,6 @@
 // Support
 - (void)installBuiltins;
 - (void)cleanUp;
-- (void)unlinkAllReferences;
+//- (void)unlinkAllReferences;
 
 @end

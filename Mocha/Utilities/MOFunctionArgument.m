@@ -10,10 +10,12 @@
 // Note: A lot of this code is based on code from the PyObjC and JSCocoa projects.
 // 
 
+#import "MOFunctionArgument.h"
 #import "MochaRuntime_Private.h"
 #import "MOPointer.h"
+#import "MOPointerValue.h"
 #import "MOStruct.h"
-#import "MOFunctionArgument.h"
+#import "MOUndefined.h"
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
 #import "MOUtilities.h"
@@ -31,7 +33,7 @@
     id _customData;
 }
 
-@synthesize outArgument=_outArgument;
+@synthesize pointer=_pointer;
 @synthesize returnValue=_returnValue;
 
 - (id)init {
@@ -174,11 +176,9 @@
     if (_typeEncoding == _C_STRUCT_B && _pointerTypeEncoding) {
         return &_storage;
     }
-    
-    if (self.outArgument) {
+    if (self.pointer != nil) {
         return &_storage;
     }
-    
     return _storage;
 }
 
@@ -225,7 +225,7 @@
     return _storage;
 }
 
-// This    destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
+// This destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
 + (void)alignPtr:(void**)ptr accordingToEncoding:(char)encoding {
     size_t alignOnSize = 0;
     BOOL success = [MOFunctionArgument getAlignment:&alignOnSize ofTypeEncoding:encoding];
@@ -243,7 +243,7 @@
     }
 }
 
-// This    destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
+// This destroys the original pointer value by modifying it in place : maybe change to returning the new address ?
 + (void)advancePtr:(void**)ptr accordingToEncoding:(char)encoding {
     long address = (long)*ptr;
     size_t size = 0;
@@ -262,25 +262,26 @@
 #pragma mark JSValue conversion
 
 - (JSValueRef)getValueAsJSValueInContext:(JSContextRef)ctx {
+    return [self getValueAsJSValueInContext:ctx dereference:NO];
+}
+
+- (JSValueRef)getValueAsJSValueInContext:(JSContextRef)ctx dereference:(BOOL)dereference {
+    JSValueRef value = NULL;
     void *p = _storage;
-#ifdef __BIG_ENDIAN__
-    long v;
-    // Return value was padded, need to do some shifting on PPC
-    if (_returnValue) {
-        int size = [MOFunctionArgument sizeOfTypeEncoding:typeEncoding];
-        int paddedSize = sizeof(long);
-        
-        if (size > 0 && size < paddedSize && paddedSize == 4) {
-            v = *(long*)ptr;
-            v = CFSwapInt32(v);
-            p = &v;
+    char typeEncoding = _typeEncoding;
+    NSString *encoding = (_structureTypeEncoding ? _structureTypeEncoding : _pointerTypeEncoding);
+    
+    if (dereference) {
+        if (typeEncoding == _C_PTR) {
+            typeEncoding = [_pointerTypeEncoding characterAtIndex:1];
+            encoding = [_pointerTypeEncoding substringFromIndex:1];
+        }
+        else {
+            @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to dereference non-pointer value: %@", self] userInfo:nil];
         }
     }
-#endif
     
-    JSValueRef value = NULL;
-    NSString *encoding = (_structureTypeEncoding ? _structureTypeEncoding : _pointerTypeEncoding);
-    if (![MOFunctionArgument toJSValue:&value inContext:ctx typeEncoding:_typeEncoding fullTypeEncoding:encoding storage:p]) {
+    if (![MOFunctionArgument toJSValue:&value inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:encoding storage:p]) {
         @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Getting value as JSValue failed: %@", self] userInfo:nil];
     }
     
@@ -288,9 +289,26 @@
 }
 
 - (void)setValueAsJSValue:(JSValueRef)value context:(JSContextRef)ctx {
+    [self setValueAsJSValue:value context:ctx dereference:NO];
+}
+
+- (void)setValueAsJSValue:(JSValueRef)value context:(JSContextRef)ctx dereference:(BOOL)dereference {
     if (value != NULL) {
+        void *p = _storage;
+        char typeEncoding = _typeEncoding;
         NSString *encoding = (_structureTypeEncoding ? _structureTypeEncoding : _pointerTypeEncoding);
-        if (![MOFunctionArgument fromJSValue:value inContext:ctx typeEncoding:_typeEncoding fullTypeEncoding:encoding storage:_storage]) {
+        
+        if (dereference) {
+            if (typeEncoding == _C_PTR) {
+                typeEncoding = [_pointerTypeEncoding characterAtIndex:1];
+                encoding = [_pointerTypeEncoding substringFromIndex:1];
+            }
+            else {
+                @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to dereference non-pointer value: %@", self] userInfo:nil];
+            }
+        }
+        
+        if (![MOFunctionArgument fromJSValue:value inContext:ctx typeEncoding:typeEncoding fullTypeEncoding:encoding storage:p]) {
             @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Setting value from JSValue failed: %@, %@", self, MOJSValueToString(ctx, value, NULL)] userInfo:nil];
         }
     }
@@ -778,7 +796,7 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
             if ([object isKindOfClass:[NSNull class]]) {
                 *(void**)ptr = NULL;
             }
-            else if ([object isKindOfClass:[MOPointer class]]) {
+            else if ([object isKindOfClass:[MOPointerValue class]]) {
                 *(void**)ptr = [object pointerValue];
             }
             else if ([object isKindOfClass:[MOStruct class]]) {
@@ -895,7 +913,7 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
             }
             else {
                 void* pointer = *(void**)ptr;
-                MOPointer *object = [[MOPointer alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding];
+                MOPointerValue *object = [[MOPointerValue alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding];
                 *value = [runtime JSValueForObject:object];
             }
             return YES;
