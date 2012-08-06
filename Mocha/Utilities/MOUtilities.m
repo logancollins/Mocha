@@ -870,7 +870,8 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName) {
     if ([propertyName length] > 0) {
         // Capitalize first character and append "set" and "_"
         // title -> setTitle_
-        return [[@"set" stringByAppendingString:[propertyName capitalizedString]] stringByAppendingString:@"_"];
+        NSString *capitalizedName = [NSString stringWithFormat:@"%@%@", [[propertyName substringToIndex:1] capitalizedString], [propertyName substringFromIndex:1]];
+        return [[@"set" stringByAppendingString:capitalizedName] stringByAppendingString:@"_"];
     }
     else {
         return nil;

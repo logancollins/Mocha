@@ -1108,22 +1108,29 @@ static void MOObject_finalize(JSObjectRef object) {
 static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS) {
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, propertyNameJS));
     
-    //Mocha *runtime = [Mocha runtimeWithContext:ctx];
+//    Mocha *runtime = [Mocha runtimeWithContext:ctx];
     
     id private = (__bridge id)(JSObjectGetPrivate(objectJS));
     id object = [private representedObject];
     Class objectClass = [object class];
     
     // Property
-    /*if (runtime.autocallObjCProperties) {
-        objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
-        if (property != NULL) {
-            SEL selector = MOSelectorFromPropertyName(propertyName);
-            if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
-                return YES;
-            }
+    objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
+    if (property != NULL) {
+        SEL selector = NULL;
+        char * getterValue = property_copyAttributeValue(property, "G");
+        if (getterValue != NULL) {
+            selector = NSSelectorFromString([NSString stringWithUTF8String:getterValue]);
+            free(getterValue);
         }
-    }*/
+        else {
+            selector = NSSelectorFromString(propertyName);
+        }
+        
+        if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
+            return YES;
+        }
+    }
     
     // Association object
     id value = objc_getAssociatedObject(object, (__bridge const void *)(propertyName));
@@ -1179,17 +1186,24 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
     // Perform the lookup
     @try {
         // Property
-        /*if (runtime.autocallObjCProperties) {
-            objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
-            if (property != NULL) {
-                SEL selector = MOSelectorFromPropertyName(propertyName);
-                if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
-                    MOMethod *method = [MOMethod methodWithTarget:object selector:selector];
-                    JSValueRef value = MOFunctionInvoke(method, ctx, 0, NULL, exception);
-                    return value;
-                }
+        objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
+        if (property != NULL) {
+            SEL selector = NULL;
+            char * getterValue = property_copyAttributeValue(property, "G");
+            if (getterValue != NULL) {
+                selector = NSSelectorFromString([NSString stringWithUTF8String:getterValue]);
+                free(getterValue);
             }
-        }*/
+            else {
+                selector = NSSelectorFromString(propertyName);
+            }
+            
+            if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                MOMethod *method = [MOMethod methodWithTarget:object selector:selector];
+                JSValueRef value = MOFunctionInvoke(method, ctx, 0, NULL, exception);
+                return value;
+            }
+        }
         
         // Association object
         id value = objc_getAssociatedObject(object, (__bridge const void *)(propertyName));
@@ -1277,24 +1291,31 @@ static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     
     id private = (__bridge id)(JSObjectGetPrivate(objectJS));
     id object = [private representedObject];
-    //Class objectClass = [object class];
+    Class objectClass = [object class];
     id value = [runtime objectForJSValue:valueJS];
     
     // Perform the lookup
     @try {
         // Property
-        /*if (runtime.autocallObjCProperties) {
-            objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
-            if (property != NULL) {
-                NSString *setterName = MOPropertyNameToSetterName(propertyName);
-                SEL selector = MOSelectorFromPropertyName(setterName);
-                if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
-                    MOMethod *method = [MOMethod methodWithTarget:object selector:selector];
-                    JSValueRef valueJS = MOFunctionInvoke(method, ctx, 1, &valueJS, exception);
-                    return YES;
-                }
+        objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
+        if (property != NULL) {
+            SEL selector = NULL;
+            char * setterValue = property_copyAttributeValue(property, "S");
+            if (setterValue != NULL) {
+                selector = NSSelectorFromString([NSString stringWithUTF8String:setterValue]);
+                free(setterValue);
             }
-        }*/
+            else {
+                NSString *setterName = MOPropertyNameToSetterName(propertyName);
+                selector = MOSelectorFromPropertyName(setterName);
+            }
+            
+            if ([object respondsToSelector:selector] && ![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                MOMethod *method = [MOMethod methodWithTarget:object selector:selector];
+                MOFunctionInvoke(method, ctx, 1, &valueJS, exception);
+                return YES;
+            }
+        }
         
         // Indexed subscript
         if ([object respondsToSelector:@selector(setObject:forIndexedSubscript:)]) {
