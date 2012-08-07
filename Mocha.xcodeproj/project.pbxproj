@@ -57,6 +57,7 @@
 		0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211232A155D99F600415471 /* MOBridgeSupportSymbol.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0211233E155DB8F800415471 /* MOBridgeSupportLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211233C155DB8F800415471 /* MOBridgeSupportLibrary.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02112342155DB9A100415471 /* MOBridgeSupportParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112340155DB9A100415471 /* MOBridgeSupportParser.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		025184A115D182FA005D661F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025184A015D182FA005D661F /* Cocoa.framework */; };
 		026BE1FD15D05C9800BC4B73 /* MOMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 026BE1FB15D05C9800BC4B73 /* MOMapTable.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		026BE1FE15D05C9800BC4B73 /* MOMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 026BE1FB15D05C9800BC4B73 /* MOMapTable.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		026BE1FF15D05C9800BC4B73 /* MOMapTable.h in Headers */ = {isa = PBXBuildFile; fileRef = 026BE1FC15D05C9800BC4B73 /* MOMapTable.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -71,7 +72,6 @@
 		02B1AE1E15C07A88000E2008 /* MOAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B1AE1915C07A80000E2008 /* MOAllocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02B1AE1F15C07A88000E2008 /* MOAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B1AE1915C07A80000E2008 /* MOAllocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02BF150B15C096070004CA2C /* SenTestingKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BF150A15C096070004CA2C /* SenTestingKit.framework */; };
-		02BF150D15C096070004CA2C /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 02BF150C15C096070004CA2C /* Cocoa.framework */; };
 		02BF151715C096070004CA2C /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 02BF151515C096070004CA2C /* InfoPlist.strings */; };
 		02BF151A15C096070004CA2C /* MOUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BF151915C096070004CA2C /* MOUnitTests.m */; };
 		02BF152015C096370004CA2C /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
@@ -283,6 +283,7 @@
 		02112341155DB9A100415471 /* MOBridgeSupportParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportParser.m; sourceTree = "<group>"; };
 		023EB37E1587A2D40072EC4E /* postinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = postinstall; sourceTree = "<group>"; };
 		023EB37F1587A2D40072EC4E /* preinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = preinstall; sourceTree = "<group>"; };
+		025184A015D182FA005D661F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		026BE1FB15D05C9800BC4B73 /* MOMapTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMapTable.m; sourceTree = "<group>"; };
 		026BE1FC15D05C9800BC4B73 /* MOMapTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMapTable.h; sourceTree = "<group>"; };
 		0282F68E1588F6940085FDC7 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.0.sdk/usr/lib/libicucore.dylib; sourceTree = DEVELOPER_DIR; };
@@ -294,10 +295,6 @@
 		02B1AE1A15C07A80000E2008 /* MOAllocator.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOAllocator.m; sourceTree = "<group>"; };
 		02BF150915C096070004CA2C /* UnitTests.octest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = UnitTests.octest; sourceTree = BUILT_PRODUCTS_DIR; };
 		02BF150A15C096070004CA2C /* SenTestingKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SenTestingKit.framework; path = Library/Frameworks/SenTestingKit.framework; sourceTree = DEVELOPER_DIR; };
-		02BF150C15C096070004CA2C /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = Library/Frameworks/Cocoa.framework; sourceTree = DEVELOPER_DIR; };
-		02BF150F15C096070004CA2C /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = Library/Frameworks/AppKit.framework; sourceTree = SDKROOT; };
-		02BF151015C096070004CA2C /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = Library/Frameworks/CoreData.framework; sourceTree = SDKROOT; };
-		02BF151115C096070004CA2C /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		02BF151415C096070004CA2C /* UnitTests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "UnitTests-Info.plist"; sourceTree = "<group>"; };
 		02BF151615C096070004CA2C /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		02BF151815C096070004CA2C /* MOUnitTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = MOUnitTests.h; sourceTree = "<group>"; };
@@ -399,7 +396,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				02BF150D15C096070004CA2C /* Cocoa.framework in Frameworks */,
+				025184A115D182FA005D661F /* Cocoa.framework in Frameworks */,
 				02BF150B15C096070004CA2C /* SenTestingKit.framework in Frameworks */,
 				02BF152015C096370004CA2C /* Mocha.framework in Frameworks */,
 			);
@@ -470,16 +467,6 @@
 				023EB37E1587A2D40072EC4E /* postinstall */,
 			);
 			path = Scripts;
-			sourceTree = "<group>";
-		};
-		02BF150E15C096070004CA2C /* Other Frameworks */ = {
-			isa = PBXGroup;
-			children = (
-				02BF150F15C096070004CA2C /* AppKit.framework */,
-				02BF151015C096070004CA2C /* CoreData.framework */,
-				02BF151115C096070004CA2C /* Foundation.framework */,
-			);
-			name = "Other Frameworks";
 			sourceTree = "<group>";
 		};
 		02BF151215C096070004CA2C /* UnitTests */ = {
@@ -659,14 +646,13 @@
 			isa = PBXGroup;
 			children = (
 				EAA45E0B155CE44B00F93E40 /* Foundation.framework */,
+				025184A015D182FA005D661F /* Cocoa.framework */,
 				EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */,
+				02BF150A15C096070004CA2C /* SenTestingKit.framework */,
 				EA1A1231156160F200A1F1A4 /* libffi.dylib */,
 				EAA45EAA155F0B4600F93E40 /* libreadline.dylib */,
 				0282F6901588F69A0085FDC7 /* libstdc++.dylib */,
 				0282F68E1588F6940085FDC7 /* libicucore.dylib */,
-				02BF150A15C096070004CA2C /* SenTestingKit.framework */,
-				02BF150C15C096070004CA2C /* Cocoa.framework */,
-				02BF150E15C096070004CA2C /* Other Frameworks */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";

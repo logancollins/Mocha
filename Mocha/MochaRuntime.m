@@ -1115,6 +1115,11 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     id object = [private representedObject];
     Class objectClass = [object class];
     
+    // String conversion
+    if ([propertyName isEqualToString:@"toString"]) {
+        return YES;
+    }
+    
     // Allocators
     if ([object isKindOfClass:[MOAllocator class]]) {
         objectClass = [object objectClass];
@@ -1210,6 +1215,12 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
     
     // Perform the lookup
     @try {
+        // String conversion
+        if ([propertyName isEqualToString:@"toString"]) {
+            MOMethod *function = [MOMethod methodWithTarget:object selector:@selector(description)];
+            return [runtime JSValueForObject:function];
+        }
+        
         // Allocators
         if ([object isKindOfClass:[MOAllocator class]]) {
             objectClass = [object objectClass];
