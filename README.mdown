@@ -217,9 +217,9 @@ Some C functions and Cocoa methods expect pointers to types. This introduces an 
 Creating a pointer will wrap a value in an opaque container, which will be passed properly to functions and methods which expect a pointer type.
 
 Pointer arguments typically come in one of three flavors:
-- **in**, where the value is simply passed by reference
-- **out**, where the function or method may modify the value of the pointer on output
-- **inout**, a combination of **in** and **out**
+- `**in**`, where the value is simply passed by reference
+- `**out**`, where the function or method may modify the value of the pointer on output
+- `**inout**`, a combination of **in** and **out**
 
 ### In Arguments
 
