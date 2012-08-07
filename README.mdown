@@ -229,9 +229,7 @@ In arguments are just normal by-reference value arguments. As such, the runtime 
 <pre>
 // ObjC
 @interface MyClass : NSObject
-
 - (CGFloat)getWidthOfRect:(const NSRect *)rect;
-
 @end
 
 // JavaScript
