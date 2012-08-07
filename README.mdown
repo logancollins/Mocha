@@ -119,7 +119,7 @@ myObject.someMethod(argument, otherArgument);
 
 ### Objective-C Properties
 
-Objective-C properties are handled in a special way. Unlike a normal method, invoking a property will return its value immediately (instead of returning an instance of MOMethod that is callable). Likewise, a property can be set using the JavaScript property setter syntax.
+Objective-C properties behave as they should on the JavaScript side of the bridge. Invoking a property will immediately return its value (as opposed to methods, which return a callable object). A property can also be set using the normal setter syntax. For this to work, the property must be declared using the Objective-C @property syntax.
 
 #### Example:
 <pre>
