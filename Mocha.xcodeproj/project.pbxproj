@@ -64,9 +64,9 @@
 		0282F68F1588F6940085FDC7 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0282F68E1588F6940085FDC7 /* libicucore.dylib */; };
 		0282F6911588F69A0085FDC7 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 0282F6901588F69A0085FDC7 /* libstdc++.dylib */; };
 		028D628615C0650600C12842 /* Mocha.hdoc in Resources */ = {isa = PBXBuildFile; fileRef = 028D628515C0650600C12842 /* Mocha.hdoc */; };
-		02A9EB1115C84D51005C0E8C /* MOPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A9EB0F15C84D51005C0E8C /* MOPointer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02A9EB1115C84D51005C0E8C /* MOPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A9EB0F15C84D51005C0E8C /* MOPointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02A9EB1215C84D51005C0E8C /* MOPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A9EB1015C84D51005C0E8C /* MOPointer.m */; };
-		02A9EB1415C84DA2005C0E8C /* MOPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A9EB0F15C84D51005C0E8C /* MOPointer.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02A9EB1415C84DA2005C0E8C /* MOPointer.h in Headers */ = {isa = PBXBuildFile; fileRef = 02A9EB0F15C84D51005C0E8C /* MOPointer.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		02B1AE1C15C07A80000E2008 /* MOAllocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B1AE1A15C07A80000E2008 /* MOAllocator.m */; };
 		02B1AE1E15C07A88000E2008 /* MOAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B1AE1915C07A80000E2008 /* MOAllocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02B1AE1F15C07A88000E2008 /* MOAllocator.h in Headers */ = {isa = PBXBuildFile; fileRef = 02B1AE1915C07A80000E2008 /* MOAllocator.h */; settings = {ATTRIBUTES = (Private, ); }; };
