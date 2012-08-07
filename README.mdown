@@ -116,6 +116,25 @@ If you wish to change this behavior (for example, to shorten an Objective-C meth
 myObject.someMethod(argument, otherArgument);
 </pre>
 
+
+### Objective-C Properties
+
+Objective-C properties are handled in a special way. Unlike a normal method, invoking a property will return its value immediately (instead of returning an instance of MOMethod that is callable). Likewise, a property can be set using the JavaScript property setter syntax.
+
+#### Example:
+<pre>
+// JavaScript
+
+myObject.name;
+>>> "Foobar"
+
+myObject.name = "Baz";
+
+myObject.name;
+>>> "Baz";
+</pre>
+
+
 ### Exposing Objective-C methods
 
 By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the `+isSelectorExcludedFromMochaScript:` method. Objects implementing this method can return `YES` for any selector that should not be invoked from the bridge.
