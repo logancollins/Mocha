@@ -124,7 +124,6 @@ Objective-C properties behave as they should on the JavaScript side of the bridg
 #### Example:
 <pre>
 // JavaScript
-
 myObject.name;
 >>> "Foobar"
 
@@ -209,6 +208,63 @@ MOMethod *method = [MOMethod methodWithTarget:myObject selector:@selector(someMe
 // JavaScript
 var result = someMethod();
 </pre>
+
+
+## Pointers
+
+Some C functions and Cocoa methods expect pointers to types. This introduces an issue to bridged languages that do not have the concept of pointers, like JavaScript. The runtime solves this by exposing a mechanism for creating pointers to values explicitly.
+
+Creating a pointer will wrap a value in an opaque container, which will be passed properly to functions and methods which expect a pointer type.
+
+Pointer arguments typically come in one of three flavors:
+- **in**, in which the value is simply passed by reference
+- **out**, in which the function or method may modify the value of the pointer on output
+- **inout**, a combination of **in** and **out**
+
+### In Arguments
+
+In arguments are just normal by-reference value arguments. As such, the runtime handles these transparently. If a function or method expects a pointer to an NSRect structure, you can pass it along like so:
+
+#### Example
+<pre>
+// ObjC
+@interface MyClass : NSObject
+
+- (CGFloat)getWidthOfRect:(const NSRect *)rect;
+
+@end
+
+// JavaScript
+var rect = NSMakeRect(0.0, 0.0, 100.0, 100.0:
+var ptr = MOPointer.alloc().initWithValue_(rect);
+
+myObject.getWidthOfRect_(ptr);
+>>> 100.0;
+</pre>
+
+
+### Out Arguments
+
+Out arguments are commonly used to return more than one value from a function or method. Cocoa uses this paradigm often to return error objects in the case where an operation fails.
+
+NSScanner also uses this paradigm for its scanning methods. The -scanFloat: method returns a BOOL indicating whether a value was successfully scanned. The argument passed is a pointer to a value that will be modified on the method's return.
+
+#### Example
+<pre>
+// JavaScript
+var scanner = NSScanner.alloc().initWithString_("3.14159");
+var ptr = MOPointer.alloc().init();
+
+scanner.scanFloat_(ptr);
+
+ptr.value();
+>>> 3.14159
+</pre>
+
+
+### Inout arguments
+
+Inout argument don't require anything special. They are just a combination of the two previous types of arguments.
 
 
 ## Object Subscripting
