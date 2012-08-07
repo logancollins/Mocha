@@ -104,6 +104,19 @@
     return nil;
 }
 
+- (NSArray *)ancestors {
+    NSMutableArray *array = [NSMutableArray array];
+    Class superclass = class_getSuperclass(_class);
+    while (superclass != Nil) {
+        MOClassDescription *description = [MOClassDescription descriptionForClass:superclass];
+        if (description != nil) {
+            [array addObject:description];
+        }
+        superclass = class_getSuperclass(superclass);
+    }
+    return array;
+}
+
 
 #pragma mark -
 #pragma mark Instance Variables
