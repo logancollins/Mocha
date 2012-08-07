@@ -746,7 +746,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 
 - (BOOL)loadFrameworkWithName:(NSString *)frameworkName {
     BOOL success = NO;
-    NSFileManager *fileManager = [NSFileManager defaultManager];
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
     
     for (NSString *path in _frameworkSearchPaths) {
         NSString *frameworkPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework", frameworkName]];

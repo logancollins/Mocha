@@ -13,6 +13,7 @@ function main() {
     fm.removeItemAtURL_error_(url, null);
     
     var rect = CGRectMake(0.0, 0.0, 100.0, 100.0);
+    var rectPtr = MOPointer.alloc().initWithValue_(rect).autorelease();
     var c = CGPDFContextCreateWithURL(url, rect, null);
     
     CGPDFContextBeginPage(c, null);
