@@ -7,51 +7,19 @@
 //
 
 #import "MOPointer.h"
-#import "MochaRuntime_Private.h"
+#import "MOPointer_Private.h"
 
 
-@implementation MOPointer {
-    JSValueRef _JSValue;
-    JSContextRef _JSContext;
-}
+@implementation MOPointer
 
-@synthesize JSContext=_JSContext;
+@synthesize value=_value;
 
-- (id)initWithJSValue:(JSValueRef)JSValue context:(JSContextRef)JSContext {
+- (id)initWithValue:(id)value {
     self = [super init];
     if (self) {
-        [self setJSValue:JSValue JSContext:JSContext];
+        self.value = value;
     }
     return self;
-}
-
-- (void)dealloc {
-    if (_JSValue != NULL) {
-        JSValueUnprotect(_JSContext, _JSValue);
-    }
-}
-
-- (JSValueRef)JSValue {
-    return _JSValue;
-}
-
-- (JSContextRef)JSContext {
-    return _JSContext;
-}
-
-- (void)setJSValue:(JSValueRef)JSValue JSContext:(JSContextRef)JSContext {
-    if (_JSValue != NULL) {
-        JSValueUnprotect(_JSContext, _JSValue);
-    }
-    _JSValue = JSValue;
-    _JSContext = JSContext;
-    if (_JSValue != NULL) {
-        JSValueProtect(_JSContext, _JSValue);
-    }
-}
-
-- (id)value {
-    return [[Mocha runtimeWithContext:self.JSContext] objectForJSValue:self.JSValue];
 }
 
 @end

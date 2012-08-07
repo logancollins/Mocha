@@ -293,7 +293,7 @@
 }
 
 - (void)setValueAsJSValue:(JSValueRef)value context:(JSContextRef)ctx dereference:(BOOL)dereference {
-    if (value != NULL) {
+    if (value != NULL && !JSValueIsNull(ctx, value)) {
         void *p = _storage;
         char typeEncoding = _typeEncoding;
         NSString *encoding = (_structureTypeEncoding ? _structureTypeEncoding : _pointerTypeEncoding);

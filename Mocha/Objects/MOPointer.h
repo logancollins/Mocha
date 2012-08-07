@@ -7,17 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 
 
 @interface MOPointer : NSObject
 
-- (id)initWithJSValue:(JSValueRef)JSValue context:(JSContextRef)JSContext;
+- (id)initWithValue:(id)value;
 
-@property (readonly) JSValueRef JSValue;
-@property (readonly) JSContextRef JSContext;
-- (void)setJSValue:(JSValueRef)JSValue JSContext:(JSContextRef)JSContext;
-
-@property (readonly) id value;
+@property (strong, readonly) id value;
 
 @end

@@ -16,7 +16,7 @@
 #import "MOFunctionArgument.h"
 #import "MOUndefined.h"
 #import "MOJavaScriptObject.h"
-#import "MOPointer.h"
+#import "MOPointer_Private.h"
 
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
@@ -554,8 +554,9 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             if ([object isKindOfClass:[MOPointer class]]) {
                 [arg setPointer:object];
                 
-                JSValueRef outJSValue = [(MOPointer *)object JSValue];
-                [arg setValueAsJSValue:outJSValue context:ctx dereference:YES];
+                id objValue = [(MOPointer *)object value];
+                JSValueRef jsValue = [runtime JSValueForObject:objValue];
+                [arg setValueAsJSValue:jsValue context:ctx dereference:YES];
             }
             else {
                 [arg setValueAsJSValue:jsValue context:ctx];
@@ -616,7 +617,8 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if ([arg pointer] != nil) {
             MOPointer *pointer = [arg pointer];
             JSValueRef value = [arg getValueAsJSValueInContext:ctx dereference:YES];
-            [pointer setJSValue:value JSContext:[runtime context]];
+            id object = [runtime objectForJSValue:value];
+            pointer.value = object;
         }
     }
     

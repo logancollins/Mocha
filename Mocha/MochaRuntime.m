@@ -17,6 +17,7 @@
 #import "MOPointer.h"
 #import "MOUtilities.h"
 #import "MOFunctionArgument.h"
+#import "MOAllocator.h"
 
 #import "MOObjCRuntime.h"
 #import "MOMapTable.h"
@@ -790,7 +791,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
                 NSString *filePath = [path stringByAppendingPathComponent:filePathComponent];
                 if ([[filePath pathExtension] isEqualToString:@"bridgesupport"]
                     || [[filePathComponent pathExtension] isEqualToString:@"dylib"]) {
-                    [filesToLoad addObject:path];
+                    [filesToLoad addObject:filePath];
                 }
             }
         }
@@ -1114,6 +1115,30 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     id object = [private representedObject];
     Class objectClass = [object class];
     
+    // Allocators
+    if ([object isKindOfClass:[MOAllocator class]]) {
+        objectClass = [object objectClass];
+        
+        // Method
+        SEL selector = MOSelectorFromPropertyName(propertyName);
+        NSMethodSignature *methodSignature = [objectClass instanceMethodSignatureForSelector:selector];
+        if (!methodSignature) {
+            // Allow the trailing underscore to be left off (issue #7)
+            selector = MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"]);
+            methodSignature = [objectClass instanceMethodSignatureForSelector:selector];
+        }
+        if (methodSignature != nil) {
+            if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
+                if (![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                    return YES;
+                }
+            }
+            else {
+                return YES;
+            }
+        }
+    }
+    
     // Property
     objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
     if (property != NULL) {
@@ -1185,6 +1210,35 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
     
     // Perform the lookup
     @try {
+        // Allocators
+        if ([object isKindOfClass:[MOAllocator class]]) {
+            objectClass = [object objectClass];
+            
+            // Method
+            SEL selector = MOSelectorFromPropertyName(propertyName);
+            NSMethodSignature *methodSignature = [objectClass instanceMethodSignatureForSelector:selector];
+            if (!methodSignature) {
+                // Allow the trailing underscore to be left off (issue #7)
+                selector = MOSelectorFromPropertyName([propertyName stringByAppendingString:@"_"]);
+                methodSignature = [objectClass instanceMethodSignatureForSelector:selector];
+            }
+            if (methodSignature != nil) {
+                BOOL implements = NO;
+                if ([objectClass respondsToSelector:@selector(isSelectorExcludedFromMochaScript:)]) {
+                    if (![objectClass isSelectorExcludedFromMochaScript:selector]) {
+                        implements = YES;
+                    }
+                }
+                else {
+                    implements = YES;
+                }
+                if (implements) {
+                    MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
+                    return [runtime JSValueForObject:function];
+                }
+            }
+        }
+        
         // Property
         objc_property_t property = class_getProperty(objectClass, [propertyName UTF8String]);
         if (property != NULL) {
