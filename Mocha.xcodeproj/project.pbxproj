@@ -1341,6 +1341,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				ONLY_ACTIVE_ARCH = YES;
+				OTHER_CFLAGS = "-fobjc-arc-exceptions";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -1362,6 +1363,7 @@
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				OTHER_CFLAGS = "-fobjc-arc-exceptions";
 				SDKROOT = macosx;
 			};
 			name = Release;

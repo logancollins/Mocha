@@ -330,16 +330,16 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
         // Determine the method type
         if (classMethod) {
-            method = class_getClassMethod([target class], selector);
+            method = class_getClassMethod(klass, selector);
         }
         else {
-            method = class_getInstanceMethod([target class], selector);
+            method = class_getInstanceMethod(klass, selector);
         }
         
         variadic = MOSelectorIsVariadic(klass, selector);
         
         if (method == NULL) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to locate method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to locate method %@ of class %@", NSStringFromSelector(selector), klass] userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
             }
@@ -350,7 +350,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         argumentEncodings = [MOParseObjCMethodEncoding(encoding) mutableCopy];
         
         if (argumentEncodings == nil) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), klass] userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
             }
