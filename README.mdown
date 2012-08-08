@@ -338,8 +338,7 @@ To use Mocha in your OS X project, follow these steps:
 
 1. Add the **Mocha project** to your project (by dragging the *.xcodeproj file to your Frameworks group in Xcode).
 2. Open your target's **Build Phases**, and under the **Link Binary With Libraries** build phase, click Add and choose **Mocha.framework** from the workspace.
-3. Next, add the following system libraries the same way: **JavaScriptCore.framework**
-4. Build!
+3. Build!
 
 
 ## Using Mocha with iOS
