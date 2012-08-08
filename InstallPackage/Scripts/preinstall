@@ -4,8 +4,13 @@ import os
 
 
 MOC_SYMLINK_PATH = "/usr/local/bin/moc"
+MOCHA_SYMLINK_PATH = "/usr/local/bin/mocha"
 
 
 # Remove moc symlink
 if os.path.exists(MOC_SYMLINK_PATH):
     os.remove(MOC_SYMLINK_PATH)
+
+# Remove mocha symlink
+if os.path.exists(MOCHA_SYMLINK_PATH):
+    os.remove(MOCHA_SYMLINK_PATH)

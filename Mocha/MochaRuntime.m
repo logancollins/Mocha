@@ -871,7 +871,18 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     MOMethod *addFrameworkSearchPath = [MOMethod methodWithTarget:self selector:@selector(addFrameworkSearchPath:)];
     [self setValue:addFrameworkSearchPath forKey:@"addFrameworkSearchPath"];
     
+    MOMethod *print = [MOMethod methodWithTarget:self selector:@selector(print:)];
+    [self setValue:print forKey:@"print"];
+    
     [self setValue:[MOObjCRuntime sharedRuntime] forKey:@"objc"];
+}
+
+- (void)print:(id)o {
+    if (!o) {
+        printf("null\n");
+        return;
+    }
+    printf("%s\n", [[o description] UTF8String]);
 }
 
 - (void)cleanUp {

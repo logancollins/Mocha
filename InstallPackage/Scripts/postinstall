@@ -3,8 +3,8 @@
 import os
 
 
-MOC_SYMLINK_SRC = "/Library/Frameworks/Mocha.framework/Resources/moc"
-MOC_SYMLINK_DEST = "/usr/local/bin/moc"
+MOCHA_SYMLINK_SRC = "/Library/Frameworks/Mocha.framework/Resources/mocha"
+MOCHA_SYMLINK_DEST = "/usr/local/bin/mocha"
 
 
 # Create symbolic links
@@ -12,4 +12,4 @@ try:
     os.makedirs('/usr/local/bin')
 except OSError:
     pass
-os.symlink(MOC_SYMLINK_SRC, MOC_SYMLINK_DEST)
+os.symlink(MOCHA_SYMLINK_SRC, MOCHA_SYMLINK_DEST)

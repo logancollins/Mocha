@@ -57,6 +57,7 @@
 		0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211232A155D99F600415471 /* MOBridgeSupportSymbol.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0211233E155DB8F800415471 /* MOBridgeSupportLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211233C155DB8F800415471 /* MOBridgeSupportLibrary.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02112342155DB9A100415471 /* MOBridgeSupportParser.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112340155DB9A100415471 /* MOBridgeSupportParser.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02373A2715D2DDBA005C5D0A /* NSFileHandle+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 02373A2615D2DDBA005C5D0A /* NSFileHandle+MochaAdditions.m */; };
 		025184A115D182FA005D661F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025184A015D182FA005D661F /* Cocoa.framework */; };
 		026BE1FD15D05C9800BC4B73 /* MOMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 026BE1FB15D05C9800BC4B73 /* MOMapTable.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		026BE1FE15D05C9800BC4B73 /* MOMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 026BE1FB15D05C9800BC4B73 /* MOMapTable.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -281,6 +282,8 @@
 		0211233D155DB8F800415471 /* MOBridgeSupportLibrary.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportLibrary.m; sourceTree = "<group>"; };
 		02112340155DB9A100415471 /* MOBridgeSupportParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBridgeSupportParser.h; sourceTree = "<group>"; };
 		02112341155DB9A100415471 /* MOBridgeSupportParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportParser.m; sourceTree = "<group>"; };
+		02373A2515D2DDBA005C5D0A /* NSFileHandle+MochaAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSFileHandle+MochaAdditions.h"; sourceTree = "<group>"; };
+		02373A2615D2DDBA005C5D0A /* NSFileHandle+MochaAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSFileHandle+MochaAdditions.m"; sourceTree = "<group>"; };
 		023EB37E1587A2D40072EC4E /* postinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = postinstall; sourceTree = "<group>"; };
 		023EB37F1587A2D40072EC4E /* preinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = preinstall; sourceTree = "<group>"; };
 		025184A015D182FA005D661F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
@@ -362,9 +365,9 @@
 		EAA45E22155CE57600F93E40 /* MochaRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime.h; sourceTree = "<group>"; wrapsLines = 1; };
 		EAA45E23155CE57600F93E40 /* MochaRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochaRuntime.m; sourceTree = "<group>"; };
 		EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime_Private.h; sourceTree = "<group>"; };
-		EAA45E71155EE5AF00F93E40 /* moc */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = moc; sourceTree = BUILT_PRODUCTS_DIR; };
+		EAA45E71155EE5AF00F93E40 /* mocha */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mocha; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAA45E75155EE5AF00F93E40 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		EAA45E78155EE5AF00F93E40 /* moc-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "moc-Prefix.pch"; sourceTree = "<group>"; };
+		EAA45E78155EE5AF00F93E40 /* mocha-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "mocha-Prefix.pch"; sourceTree = "<group>"; };
 		EAA45E7F155EE68000F93E40 /* MOCInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCInterpreter.h; sourceTree = "<group>"; };
 		EAA45E80155EE68000F93E40 /* MOCInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCInterpreter.m; sourceTree = "<group>"; };
 		EAA45E86155EE97200F93E40 /* MOMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMethod.h; sourceTree = "<group>"; };
@@ -450,6 +453,15 @@
 				0211232B155D99F600415471 /* MOBridgeSupportSymbol.m */,
 			);
 			path = BridgeSupport;
+			sourceTree = "<group>";
+		};
+		02373A2415D2DDA1005C5D0A /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				02373A2515D2DDBA005C5D0A /* NSFileHandle+MochaAdditions.h */,
+				02373A2615D2DDBA005C5D0A /* NSFileHandle+MochaAdditions.m */,
+			);
+			path = Categories;
 			sourceTree = "<group>";
 		};
 		023EB37B1587A2AE0072EC4E /* InstallPackage */ = {
@@ -613,9 +625,9 @@
 		EAA45DF7155CE44B00F93E40 = {
 			isa = PBXGroup;
 			children = (
-				EAA45E0C155CE44B00F93E40 /* Mocha */,
+				EAA45E0C155CE44B00F93E40 /* Framework */,
 				EAA34FCA15647AD700B62244 /* libMocha (iOS) */,
-				EAA45E74155EE5AF00F93E40 /* moc */,
+				EAA45E74155EE5AF00F93E40 /* mocha */,
 				023EB37B1587A2AE0072EC4E /* InstallPackage */,
 				02BF151215C096070004CA2C /* UnitTests */,
 				EAA45E05155CE44B00F93E40 /* Frameworks */,
@@ -628,7 +640,7 @@
 			isa = PBXGroup;
 			children = (
 				EAA45E03155CE44B00F93E40 /* Mocha.framework */,
-				EAA45E71155EE5AF00F93E40 /* moc */,
+				EAA45E71155EE5AF00F93E40 /* mocha */,
 				EAA34FC815647AD700B62244 /* libMocha.a */,
 				02BF150915C096070004CA2C /* UnitTests.octest */,
 			);
@@ -650,7 +662,7 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		EAA45E0C155CE44B00F93E40 /* Mocha */ = {
+		EAA45E0C155CE44B00F93E40 /* Framework */ = {
 			isa = PBXGroup;
 			children = (
 				EAA45E13155CE44B00F93E40 /* Mocha.h */,
@@ -665,6 +677,7 @@
 				EAC8BFCB155F42D3003653BA /* Categories */,
 				EAA45E0D155CE44B00F93E40 /* Supporting Files */,
 			);
+			name = Framework;
 			path = Mocha;
 			sourceTree = "<group>";
 		};
@@ -706,21 +719,23 @@
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		EAA45E74155EE5AF00F93E40 /* moc */ = {
+		EAA45E74155EE5AF00F93E40 /* mocha */ = {
 			isa = PBXGroup;
 			children = (
 				EAA45E75155EE5AF00F93E40 /* main.m */,
 				EAA45E7F155EE68000F93E40 /* MOCInterpreter.h */,
 				EAA45E80155EE68000F93E40 /* MOCInterpreter.m */,
+				02373A2415D2DDA1005C5D0A /* Categories */,
 				EAA45E77155EE5AF00F93E40 /* Supporting Files */,
 			);
+			name = mocha;
 			path = moc;
 			sourceTree = "<group>";
 		};
 		EAA45E77155EE5AF00F93E40 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				EAA45E78155EE5AF00F93E40 /* moc-Prefix.pch */,
+				EAA45E78155EE5AF00F93E40 /* mocha-Prefix.pch */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -882,9 +897,9 @@
 			productReference = EAA34FC815647AD700B62244 /* libMocha.a */;
 			productType = "com.apple.product-type.library.static";
 		};
-		EAA45E02155CE44B00F93E40 /* Mocha */ = {
+		EAA45E02155CE44B00F93E40 /* Framework */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EAA45E18155CE44B00F93E40 /* Build configuration list for PBXNativeTarget "Mocha" */;
+			buildConfigurationList = EAA45E18155CE44B00F93E40 /* Build configuration list for PBXNativeTarget "Framework" */;
 			buildPhases = (
 				EAA45DFE155CE44B00F93E40 /* Sources */,
 				EAA45DFF155CE44B00F93E40 /* Frameworks */,
@@ -895,14 +910,14 @@
 			);
 			dependencies = (
 			);
-			name = Mocha;
+			name = Framework;
 			productName = Mocha;
 			productReference = EAA45E03155CE44B00F93E40 /* Mocha.framework */;
 			productType = "com.apple.product-type.framework";
 		};
-		EAA45E70155EE5AF00F93E40 /* moc */ = {
+		EAA45E70155EE5AF00F93E40 /* mocha */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = EAA45E7B155EE5AF00F93E40 /* Build configuration list for PBXNativeTarget "moc" */;
+			buildConfigurationList = EAA45E7B155EE5AF00F93E40 /* Build configuration list for PBXNativeTarget "mocha" */;
 			buildPhases = (
 				EAA45E6D155EE5AF00F93E40 /* Sources */,
 				EAA45E6E155EE5AF00F93E40 /* Frameworks */,
@@ -913,9 +928,9 @@
 			dependencies = (
 				EAA3503915647DEA00B62244 /* PBXTargetDependency */,
 			);
-			name = moc;
+			name = mocha;
 			productName = moc;
-			productReference = EAA45E71155EE5AF00F93E40 /* moc */;
+			productReference = EAA45E71155EE5AF00F93E40 /* mocha */;
 			productType = "com.apple.product-type.tool";
 		};
 /* End PBXNativeTarget section */
@@ -940,9 +955,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				EAA45E02155CE44B00F93E40 /* Mocha */,
+				EAA45E02155CE44B00F93E40 /* Framework */,
 				EAA34FC715647AD700B62244 /* libMocha (iOS) */,
-				EAA45E70155EE5AF00F93E40 /* moc */,
+				EAA45E70155EE5AF00F93E40 /* mocha */,
 				02BF150815C096070004CA2C /* UnitTests */,
 				023EB3801587A31A0072EC4E /* FrameworkComplete */,
 				023EB3841587A3210072EC4E /* InstallPackage */,
@@ -985,7 +1000,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "cp \"${BUILT_PRODUCTS_DIR}/moc\" \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Resources/\"";
+			shellScript = "cp \"${BUILT_PRODUCTS_DIR}/mocha\" \"${BUILT_PRODUCTS_DIR}/Mocha.framework/Resources/\"";
 		};
 		023EB3901587A3520072EC4E /* Build Install Package */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1133,6 +1148,7 @@
 			files = (
 				EAA45E76155EE5AF00F93E40 /* main.m in Sources */,
 				EAA45E81155EE68000F93E40 /* MOCInterpreter.m in Sources */,
+				02373A2715D2DDBA005C5D0A /* NSFileHandle+MochaAdditions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1141,12 +1157,12 @@
 /* Begin PBXTargetDependency section */
 		023EB3891587A3300072EC4E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EAA45E02155CE44B00F93E40 /* Mocha */;
+			target = EAA45E02155CE44B00F93E40 /* Framework */;
 			targetProxy = 023EB3881587A3300072EC4E /* PBXContainerItemProxy */;
 		};
 		023EB38B1587A3320072EC4E /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EAA45E70155EE5AF00F93E40 /* moc */;
+			target = EAA45E70155EE5AF00F93E40 /* mocha */;
 			targetProxy = 023EB38A1587A3320072EC4E /* PBXContainerItemProxy */;
 		};
 		023EB38F1587A34F0072EC4E /* PBXTargetDependency */ = {
@@ -1156,12 +1172,12 @@
 		};
 		028D628315C064BC00C12842 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EAA45E02155CE44B00F93E40 /* Mocha */;
+			target = EAA45E02155CE44B00F93E40 /* Framework */;
 			targetProxy = 028D628215C064BC00C12842 /* PBXContainerItemProxy */;
 		};
 		EAA3503915647DEA00B62244 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = EAA45E02155CE44B00F93E40 /* Mocha */;
+			target = EAA45E02155CE44B00F93E40 /* Framework */;
 			targetProxy = EAA3503815647DEA00B62244 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -1380,7 +1396,7 @@
 				GCC_PREFIX_HEADER = "Mocha/Mocha-Prefix.pch";
 				INFOPLIST_FILE = "Mocha/Mocha-Info.plist";
 				INSTALL_PATH = "@rpath";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Mocha;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Debug;
@@ -1397,7 +1413,7 @@
 				GCC_PREFIX_HEADER = "Mocha/Mocha-Prefix.pch";
 				INFOPLIST_FILE = "Mocha/Mocha-Info.plist";
 				INSTALL_PATH = "@rpath";
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = Mocha;
 				WRAPPER_EXTENSION = framework;
 			};
 			name = Release;
@@ -1407,7 +1423,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "moc/moc-Prefix.pch";
+				GCC_PREFIX_HEADER = "moc/mocha-Prefix.pch";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../ @loader_path/";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1418,7 +1434,7 @@
 			buildSettings = {
 				CLANG_ENABLE_OBJC_ARC = YES;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = "moc/moc-Prefix.pch";
+				GCC_PREFIX_HEADER = "moc/mocha-Prefix.pch";
 				LD_RUNPATH_SEARCH_PATHS = "@loader_path/../../../../ @loader_path/";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
@@ -1481,7 +1497,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EAA45E18155CE44B00F93E40 /* Build configuration list for PBXNativeTarget "Mocha" */ = {
+		EAA45E18155CE44B00F93E40 /* Build configuration list for PBXNativeTarget "Framework" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EAA45E19155CE44B00F93E40 /* Debug */,
@@ -1490,7 +1506,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		EAA45E7B155EE5AF00F93E40 /* Build configuration list for PBXNativeTarget "moc" */ = {
+		EAA45E7B155EE5AF00F93E40 /* Build configuration list for PBXNativeTarget "mocha" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				EAA45E7C155EE5AF00F93E40 /* Debug */,

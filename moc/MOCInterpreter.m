@@ -1,6 +1,6 @@
 //
 //  MOCInterpreter.m
-//  Mocha
+//  mocha
 //
 //  Created by Logan Collins on 5/12/12.
 //  Copyright (c) 2012 Sunflower Softworks. All rights reserved.
@@ -44,47 +44,6 @@ static char ** runtimeCompletion(const char * text, int start, int end);
     
     MOMethod *exit = [MOMethod methodWithTarget:self selector:@selector(exit)];
     [runtime setValue:exit forKey:@"exit"];
-    
-    MOMethod *print = [MOMethod methodWithTarget:self selector:@selector(print:)];
-    [runtime setValue:print forKey:@"print"];
-}
-
-- (void)runScriptAtPath:(NSString*)path {
-    
-    Mocha *runtime = [Mocha sharedRuntime];
-    [runtime setDelegate:self];
-    
-    [self installBuiltins];
-    
-    NSError *err;
-    NSString *s = [NSString stringWithContentsOfFile:path encoding:NSUTF8StringEncoding error:&err];
-    
-    if (!s) {
-        NSLog(@"Could not read the file at %@", path);
-        NSLog(@"%@", err);
-        exit(1);
-    }
-    
-    @try {
-        JSValueRef value = [runtime evalJSString:s scriptPath:path];
-        
-        if (value != NULL) {
-            JSStringRef string = JSValueToStringCopy([runtime context], value, NULL);
-            NSString *description = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, string));
-            JSStringRelease(string);
-            printf("%s\n", [description UTF8String]);
-        }
-    }
-    
-    @catch (NSException *e) {
-        if ([e userInfo] != nil) {
-            printf("%s: %s\n%s\n", [[e name] UTF8String], [[e reason] UTF8String], [[[e userInfo] description] UTF8String]);
-        }
-        else {
-            printf("%s: %s\n", [[e name] UTF8String], [[e reason] UTF8String]);
-        }
-    }
-    
 }
 
 - (void)run {
@@ -140,16 +99,6 @@ static char ** runtimeCompletion(const char * text, int start, int end);
 
 - (void)exit {
     exit(0);
-}
-
-- (void)print:(id)o {
-    
-    if (!o) {
-        printf("null\n");
-        return;
-    }
-    
-    printf("%s\n", [[o description] UTF8String]);
 }
 
 @end
