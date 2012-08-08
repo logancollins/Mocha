@@ -304,11 +304,11 @@ JavaScript exceptions that are uncaught will be converted to `NSException` objec
 Mocha exceptions that do not originate from within the JavaScript environment carry the name `MORuntimeException`, and generally indicate a more serious failure caused by an issue within the runtime.
 
 
-## moc: The Mocha Interpreter
+## mocha: The Mocha Interpreter
 
-`moc` is a simple command-line interpreter for debugging and testing with Mocha. It is similar to `jsc`, provided as part of JavaScriptCore.
+`mocha` is the command-line interpreter for Mocha. It has two modes: script and interactive. Its scripting mode is similar to `python` and `ruby`. Its interactive mode is similar to `python`, `irb`, and `jsc`.
 
-`moc` has the following set of built-in functions:
+Interactive mode adds the following set of built-in functions:
 - `exit()` – Exits the interpreter
 - `gc()` – Instructs the JavaScript garbage collector to perform a collection
 - `checkSyntax(string)` – Validates the syntax of `string`, returning a `Boolean`
