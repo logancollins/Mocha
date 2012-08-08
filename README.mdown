@@ -308,10 +308,28 @@ Mocha exceptions that do not originate from within the JavaScript environment ca
 
 `mocha` is the command-line interpreter for Mocha. It has two modes: script and interactive. Its scripting mode is similar to `python` and `ruby`. Its interactive mode is similar to `python`, `irb`, and `jsc`.
 
+### Interactive
+
 Interactive mode adds the following set of built-in functions:
 - `exit()` – Exits the interpreter
 - `gc()` – Instructs the JavaScript garbage collector to perform a collection
 - `checkSyntax(string)` – Validates the syntax of `string`, returning a `Boolean`
+
+### Scripting
+
+You can use `mocha` the same way you use other scripting envorinments. Add a shebang declaration to the top of a script to enable its use on the command line, like so:
+
+### Example
+<pre>
+#!/usr/local/bin/mocha
+
+var d = {};
+d['foo'] = 'bar';
+d['baz'] = 1.0;
+d['bin'] = ['foo', 'bar', 'baz'];
+
+print(d);
+</pre>
 
 
 ## Using Mocha with OS X
