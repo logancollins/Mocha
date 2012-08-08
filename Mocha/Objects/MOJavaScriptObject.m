@@ -35,7 +35,7 @@
         JSValueUnprotect(_JSContext, _JSObject);
     }
     _JSObject = JSObject;
-    _JSContext = _JSContext;
+    _JSContext = JSContext;
     if (_JSObject != NULL) {
         JSValueProtect(_JSContext, _JSObject);
     }

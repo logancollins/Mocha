@@ -41,10 +41,7 @@
 // Storage
 @property (readonly) ffi_type *ffiType;
 @property (readonly) void** storage;
-@property (readonly) void** rawStoragePointer;
 @property (copy, readonly) NSString *typeDescription;
-
-- (void *)allocateStorage;
 
 // Values
 - (JSValueRef)getValueAsJSValueInContext:(JSContextRef)ctx;

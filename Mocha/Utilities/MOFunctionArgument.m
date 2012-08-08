@@ -23,6 +23,13 @@
 #import <objc/runtime.h>
 
 
+@interface MOFunctionArgument ()
+
+- (void *)allocateStorage;
+
+@end
+
+
 @implementation MOFunctionArgument {
     char _typeEncoding;
     void* _storage;
@@ -177,10 +184,6 @@
     if (self.pointer != nil) {
         return &_storage;
     }
-    return _storage;
-}
-
-- (void**)rawStoragePointer {
     return _storage;
 }
 

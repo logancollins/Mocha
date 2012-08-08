@@ -1028,48 +1028,30 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         
         // Enums
         else if ([symbol isKindOfClass:[MOBridgeSupportEnum class]]) {
-            NSNumber *value = [(MOBridgeSupportEnum *)symbol value];
-            
             double doubleValue = 0;
-            
+            NSNumber *value = [(MOBridgeSupportEnum *)symbol value];
 #if __LP64__
             NSNumber *value64 = [(MOBridgeSupportEnum *)symbol value64];
-            if (value != nil) {
-                doubleValue = [value doubleValue];
-            }
-            else if (value64 != nil) {
+            if (value64 != nil) {
                 doubleValue = [value doubleValue];
             }
             else {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", symbol] userInfo:nil];
-                if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e];
+#endif
+                if (value != nil) {
+                    doubleValue = [value doubleValue];
                 }
-                return NULL;
-            }
-#else
-            if (value != nil) {
-                doubleValue = [value doubleValue];
-            }
-            else {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", symbol] userInfo:nil];
-                if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e];
+                else {
+                    NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", symbol] userInfo:nil];
+                    if (exception != NULL) {
+                        *exception = [runtime JSValueForObject:e];
+                    }
+                    return NULL;
                 }
-                return NULL;
+#if __LP64__
             }
 #endif
-            
             return JSValueMakeNumber(ctx, doubleValue);
         }
-    }
-    
-    // Describe ourselves
-    if ([propertyName isEqualToString:@"toString"] || [propertyName isEqualToString:@"valueOf"]) {
-        JSStringRef scriptJS = JSStringCreateWithUTF8CString("return '(Mocha global object)'");
-        JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
-        JSStringRelease(scriptJS);
-        return fn;
     }
     
     return NULL;
