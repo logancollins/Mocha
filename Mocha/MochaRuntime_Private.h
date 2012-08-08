@@ -7,11 +7,16 @@
 //
 
 #import <Mocha/MochaRuntime.h>
+#import <JavaScriptCore/JavaScriptCore.h>
 
 
 @interface Mocha ()
 
 + (Mocha *)runtimeWithContext:(JSContextRef)ctx;
+
+- (id)initWithGlobalContext:(JSGlobalContextRef)ctx;
+
+@property (readonly) JSGlobalContextRef context;
 
 // JSValue <-> id
 + (JSValueRef)JSValueForObject:(id)object inContext:(JSContextRef)ctx;

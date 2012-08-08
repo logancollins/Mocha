@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 #import <Mocha/MochaDefines.h>
 
 
@@ -25,31 +24,12 @@
  * @abstract The shared runtime instance
  * 
  * @discussion
- * Additional runtimes can be created by calling -init or -initWithGlobalContext:
+ * Additional runtimes can be created by calling -init
  * 
  * @result A Mocha object
  */
 + (Mocha *)sharedRuntime;
 
-/*!
- * @method initWithGlobalContext:
- * @abstract Creates a new runtime
- * 
- * @param ctx
- * The JSGlobalContext on which to base the runtime
- * 
- * @result A Mocha object
- */
-- (id)initWithGlobalContext:(JSGlobalContextRef)ctx;
-
-
-/*!
- * @property context
- * @abstract Gets the JSGlobalContext backing the runtime
- * 
- * @result A JSGlobalContextRef value
- */
-@property (readonly) JSGlobalContextRef context;
 
 /*!
  * @property delegate

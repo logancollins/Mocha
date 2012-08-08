@@ -7,7 +7,7 @@ Mocha is a runtime that bridges JavaScript to Objective-C. It is built on top of
 
 ## Usage
 
-Instances of the `Mocha` class are representations of a runtime. A runtime can be used either through shared instance (returned from `-sharedRuntime`) or by creating an instance by calling `-init` or `-initWithGlobalContext:`.
+Instances of the `Mocha` class are representations of a runtime. A runtime can be used either through shared instance (returned from `-sharedRuntime`) or by creating an instance by calling `-init`.
 
 
 ## Values and Boxed Objects
