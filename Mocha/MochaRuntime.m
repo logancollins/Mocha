@@ -407,6 +407,9 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     if ([object isKindOfClass:[MOBox class]]) {
         value = [object JSObject];
     }
+    else if ([object isKindOfClass:[MOJavaScriptObject class]]) {
+        return [object JSObject];
+    }
     /*else if ([object isKindOfClass:[NSString class]]) {
         JSStringRef string = JSStringCreateWithCFString((CFStringRef)object);
         value = JSValueMakeString(_ctx, string);
