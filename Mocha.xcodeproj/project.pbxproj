@@ -592,13 +592,6 @@
 			path = JavaScriptCore;
 			sourceTree = "<group>";
 		};
-		EA78AF5E15D0CE17000A01A9 /* Libraries */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Libraries;
-			sourceTree = "<group>";
-		};
 		EAA34FCA15647AD700B62244 /* libMocha (iOS) */ = {
 			isa = PBXGroup;
 			children = (
@@ -670,7 +663,6 @@
 				02112329155D99CA00415471 /* BridgeSupport */,
 				EAA45E68155E5E2200F93E40 /* Utilities */,
 				EAC8BFCB155F42D3003653BA /* Categories */,
-				EA78AF5E15D0CE17000A01A9 /* Libraries */,
 				EAA45E0D155CE44B00F93E40 /* Supporting Files */,
 			);
 			path = Mocha;

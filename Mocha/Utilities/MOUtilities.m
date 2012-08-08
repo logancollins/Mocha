@@ -286,7 +286,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     JSValueRef value = NULL;
     BOOL objCCall = NO;
     BOOL blockCall = NO;
-    NSArray *argumentEncodings = nil;
+    NSMutableArray *argumentEncodings = nil;
     MOFunctionArgument *returnValue = nil;
     void* callAddress = NULL;
     NSUInteger callAddressArgumentCount = 0;
@@ -347,7 +347,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         }
         
         const char *encoding = method_getTypeEncoding(method);
-        argumentEncodings = MOParseObjCMethodEncoding(encoding);
+        argumentEncodings = [MOParseObjCMethodEncoding(encoding) mutableCopy];
         
         if (argumentEncodings == nil) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
@@ -390,7 +390,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         callAddress = [function callAddress];
         
         const char *typeEncoding = [(MOClosure *)function typeEncoding];
-        argumentEncodings = MOParseObjCMethodEncoding(typeEncoding);
+        argumentEncodings = [MOParseObjCMethodEncoding(typeEncoding) mutableCopy];
         
         if (argumentEncodings == nil) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
@@ -470,7 +470,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             [args addObject:arg];
         }
         
-        argumentEncodings = [args copy];
+        argumentEncodings = [args mutableCopy];
         
         // Function arguments are all arguments minus return value
         callAddressArgumentCount = [args count] - 1;
@@ -531,6 +531,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             if (variadic && i >= callAddressArgumentCount) {
                 arg = [[MOFunctionArgument alloc] init];
                 [arg setTypeEncoding:_C_ID];
+                [argumentEncodings addObject:arg];
             }
             else {
                 arg = [argumentEncodings objectAtIndex:(j + 1)];
