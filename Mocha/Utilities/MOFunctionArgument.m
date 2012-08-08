@@ -25,7 +25,7 @@
 
 @implementation MOFunctionArgument {
     char _typeEncoding;
-    void *_storage;
+    void* _storage;
     BOOL _ownsStorage;
     ffi_type _structureType;
     NSString *_structureTypeEncoding;
@@ -46,13 +46,14 @@
 }
 
 - (void)dealloc {
-    if (_storage && _ownsStorage) {
+    if (_storage != NULL && _ownsStorage) {
         free(_storage);
     }
     _storage = NULL;
     
     if (_structureType.elements != NULL) {
         free(_structureType.elements);
+        _structureType.elements = NULL;
     }
 }
 
@@ -173,9 +174,6 @@
 #pragma mark Storage
 
 - (void**)storage {
-    if (_typeEncoding == _C_STRUCT_B && _pointerTypeEncoding) {
-        return &_storage;
-    }
     if (self.pointer != nil) {
         return &_storage;
     }
@@ -195,7 +193,7 @@
     size_t size = 0;
     
     // Special case for structs
-    if (self.typeEncoding == _C_STRUCT_B) {
+    if (_typeEncoding == _C_STRUCT_B) {
         // Some front padding for alignment and tail padding for structure
         // ( http://developer.apple.com/documentation/DeveloperTools/Conceptual/LowLevelABI/Articles/IA32.html )
         // Structures are tail-padded to 32-bit multiples.
@@ -211,7 +209,7 @@
     }
     
     if (success) {
-        int    minimalReturnSize = sizeof(long);
+        size_t minimalReturnSize = sizeof(long);
         if (self.returnValue && size < minimalReturnSize) {
             size = minimalReturnSize;
         }
@@ -266,6 +264,8 @@
 }
 
 - (JSValueRef)getValueAsJSValueInContext:(JSContextRef)ctx dereference:(BOOL)dereference {
+    NSAssert(_storage != NULL, @"Cannot get value with NULL storage pointer");
+    
     JSValueRef value = NULL;
     void *p = _storage;
     char typeEncoding = _typeEncoding;
@@ -293,6 +293,8 @@
 }
 
 - (void)setValueAsJSValue:(JSValueRef)value context:(JSContextRef)ctx dereference:(BOOL)dereference {
+    NSAssert(_storage != NULL, @"Cannot set value with NULL storage pointer");
+    
     if (value != NULL && !JSValueIsNull(ctx, value)) {
         void *p = _storage;
         char typeEncoding = _typeEncoding;
@@ -325,15 +327,15 @@
  * __alignOf__ returns 8 for double, but its struct align is 4
  * use dummy structures to get struct alignment, each having a byte as first element
  */
-typedef    struct { char a; void* b; } struct_C_ID;
-typedef    struct { char a; char b; } struct_C_CHR;
-typedef    struct { char a; short b; } struct_C_SHT;
-typedef    struct { char a; int b; } struct_C_INT;
-typedef    struct { char a; long b; } struct_C_LNG;
-typedef    struct { char a; long long b; } struct_C_LNG_LNG;
-typedef    struct { char a; float b; } struct_C_FLT;
-typedef    struct { char a; double b; } struct_C_DBL;
-typedef    struct { char a; BOOL b; } struct_C_BOOL;
+typedef struct { char a; void* b; } struct_C_ID;
+typedef struct { char a; char b; } struct_C_CHR;
+typedef struct { char a; short b; } struct_C_SHT;
+typedef struct { char a; int b; } struct_C_INT;
+typedef struct { char a; long b; } struct_C_LNG;
+typedef struct { char a; long long b; } struct_C_LNG_LNG;
+typedef struct { char a; float b; } struct_C_FLT;
+typedef struct { char a; double b; } struct_C_DBL;
+typedef struct { char a; BOOL b; } struct_C_BOOL;
 
 + (BOOL)getAlignment:(size_t *)alignmentPtr ofTypeEncoding:(char)encoding {
     BOOL success = YES;
@@ -717,13 +719,29 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
     Mocha *runtime = [Mocha runtimeWithContext:ctx];
     
     switch (typeEncoding) {
-        case _C_ID:    
+        case _C_ID:
         case _C_CLASS: {
             id __autoreleasing object = [runtime objectForJSValue:value];
-            *(void**)ptr = (__bridge void*)object;
+            *(void**)ptr = (__bridge void *)object;
             return YES;
         }
-        
+        case _C_PTR: {
+            id __autoreleasing object = [runtime objectForJSValue:value];
+            if ([object isKindOfClass:[MOPointerValue class]]) {
+                *(void**)ptr = [object pointerValue];
+            }
+            else if ([object isKindOfClass:[MOStruct class]]) {
+                JSObjectRef object = JSValueToObject(ctx, value, NULL);
+                NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:[fullTypeEncoding substringFromIndex:1]];
+                
+                NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[type UTF8String] storage:&ptr];
+                return numParsed;
+            }
+            else {
+                *(void**)ptr = (__bridge void *)object;
+            }
+            return YES;
+        }
         case _C_CHR:
         case _C_UCHR:
         case _C_SHT:
@@ -774,7 +792,7 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
             NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
             
             NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char*)[type UTF8String] storage:&ptr];
-            return numParsed;
+            return (numParsed > 0);
         }
         case _C_SEL: {
             NSString *str = MOJSValueToString(ctx, value, NULL);
@@ -789,30 +807,6 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
         case _C_BOOL: {
             bool b = JSValueToBoolean(ctx, value);
             *(bool*)ptr = b;
-            return YES;
-        }
-        case _C_PTR: {
-            id __autoreleasing object = [runtime objectForJSValue:value];
-            if ([object isKindOfClass:[NSNull class]]) {
-                *(void**)ptr = NULL;
-            }
-            else if ([object isKindOfClass:[MOPointerValue class]]) {
-                *(void**)ptr = [object pointerValue];
-            }
-            else if ([object isKindOfClass:[MOStruct class]]) {
-                if (!JSValueIsObject(ctx, value)) {
-                    return NO;
-                }
-                
-                JSObjectRef object = JSValueToObject(ctx, value, NULL);
-                NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:[fullTypeEncoding substringFromIndex:1]];
-                
-                NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[type UTF8String] storage:&ptr];
-                return numParsed;
-            }
-            else {
-                *(void**)ptr = (__bridge void *)object;
-            }
             return YES;
         }
     }
@@ -831,6 +825,12 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
         case _C_ID:    
         case _C_CLASS: {
             id __autoreleasing object = (__bridge id)(*(void**)ptr);
+            *value = [runtime JSValueForObject:object];
+            return YES;
+        }
+        case _C_PTR: {
+            void* pointer = *(void**)ptr;
+            MOPointerValue *object = [[MOPointerValue alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding];
             *value = [runtime JSValueForObject:object];
             return YES;
         }
@@ -870,13 +870,12 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
         case _C_STRUCT_B: {
             void *p = ptr;
             NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:fullTypeEncoding];
-            if (!type) {
-                // Bail if structure not found
+            if (type == nil) {
                 return NO;
             }
             
             NSInteger numParsed = [MOFunctionArgument structureToJSValue:value inContext:ctx cString:(char *)[type UTF8String] storage:&p];
-            return numParsed;
+            return (numParsed > 0);
         }
         case _C_SEL: {
             SEL sel = *(SEL*)ptr;
@@ -905,17 +904,6 @@ typedef    struct { char a; BOOL b; } struct_C_BOOL;
             *value = JSValueMakeString(ctx, jsName);
             JSStringRelease(jsName);
             
-            return YES;
-        }
-        case _C_PTR: {
-            if (ptr == NULL) {
-                *value = JSValueMakeNull(ctx);
-            }
-            else {
-                void* pointer = *(void**)ptr;
-                MOPointerValue *object = [[MOPointerValue alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding];
-                *value = [runtime JSValueForObject:object];
-            }
             return YES;
         }
     }

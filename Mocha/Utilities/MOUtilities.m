@@ -288,7 +288,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     BOOL blockCall = NO;
     NSArray *argumentEncodings = nil;
     MOFunctionArgument *returnValue = nil;
-    void *callAddress = NULL;
+    void* callAddress = NULL;
     NSUInteger callAddressArgumentCount = 0;
     BOOL variadic = NO;
     
@@ -306,18 +306,20 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         selector = [function selector];
         Class klass = [target class];
         
+        // Override for Distributed Objects
         if ([klass isSubclassOfClass:[NSDistantObject class]]) {
-            // Override for Distributed Objects
             return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
         }
         
-        if (selector == @selector(alloc)) {
+        // Override for Allocators
+        if (selector == @selector(alloc)
+            || selector == @selector(allocWithZone:))
+        {
             // Override for -alloc
             MOAllocator *allocator = [MOAllocator allocator];
             allocator.objectClass = klass;
             return [runtime JSValueForObject:allocator];
         }
-        
         if ([target isKindOfClass:[MOAllocator class]]) {
             klass = [target objectClass];
             target = [[target objectClass] alloc];
@@ -362,7 +364,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         callAddress = MOInvocationGetObjCCallAddressForArguments(argumentEncodings);
         
         if (variadic) {
-            if (argumentCount > 0 && !JSValueIsNull(ctx, arguments[argumentCount - 1])) {
+            if (argumentCount > 0) {
                 // add an argument for NULL
                 argumentCount++;
             }
@@ -468,7 +470,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             [args addObject:arg];
         }
         
-        argumentEncodings = args;
+        argumentEncodings = [args copy];
         
         // Function arguments are all arguments minus return value
         callAddressArgumentCount = [args count] - 1;
@@ -507,22 +509,21 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
         NSUInteger j = 0;
         
-        // ObjC calls include the target and selector as the first two arguments
         if (objCCall) {
+            // ObjC calls include the target and selector as the first two arguments
             args[0] = &ffi_type_pointer;
             args[1] = &ffi_type_pointer;
             values[0] = (void *)&target;
             values[1] = (void *)&selector;
             j = 2;
         }
-        
-        // Block calls include the block as the first argument
-        if (blockCall) {
+        else if (blockCall) {
+            // Block calls include the block as the first argument
             args[0] = &ffi_type_pointer;
             values[0] = (void *)&block;
             j = 1;
         }
-         
+        
         for (NSUInteger i=0; i<argumentCount; i++, j++) {
             JSValueRef jsValue = NULL;
             
@@ -532,9 +533,9 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
                 [arg setTypeEncoding:_C_ID];
             }
             else {
-                arg = [argumentEncodings objectAtIndex:j+1];
+                arg = [argumentEncodings objectAtIndex:(j + 1)];
             }
-                
+            
             if (objCCall && variadic && i == argumentCount - 1) {
                 // The last variadic argument in ObjC calls is nil (the sentinel value)
                 jsValue = NULL;
@@ -543,23 +544,23 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
                 jsValue = arguments[i];
             }
             
-            Mocha *runtime = [Mocha runtimeWithContext:ctx];
-            id object = [runtime objectForJSValue:jsValue];
-            
-            if ([arg typeEncoding] == _C_PTR) {
-                [arg allocateStorage];
-            }
-            
-            // Handle pointers
-            if ([object isKindOfClass:[MOPointer class]]) {
-                [arg setPointer:object];
+            if (jsValue != NULL) {
+                id object = [runtime objectForJSValue:jsValue];
                 
-                id objValue = [(MOPointer *)object value];
-                JSValueRef jsValue = [runtime JSValueForObject:objValue];
-                [arg setValueAsJSValue:jsValue context:ctx dereference:YES];
+                // Handle pointers
+                if ([object isKindOfClass:[MOPointer class]]) {
+                    [arg setPointer:object];
+                    
+                    id objValue = [(MOPointer *)object value];
+                    JSValueRef jsValue = [runtime JSValueForObject:objValue];
+                    [arg setValueAsJSValue:jsValue context:ctx dereference:YES];
+                }
+                else {
+                    [arg setValueAsJSValue:jsValue context:ctx];
+                }
             }
             else {
-                [arg setValueAsJSValue:jsValue context:ctx];
+                [arg setValueAsJSValue:NULL context:ctx];
             }
             
             args[j] = [arg ffiType];
@@ -572,11 +573,6 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     
     // Prep
     ffi_status prep_status = ffi_prep_cif(&cif, FFI_DEFAULT_ABI, (unsigned int)effectiveArgumentCount, [returnValue ffiType], args);
-    
-    // Allocate return value storage if it's a pointer
-    if ([returnValue typeEncoding] == _C_PTR) {
-        [returnValue allocateStorage];
-    }
     
     // Call
     if (prep_status == FFI_OK) {
