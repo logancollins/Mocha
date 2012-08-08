@@ -16,6 +16,7 @@
 #import "MOFunctionArgument.h"
 #import "MOUndefined.h"
 #import "MOJavaScriptObject.h"
+#import "MOPointerValue.h"
 #import "MOPointer_Private.h"
 
 #import "MOBridgeSupportController.h"
@@ -110,17 +111,6 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
         if ([object isKindOfClass:[MOBox class]]) {
             __unsafe_unretained id value = [object representedObject];
             [invocation setArgument:&value atIndex:argIndex];
-            //id representedObject = [object representedObject];
-            //if ([representedObject isKindOfClass:[MOBox class]]) {
-            //}
-            //else if ([object isKindOfClass:[MOFunction class]]) {
-            //    SEL selector = [(MOFunction *)object selector];
-            //    [invocation setArgument:&selector atIndex:argIndex];
-            //}
-            //else if ([[(MOPrivateObject *)object type] isEqualToString:@"pointer"]) {
-            //    void * pointer = [[(MOPrivateObject *)object object] pointerValue];
-            //    [invocation setArgument:&pointer atIndex:argIndex];
-            //}
         }
         
         // NSNumber
@@ -202,25 +192,16 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
         SEL selector = NULL;
         [invocation getReturnValue:&selector];
         
-        JSObjectRef object = [mocha newPrivateObject];
-        MOPrivateObject *private = JSObjectGetPrivate(object);
-        private.type = @"selector";
-        private.selector = selector;
-        
         returnValue = object;
     }*/
     // void *
-    /*else if (strcmp(returnType, @encode(void *)) == 0) {
+    else if (strcmp(returnType, @encode(void *)) == 0) {
         void *pointer = NULL;
         [invocation getReturnValue:&pointer];
         
-        JSObjectRef object = [mocha newPrivateObject];
-        MOPrivateObject *private = JSObjectGetPrivate(object);
-        private.type = @"pointer";
-        private.object = [NSValue valueWithPointer:pointer];
-        
-        returnValue = object;
-    }*/
+        MOPointerValue * __autoreleasing object = [[MOPointerValue alloc] initWithPointerValue:pointer typeEncoding:nil];
+        returnValue = (__bridge void *)object;
+    }
     // bool
     else if (strcmp(returnType, @encode(bool)) == 0
              || strcmp(returnType, @encode(_Bool)) == 0) {
