@@ -689,9 +689,12 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 #pragma mark Exceptions
 
 + (NSException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx {
+    NSString *error = nil;
     JSStringRef resultStringJS = JSValueToStringCopy(ctx, exception, NULL);
-    NSString *error = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, resultStringJS));
-    JSStringRelease(resultStringJS);
+    if (resultStringJS != NULL) {
+        error = (NSString *)CFBridgingRelease(JSStringCopyCFString(kCFAllocatorDefault, resultStringJS));
+        JSStringRelease(resultStringJS);
+    }
     
     if (JSValueGetType(ctx, exception) != kJSTypeObject) {
         NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:nil];
