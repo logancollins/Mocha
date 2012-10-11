@@ -1014,7 +1014,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "rm -r \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders/\"\nrm \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders\"\nrm -r \"${DSTROOT}\"\nmkdir -p \"${DSTROOT}/Library/Frameworks/\"\ncp -R \"${BUILT_PRODUCTS_DIR}/Mocha.framework\" \"${DSTROOT}/Library/Frameworks/\"\nchmod -R 755 \"${SRCROOT}/InstallPackage/Scripts/\"\npkgbuild --root \"${DSTROOT}\" \"${BUILT_PRODUCTS_DIR}/Mocha.pkg\" --identifier \"com.sunflowersw.Mocha\" --scripts \"${SRCROOT}/InstallPackage/Scripts\"";
+			shellScript = "rm -r \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders/\"\nrm \"${BUILT_PRODUCTS_DIR}/Mocha.framework/PrivateHeaders\"\nrm -rf \"${DSTROOT}\"\nmkdir -p \"${DSTROOT}/Library/Frameworks/\"\ncp -R \"${BUILT_PRODUCTS_DIR}/Mocha.framework\" \"${DSTROOT}/Library/Frameworks/\"\nchmod -R 755 \"${SRCROOT}/InstallPackage/Scripts/\"\npkgbuild --root \"${DSTROOT}\" \"${BUILT_PRODUCTS_DIR}/Mocha.pkg\" --identifier \"com.sunflowersw.Mocha\" --scripts \"${SRCROOT}/InstallPackage/Scripts\"";
 		};
 		028D628415C064C400C12842 /* Generate Documentation */ = {
 			isa = PBXShellScriptBuildPhase;
