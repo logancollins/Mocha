@@ -604,14 +604,14 @@
 			path = JavaScriptCore;
 			sourceTree = "<group>";
 		};
-		EAA34FCA15647AD700B62244 /* libMocha (iOS) */ = {
+		EAA34FCA15647AD700B62244 /* libMocha */ = {
 			isa = PBXGroup;
 			children = (
 				EA33A2741569B77D00B4A27D /* JavaScriptCore */,
 				EA33A2501569B47D00B4A27D /* libffi */,
 				EAA34FCB15647AD700B62244 /* Supporting Files */,
 			);
-			path = "libMocha (iOS)";
+			path = libMocha;
 			sourceTree = "<group>";
 		};
 		EAA34FCB15647AD700B62244 /* Supporting Files */ = {
@@ -626,7 +626,7 @@
 			isa = PBXGroup;
 			children = (
 				EAA45E0C155CE44B00F93E40 /* Framework */,
-				EAA34FCA15647AD700B62244 /* libMocha (iOS) */,
+				EAA34FCA15647AD700B62244 /* libMocha */,
 				EAA45E74155EE5AF00F93E40 /* mocha */,
 				023EB37B1587A2AE0072EC4E /* InstallPackage */,
 				02BF151215C096070004CA2C /* UnitTests */,
