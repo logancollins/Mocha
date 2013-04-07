@@ -287,10 +287,14 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         selector = [function selector];
         Class klass = [target class];
         
+        #if TARGET_OS_IPHONE
+        // iOS has no NSDistantObject
+        #else
         // Override for Distributed Objects
         if ([klass isSubclassOfClass:[NSDistantObject class]]) {
             return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
         }
+        #endif
         
         // Override for Allocators
         if (selector == @selector(alloc)
