@@ -91,7 +91,7 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
     
     NSUInteger methodArgumentCount = [methodSignature numberOfArguments] - 2;
     if (methodArgumentCount != argumentCount) {
-        NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), methodArgumentCount, (methodArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+        NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), (unsigned long)methodArgumentCount, (methodArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
         NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
         if (exception != NULL) {
             *exception = [runtime JSValueForObject:e];
@@ -356,7 +356,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if ((variadic && (callAddressArgumentCount > argumentCount))
             || (!variadic && (callAddressArgumentCount != argumentCount)))
         {
-            NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
@@ -386,7 +386,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         callAddressArgumentCount = [argumentEncodings count] - 2;
         
         if (callAddressArgumentCount != argumentCount) {
-            NSString *reason = [NSString stringWithFormat:@"Block requires %lu %@, but JavaScript passed %zd %@", callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSString *reason = [NSString stringWithFormat:@"Block requires %lu %@, but JavaScript passed %zd %@", (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
@@ -462,7 +462,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if ((variadic && (callAddressArgumentCount > argumentCount))
             || (!variadic && (callAddressArgumentCount != argumentCount)))
         {
-            NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %zd %@", functionName, callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
+            NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %zd %@", functionName, (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
                 *exception = [runtime JSValueForObject:e];
