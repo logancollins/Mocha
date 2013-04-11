@@ -287,14 +287,12 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         selector = [function selector];
         Class klass = [target class];
         
-        #if TARGET_OS_IPHONE
-        // iOS has no NSDistantObject
-        #else
+#if !TARGET_OS_IPHONE
         // Override for Distributed Objects
         if ([klass isSubclassOfClass:[NSDistantObject class]]) {
             return MOSelectorInvoke(target, selector, ctx, argumentCount, arguments, exception);
         }
-        #endif
+#endif
         
         // Override for Allocators
         if (selector == @selector(alloc)
@@ -308,12 +306,6 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if ([target isKindOfClass:[MOAllocator class]]) {
             klass = [target objectClass];
             target = [[target objectClass] alloc];
-        }
-        
-        // Make sure autorelease is ignored, since we do our own reference counting.
-        if (selector == NSSelectorFromString(@"autorelease")) {
-            NSLog(@"Ignoring autorelease call on %@", target);
-            return [runtime JSValueForObject:target];
         }
         
         Method method = NULL;
