@@ -132,6 +132,8 @@
 		EA33A2E31569BB8500B4A27D /* NSObject+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EABA262A15658AA3005CF076 /* NSObject+MochaAdditions.m */; };
 		EA33A2E41569BB8800B4A27D /* NSObject+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262915658AA3005CF076 /* NSObject+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA33A2E51569BB9300B4A27D /* NSOrderedSet+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EABA262415657747005CF076 /* NSOrderedSet+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		EA4CBC7A17168A36006C073D /* MOPointer.m in Sources */ = {isa = PBXBuildFile; fileRef = 02A9EB1015C84D51005C0E8C /* MOPointer.m */; };
+		EA4CBC7B17168A3F006C073D /* MOAllocator.m in Sources */ = {isa = PBXBuildFile; fileRef = 02B1AE1A15C07A80000E2008 /* MOAllocator.m */; };
 		EA78AF6215D0CFDA000A01A9 /* MOPointer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EA78AF6115D0CFDA000A01A9 /* MOPointer_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA78AF6315D0CFDC000A01A9 /* MOPointer_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EA78AF6115D0CFDA000A01A9 /* MOPointer_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34F9C156304A800B62244 /* MOUndefined.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -417,9 +419,9 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D2CB84A1711A12200AFA330 /* libstdc++.dylib in Frameworks */,
 				EAA34FC915647AD700B62244 /* Foundation.framework in Frameworks */,
 				EA33A29E1569B81800B4A27D /* libiOSJavaScriptCore.a in Frameworks */,
+				2D2CB84A1711A12200AFA330 /* libstdc++.dylib in Frameworks */,
 				2D2CB84C1711A35000AFA330 /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1168,6 +1170,8 @@
 				2D75F67B1711975C00876CCF /* prep_cif.c in Sources */,
 				2D75F67C1711975C00876CCF /* raw_api.c in Sources */,
 				2D75F67D1711975C00876CCF /* types.c in Sources */,
+				EA4CBC7A17168A36006C073D /* MOPointer.m in Sources */,
+				EA4CBC7B17168A3F006C073D /* MOAllocator.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1365,9 +1369,9 @@
 					"\"$(SDKROOT)/../../../../iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/Mocha;
+				PRIVATE_HEADERS_FOLDER_PATH = Headers/Mocha;
 				PRODUCT_NAME = Mocha;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/Mocha;
+				PUBLIC_HEADERS_FOLDER_PATH = Headers/Mocha;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 			};
@@ -1388,9 +1392,9 @@
 					"\"$(SDKROOT)/../../../../iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib\"",
 				);
 				OTHER_LDFLAGS = "-ObjC";
-				PRIVATE_HEADERS_FOLDER_PATH = /usr/local/include/Mocha;
+				PRIVATE_HEADERS_FOLDER_PATH = Headers/Mocha;
 				PRODUCT_NAME = Mocha;
-				PUBLIC_HEADERS_FOLDER_PATH = /usr/local/include/Mocha;
+				PUBLIC_HEADERS_FOLDER_PATH = Headers/Mocha;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
 				VALIDATE_PRODUCT = YES;
