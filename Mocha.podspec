@@ -3,7 +3,7 @@ Pod::Spec.new do |s|
   s.version      = "0.0.1"
   s.summary      = "Objective-C / JavaScript Bridge and Scripting Environment."
   s.description  = "Mocha is a runtime that bridges JavaScript to Objective-C. It is built on top of JavaScriptCore, the component of WebKit responsible for parsing and evaluating JavaScript code, and BridgeSupport, which enables libraries to expose the definition of their C structures and functions for use at run-time (as opposed to compile-time)."
-  s.homepage     = "https://github.com/Ashton-W/Mocha"
+  s.homepage     = "https://github.com/logancollins/Mocha"
   s.license      = {
     :type => 'Apache License, Version 2.0',
     :text => <<-LICENSE
@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
     LICENSE
   }
   s.author       = { "Logan Collins" => "loganscollins@gmail.com" }
-  s.source       = { :git => "https://github.com/Ashton-W/Mocha.git", :tag => s.version.to_s }
+  s.source       = { :git => "https://github.com/logancollins/Mocha.git", :tag => s.version.to_s }
   s.platform = :ios
   s.ios.deployment_target = '5.0'
   s.source_files = 'Mocha/**/*.{h,m}', 'Mocha/*.{h,m}'
