@@ -1,0 +1,509 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Mocha by logancollins</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Mocha</h1>
+        <p>Objective-C / JavaScript Bridge and Scripting Environment</p>
+
+        <p class="view"><a href="https://github.com/logancollins/Mocha">View the Project on GitHub <small>logancollins/Mocha</small></a></p>
+
+
+        <ul>
+          <li><a href="https://github.com/logancollins/Mocha/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/logancollins/Mocha/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/logancollins/Mocha">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>
+<a name="mocha" class="anchor" href="#mocha"><span class="octicon octicon-link"></span></a>Mocha</h1>
+
+<h3>
+<a name="objective-c--javascript-bridge-and-scripting-environment" class="anchor" href="#objective-c--javascript-bridge-and-scripting-environment"><span class="octicon octicon-link"></span></a>Objective-C / JavaScript Bridge and Scripting Environment</h3>
+
+<p>Mocha is a runtime that bridges JavaScript to Objective-C. It is built on top of JavaScriptCore, the component of WebKit responsible for parsing and evaluating JavaScript code, and BridgeSupport, which enables libraries to expose the definition of their C structures and functions for use at run-time (as opposed to compile-time).</p>
+
+<h2>
+<a name="usage" class="anchor" href="#usage"><span class="octicon octicon-link"></span></a>Usage</h2>
+
+<p>Instances of the <code>Mocha</code> class are representations of a runtime. A runtime can be used either through shared instance (returned from <code>+sharedRuntime</code>) or by creating an instance by calling <code>-init</code>.</p>
+
+<h2>
+<a name="values-and-boxed-objects" class="anchor" href="#values-and-boxed-objects"><span class="octicon octicon-link"></span></a>Values and Boxed Objects</h2>
+
+<p>When arguments are passed between the Objective-C and JavaScript sides of the bridge they may be implicitly converted to an appropriate type counterpart or boxed within an opaque proxy object. The following type conventions are in effect when moving between each side of the bridge:</p>
+
+<h3>
+<a name="objective-c-to-javascript" class="anchor" href="#objective-c-to-javascript"><span class="octicon octicon-link"></span></a>Objective-C to JavaScript</h3>
+
+<ul>
+<li>
+<code>nil</code> is converted to <code>null</code>
+</li>
+<li>
+<code>MOUndefined</code> is converted to <code>undefined</code>
+</li>
+<li>
+<code>char*</code> is converted to <code>String</code>
+</li>
+<li>
+<strong>Objective-C methods</strong> are converted to <code>MOMethod</code>, and are callable</li>
+<li>
+<strong>Blocks</strong> are boxed within an opaque <code>Object</code> type, and are callable</li>
+<li>
+<strong>C functions</strong> are boxed within an opaque <code>Object</code> type, and are callable</li>
+<li>
+<strong>C structs</strong> are boxed within an opaque <code>Object</code> type, allowing direct access to members in a dictionary-like manner.</li>
+<li>
+<strong>C numeric primitives</strong> (<code>int</code>, <code>long</code>, <code>short</code>, <code>char</code>, <code>float</code>, <code>double</code>, etc.) are converted to <code>Number</code>
+</li>
+<li>
+<code>bool</code> and <code>_Bool</code> are converted to <code>Boolean</code>
+</li>
+<li>
+<strong>Pointers</strong> are boxed within an opaque <code>Object</code> type</li>
+<li>
+<strong>All other Objective-C objects</strong> are boxed within an opaque <code>Object</code> type. This type can be converted to <code>String</code> or <code>Number</code> from within JavaScript. <code>NSString</code> instances will convert to <code>String</code> appropriately. <code>NSNumber</code> instances will convert to <code>Number</code> appropriately. All other conversions will use the <code>-description</code> method of the <code>NSObject</code> subclass.</li>
+</ul><p>Note: <code>BOOL</code>, unlike <code>bool</code>, is converted to <code>Number</code>, as <code>BOOL</code> is typedef'd as an <code>unsigned char</code> in Objective-C.</p>
+
+<h3>
+<a name="javascript-to-objective-c" class="anchor" href="#javascript-to-objective-c"><span class="octicon octicon-link"></span></a>JavaScript to Objective-C</h3>
+
+<ul>
+<li>
+<code>null</code> is converted to <code>nil</code> (when bare) or <code>NSNull</code> (when placed in a container)</li>
+<li>
+<code>undefined</code> is converted to <code>MOUndefined</code>
+</li>
+<li>
+<code>String</code> is converted to <code>NSString</code> or <code>char*</code>, depending on context</li>
+<li>
+<code>Number</code> is converted to <code>NSNumber</code> or a <strong>C numeric primitive</strong>, depending on context</li>
+<li>
+<code>Boolean</code> is converted to <code>NSNumber</code>, <code>bool</code>, or <code>_Bool</code>, depending on context</li>
+<li>
+<code>Array</code> is converted to <code>NSArray</code>
+</li>
+<li>
+<strong>JavaScript functions</strong> are boxed within an opaque class</li>
+<li>
+<strong>All boxed types</strong> are unboxed</li>
+<li>All other pure <code>Object</code> types are converted to <code>NSDictionary</code>
+</li>
+</ul><h2>
+<a name="callables" class="anchor" href="#callables"><span class="octicon octicon-link"></span></a>Callables</h2>
+
+<h3>
+<a name="functions-methods-and-blocks-oh-my" class="anchor" href="#functions-methods-and-blocks-oh-my"><span class="octicon octicon-link"></span></a>Functions, Methods, and Blocks… Oh My!</h3>
+
+<p>All three of these constructs are automatically converted across the bridge. The specifics of how each of them are boxed is different, but the end result is the same: All three are available to be called from within the runtime as if they were a normal JavaScript function.</p>
+
+<h4>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+// ObjC
+typedef NSString * (^UppercaseBlock)(NSString *);
+UppercaseBlock toUppercaseBlock = [myObject toUppercaseBlock];
+toUppercaseBlock(@"Hello, World!");
+&gt;&gt;&gt; "HELLO, WORLD!"
+
+// JavaScript
+var toUppercaseBlock = myObject.toUppercaseBlock();
+toUppercaseBlock("Hello, World!");
+&gt;&gt;&gt; "HELLO, WORLD!"
+</pre>
+
+<h3>
+<a name="arguments" class="anchor" href="#arguments"><span class="octicon octicon-link"></span></a>Arguments</h3>
+
+<p>Arguments to boxed callables are automatically converted when crossing the bridge. Care is taken to automatically allocate storage space for return values and maintain type consistency between the C, Objective-C, and JavaScript layers.</p>
+
+<p>Callables that return other callables (e.g. a block that returns another block) or take callables as arguments also work as expected.</p>
+
+<p>Variable-argument functions work as expected. Objective-C methods that require a terminating sentinel (through the <code>NS_REQUIRES_NIL_TERMINATION</code> compiler attribute) <strong>do not</strong> require a trailing <code>null</code>.</p>
+
+<h4>
+<a name="example-1" class="anchor" href="#example-1"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+// ObjC
+NSArray *array = [NSArray arrayWithObjects:first, second, third, nil];
+
+// JavaScript
+var array = NSArray.arrayWithObjects_(first, second, third);
+</pre>
+
+<p>Since JavaScript is a dynamic, weak, duck typed language, type safety is key. Mocha will throw an exception if a callable receives more or fewer arguments than is expected, but the actual type of those arguments is mostly left up to the user. The runtime will attempt to convert the JavaScript arguments to the appropriate type as best it can.</p>
+
+<p><strong>This is an important note:</strong> While normal JavaScript functions can have optional arguments, callables provided from the bridge must receive the exact number of arguments that are expected. (Except in the case of variadic functions, in which case the <em>minimum</em> number of arguments needed for calling are required.)</p>
+
+<h3>
+<a name="objective-c-selectors" class="anchor" href="#objective-c-selectors"><span class="octicon octicon-link"></span></a>Objective-C Selectors</h3>
+
+<p>Objective-C methods are exposed as properties of the object's opaque JavaScript proxy. When a method is invoked, it is automatically converted to the appropriate selector on the Objective-C side of the bridge, and all arguments are converted to the appropriate types.</p>
+
+<p>Method name conversion follow a similar pattern to PyObjC. The following steps are taken when converting a selector name to the JavaScript property name:</p>
+
+<ul>
+<li>All colons are converted to underscores.</li>
+<li>Each component of the selector is concatenated into a single string with no separation.</li>
+</ul><p>As such, a selector such as <code>executeOperation:withObject:error:</code> is converted to the function name <code>executeOperation_withObject_error_()</code>. The reverse is done to convert the property name back into an Objective-C selector.</p>
+
+<p>If you wish to change this behavior (for example, to shorten an Objective-C method name for ease of use), you can. Use the <code>+selectorForMochaPropertyName:</code> method, defined within a category on NSObject. Objects implementing this method can return the selector for a give JavaScript property name, which will cause the runtime to forward invocations of that property to the appropriate method selector.</p>
+
+<h4>
+<a name="example-2" class="anchor" href="#example-2"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+// ObjC
+@implementation MyClass
+…
+
++ (SEL)selectorForMochaPropertyName:(NSString *)propertyName; {
+    if ([propertyName isEqualToString:@"someMethod") {
+        return @selector(someMethodTakingArgument:otherArgument:)
+    }
+    return [super selectorForMochaPropertyName:propertyName];
+}
+
+@end
+
+// JavaScript
+myObject.someMethod(argument, otherArgument);
+</pre>
+
+<h3>
+<a name="objective-c-properties" class="anchor" href="#objective-c-properties"><span class="octicon octicon-link"></span></a>Objective-C Properties</h3>
+
+<p>Objective-C properties behave as they should on the JavaScript side of the bridge. Invoking a property will immediately return its value (as opposed to methods, which return a callable object). A property can also be set using the normal setter syntax. For this to work, the property must be declared using the Objective-C <a href="https://github.com/property" class="user-mention">@property</a> syntax.</p>
+
+<h4>
+<a name="example-3" class="anchor" href="#example-3"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+// JavaScript
+myObject.name;
+&gt;&gt;&gt; "Foobar"
+
+myObject.name = "Baz";
+
+myObject.name;
+&gt;&gt;&gt; "Baz";
+</pre>
+
+<h3>
+<a name="exposing-objective-c-methods" class="anchor" href="#exposing-objective-c-methods"><span class="octicon octicon-link"></span></a>Exposing Objective-C methods</h3>
+
+<p>By default, all methods and properties of an Objective-C object crossing the bridge are available to be invoked. If you wish to specifically exclude methods from invocation on the JavaScript side of the bridge, use the <code>+isSelectorExcludedFromMochaScript:</code> method. Objects implementing this method can return <code>YES</code> for any selector that should not be invoked from the bridge.</p>
+
+<h4>
+<a name="example-4" class="anchor" href="#example-4"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+// ObjC
+@implementation MyClass
+…
+
++ (BOOL)isSelectorExcludedFromMochaScript:(SEL)selector {
+    if (selector == @selector(someMethod)) {
+        return YES;
+    }
+    return [super isSelectorExcludedFromMochaScript:selector];
+}
+
+@end
+
+// JavaScript
+var result = myObject.someMethod();
+&gt;&gt;&gt; "MOJavaScriptException: ReferenceError: Can't find variable: someMethod"
+</pre>
+
+<h2>
+<a name="frameworks" class="anchor" href="#frameworks"><span class="octicon octicon-link"></span></a>Frameworks</h2>
+
+<p>Frameworks that expose BridgeSupport information (as all public OS X frameworks do) can be imported through the use of the <code>framework</code> built-in function.</p>
+
+<h4>
+<a name="example-5" class="anchor" href="#example-5"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+AVAsset.assetWithURL_(url);
+&gt;&gt;&gt; "MOJavaScriptException: ReferenceError: Can't find variable: AVAsset"
+
+framework('AVFoundation');
+
+AVAsset.assetWithURL_(url);
+&gt;&gt;&gt; "&lt;AVURLAsset: 0x7fe803ce8340&gt;"
+</pre>
+
+<p>On OS X, the following frameworks are imported automatically: Foundation, CoreGraphics.</p>
+
+<h2>
+<a name="globals" class="anchor" href="#globals"><span class="octicon octicon-link"></span></a>Globals</h2>
+
+<h3>
+<a name="global-objects" class="anchor" href="#global-objects"><span class="octicon octicon-link"></span></a>Global Objects</h3>
+
+<p>Arbitrary Objective-C objects and methods can be exposed as global objects to the runtime without needing to declare BridgeSupport information. The <code>Mocha</code> class is a fully Key-Value Coding compliant container for just this purpose. Calling <code>-valueForKey:</code> and <code>-setValue:forKey:</code> exposes an object to the runtime, assuming it can be boxed as an appropriate JavaScript type (see above).</p>
+
+<h4>
+<a name="example-6" class="anchor" href="#example-6"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+// ObjC
+Mocha *runtime = [Mocha sharedRuntime];
+MyClass *object = [[[MyClass alloc] init];
+[runtime setValue:object forKey:@"MyObject"];
+
+// JavaScript
+var result = MyObject.someMethod();
+</pre>
+
+<h3>
+<a name="global-functions" class="anchor" href="#global-functions"><span class="octicon octicon-link"></span></a>Global Functions</h3>
+
+<p>To expose arbitrary global functions to the runtime, use the <code>MOMethod</code> class. Instances of the class keep reference to a target object and Objective-C selector, which can be invoked dynamically by the runtime whenever the method is called on the JavaScript side of the bridge. Like all other objects, methods can be exposed using the <code>-valueForKey:</code> and <code>-setValue:forKey:</code> methods of the <code>Mocha</code> class.</p>
+
+<h4>
+<a name="example-7" class="anchor" href="#example-7"><span class="octicon octicon-link"></span></a>Example:</h4>
+
+<pre>
+// ObjC
+Mocha *runtime = [Mocha sharedRuntime];
+MOMethod *method = [MOMethod methodWithTarget:myObject selector:@selector(someMethod)];
+[runtime setValue:method forKey:@"someMethod"];
+
+// JavaScript
+var result = someMethod();
+</pre>
+
+<h2>
+<a name="pointers" class="anchor" href="#pointers"><span class="octicon octicon-link"></span></a>Pointers</h2>
+
+<p>Some C functions and Cocoa methods expect pointers to types. This introduces an issue to bridged languages that do not have the concept of pointers, like JavaScript. The runtime solves this by exposing a mechanism for creating pointers to values explicitly.</p>
+
+<p>Creating a pointer will wrap a value in an opaque container, which will be passed properly to functions and methods which expect a pointer type.</p>
+
+<p>Pointer arguments typically come in one of three flavors:</p>
+
+<ul>
+<li>
+<code>in</code>, where the value is simply passed by reference</li>
+<li>
+<code>out</code>, where the function or method may modify the value of the pointer on output</li>
+<li>
+<code>inout</code>, a combination of <strong>in</strong> and <strong>out</strong>
+</li>
+</ul><h3>
+<a name="in-arguments" class="anchor" href="#in-arguments"><span class="octicon octicon-link"></span></a>In Arguments</h3>
+
+<p>In arguments are just normal by-reference value arguments. As such, the runtime handles these transparently. If a function or method expects a pointer to an NSRect structure, you can pass it along like so:</p>
+
+<h4>
+<a name="example-8" class="anchor" href="#example-8"><span class="octicon octicon-link"></span></a>Example</h4>
+
+<pre>
+// ObjC
+@interface MyClass : NSObject
+- (CGFloat)getWidthOfRect:(const NSRect *)rect;
+@end
+
+// JavaScript
+var rect = NSMakeRect(0.0, 0.0, 100.0, 100.0:
+var ptr = MOPointer.alloc().initWithValue_(rect);
+
+myObject.getWidthOfRect_(ptr);
+&gt;&gt;&gt; 100.0;
+</pre>
+
+<h3>
+<a name="out-arguments" class="anchor" href="#out-arguments"><span class="octicon octicon-link"></span></a>Out Arguments</h3>
+
+<p>Out arguments are commonly used to return more than one value from a function or method. Cocoa uses this paradigm often to return error objects in the case where an operation fails.</p>
+
+<p>NSScanner also uses this paradigm for its scanning methods. The -scanFloat: method returns a BOOL indicating whether a value was successfully scanned. The argument passed is a pointer to a value that will be modified on the method's return.</p>
+
+<h4>
+<a name="example-9" class="anchor" href="#example-9"><span class="octicon octicon-link"></span></a>Example</h4>
+
+<pre>
+// JavaScript
+var scanner = NSScanner.alloc().initWithString_("3.14159");
+var ptr = MOPointer.alloc().init();
+
+scanner.scanFloat_(ptr);
+
+ptr.value();
+&gt;&gt;&gt; 3.14159
+</pre>
+
+<h3>
+<a name="inout-arguments" class="anchor" href="#inout-arguments"><span class="octicon octicon-link"></span></a>Inout arguments</h3>
+
+<p>Inout argument don't require anything special. They are just a combination of the two previous types of arguments.</p>
+
+<h2>
+<a name="object-subscripting" class="anchor" href="#object-subscripting"><span class="octicon octicon-link"></span></a>Object Subscripting</h2>
+
+<p>Objects that support indexed-access (acting as array-types) or keyed-access (acting as dictionary-types) can support the JavaScript subscripting syntax for accessing values.</p>
+
+<h3>
+<a name="indexed-subscripting" class="anchor" href="#indexed-subscripting"><span class="octicon octicon-link"></span></a>Indexed Subscripting</h3>
+
+<p>Implementing <code>-objectForIndexedSubscript:</code> allows an object to use the <code>object[idx]</code> syntax for read-only access to values. For read-write access, you should also implement the <code>-setObject:forIndexedSubscript:</code> method. Both of these methods are declared within an informal protocol defined in MochaRuntime.h.</p>
+
+<p><code>NSArray</code> and <code>NSMutableArray</code>, and <code>NSOrderedSet</code> and <code>NSMutableOrderedSet</code> automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting the Objective-C indexed subscripting syntax on 10.8+).</p>
+
+<h3>
+<a name="keyed-subscripting" class="anchor" href="#keyed-subscripting"><span class="octicon octicon-link"></span></a>Keyed Subscripting</h3>
+
+<p>Implementing <code>-objectForKeyedSubscript:</code> allows an object to use the <code>object['key']</code> syntax for read-only access to values. For read-write access, you should also implement the <code>-setObject:forKeyedSubscript:</code> method. Both of these methods are declared within an informal protocol defined in MochaRuntime.h.</p>
+
+<p><code>NSDictionary</code> and <code>NSMutableDictionary</code> automatically adopt this syntax (through a swizzled category on 10.7 and before, or through automatically supporting the Objective-C keyed subscripting syntax on 10.8+).</p>
+
+<h2>
+<a name="introspecting-the-objective-c-runtime" class="anchor" href="#introspecting-the-objective-c-runtime"><span class="octicon octicon-link"></span></a>Introspecting the Objective-C Runtime</h2>
+
+<p>Mocha adds several facilities for introspecting the Objective-C runtime. The built-in object <code>objc</code> can be used to query various attributes about the Objective-C runtime. Use the <code>-classes</code> method to get a list of classes registered with the runtime, or <code>-protocols</code> method to get a list of protocols registered with the runtime.</p>
+
+<p>An NSObject category is also added by the Mocha runtime to add additional introspection abilities to class objects. Use the <code>+mocha</code> method on any class object to get an MOClassDescription object, which is used in describing the class's abilities and layout.</p>
+
+<p>MOClassDescription gives access to a class's instance variables, class and instance methods, properties and conformed protocols. Use the <code>+ancestors</code> method to get a list of a class's superclass chain. Use the <code>+classMethods</code>, <code>+instanceMethods</code>, <code>+properties</code>, and <code>+protocols</code> methods to query information about a class's class methods, instance methods, properties, and protocols, respectively. Note that these methods only return methods, properties and protocols defined by the class itself. As a convenience, Mocha also provides the following methods to query for the entire superclass chain: <code>+classMethodsWithAncestors</code>, <code>+instanceMethodsWithAncestors</code>, <code>+propertiesWithAncestors</code>, and <code>+protocolsWithAncestors</code>.</p>
+
+<p>In addition, MOClassDescription has the ability to add methods to existing classes, or even to define and register completly new classes from within the Mocha runtime.</p>
+
+<p>Facilities are also provided for introspecting Objective-C protocols through the MOProtocolDescription class in a similar way to class introspection. Similarly, new protocols can be defined and existing protocols can be amended.</p>
+
+<h2>
+<a name="exceptions" class="anchor" href="#exceptions"><span class="octicon octicon-link"></span></a>Exceptions</h2>
+
+<p>Exceptions in Objective-C code can be automatically caught by JavaScript exception handlers. The value of the <code>err</code> argument within the <code>try {} catch (err) {}</code> block will be a boxed <code>NSException</code> instance.</p>
+
+<p>JavaScript exceptions that are uncaught will be converted to <code>NSException</code> objects with a name of <code>MOJavaScriptException</code>. They can be caught in an Objective-C <code>@try {} @catch (NSException *e) {}</code> block just like any other exception.</p>
+
+<p>Mocha exceptions that do not originate from within the JavaScript environment carry the name <code>MORuntimeException</code>, and generally indicate a more serious failure caused by an issue within the runtime.</p>
+
+<h2>
+<a name="mocha-the-mocha-interpreter" class="anchor" href="#mocha-the-mocha-interpreter"><span class="octicon octicon-link"></span></a>mocha: The Mocha Interpreter</h2>
+
+<p><code>mocha</code> is the command-line interpreter for Mocha. It has two modes: script and interactive. Its scripting mode is similar to <code>python</code> and <code>ruby</code>. Its interactive mode is similar to <code>python</code>, <code>irb</code>, and <code>jsc</code>.</p>
+
+<h3>
+<a name="interactive" class="anchor" href="#interactive"><span class="octicon octicon-link"></span></a>Interactive</h3>
+
+<p>Interactive mode adds the following set of built-in functions:</p>
+
+<ul>
+<li>
+<code>exit()</code> – Exits the interpreter</li>
+<li>
+<code>gc()</code> – Instructs the JavaScript garbage collector to perform a collection</li>
+<li>
+<code>checkSyntax(string)</code> – Validates the syntax of <code>string</code>, returning a <code>Boolean</code>
+</li>
+</ul><h3>
+<a name="scripting" class="anchor" href="#scripting"><span class="octicon octicon-link"></span></a>Scripting</h3>
+
+<p>You can use <code>mocha</code> the same way you use other scripting envorinments. Add a shebang declaration to the top of a script to enable its use on the command line, like so:</p>
+
+<h3>
+<a name="example-10" class="anchor" href="#example-10"><span class="octicon octicon-link"></span></a>Example</h3>
+
+<pre>
+#!/usr/local/bin/mocha
+
+var d = {};
+d['foo'] = 'bar';
+d['baz'] = 1.0;
+d['bin'] = ['foo', 'bar', 'baz'];
+
+print(d);
+</pre>
+
+<h2>
+<a name="using-mocha-with-os-x" class="anchor" href="#using-mocha-with-os-x"><span class="octicon octicon-link"></span></a>Using Mocha with OS X</h2>
+
+<p>To use Mocha in your OS X project, follow these steps:</p>
+
+<ol>
+<li>Add the <strong>Mocha project</strong> to your project (by dragging the *.xcodeproj file to your Frameworks group in Xcode).</li>
+<li>Open your target's <strong>Build Phases</strong>, and under the <strong>Link Binary With Libraries</strong> build phase, click Add and choose <strong>Mocha.framework</strong> from the workspace.</li>
+<li>Build!</li>
+</ol><h2>
+<a name="using-mocha-with-ios" class="anchor" href="#using-mocha-with-ios"><span class="octicon octicon-link"></span></a>Using Mocha with iOS</h2>
+
+<p>Mocha works with iOS, too! libMocha is a static library built for iOS targets. To use libMocha in your project, follow these steps:</p>
+
+<ol>
+<li>Add the <strong>Mocha project</strong> to your project (by dragging the *.xcodeproj file to your Frameworks group in Xcode).</li>
+<li>Open your target's <strong>Build Phases</strong>, and under the <strong>Link Binary With Libraries</strong> build phase, click Add and choose <strong>libMocha</strong> from the workspace.</li>
+<li>Next, add the following system libraries the same way: <strong>libstdc++.dylib</strong>, <strong>libicucore.dylib</strong>.</li>
+<li>Open your target's <strong>Build Settings</strong> and add <strong>-ObjC</strong> to your <strong>Other Linker Flags</strong>.</li>
+<li>Under your <strong>Header Search Paths</strong> add <strong>${BUILT_PRODUCTS_DIR}/usr/local/include</strong> and <strong>"${SRCROOT}/(path to Mocha's source folder)/libMocha (iOS)/JavaScriptCore"</strong>
+</li>
+<li>Build!</li>
+</ol><h2>
+<a name="to-dos" class="anchor" href="#to-dos"><span class="octicon octicon-link"></span></a>To Do's</h2>
+
+<p>The following items are currently on the docket for future development:</p>
+
+<ul>
+<li>
+<del>iOS Support</del> (Added 5/20/12)</li>
+<li>
+<del>Runtime support for creating and modifying Objective-C classes</del> (Added 6/13/12)</li>
+<li>Objective-J/JSTalk-style syntax for defining Objective-C classes and categories</li>
+</ul><h2>
+<a name="code-usage" class="anchor" href="#code-usage"><span class="octicon octicon-link"></span></a>Code Usage</h2>
+
+<p>Mocha utilizes code and ideas from the following projects:</p>
+
+<ul>
+<li>PyObjC (<a href="http://pyobjc.sourceforge.net/">http://pyobjc.sourceforge.net/</a>, MIT license)</li>
+<li>JSCocoa (<a href="http://inexdo.com/JSCocoa">http://inexdo.com/JSCocoa</a>, MIT license)</li>
+<li>JavaScriptCore (<a href="http://www.webkit.org/projects/javascript/index.html">http://www.webkit.org/projects/javascript/index.html</a>, WebKit license).</li>
+<li>libffi-iphone (<a href="https://github.com/parmanoir/libffi-iphone">https://github.com/parmanoir/libffi-iphone</a>, MIT license)</li>
+<li>JavaScriptCore-iOS (<a href="http://www.phoboslab.org/log/2011/06/javascriptcore-project-files-for-ios">http://www.phoboslab.org/log/2011/06/javascriptcore-project-files-for-ios</a>, WebKit license).</li>
+</ul><p>Files are marked appropriately when code it utilized in complete or near-complete duplicate from these awesome projects.</p>
+
+<h2>
+<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+
+<p>Copyright 2012 Logan Collins</p>
+
+<p>Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at</p>
+
+<pre><code>http://www.apache.org/licenses/LICENSE-2.0
+</code></pre>
+
+<p>Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/logancollins">logancollins</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
