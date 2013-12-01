@@ -10,7 +10,7 @@
 #import <Mocha/Mocha.h>
 
 
-@interface MOCInterpreter : NSObject <MochaDelegate>
+@interface MOCInterpreter : NSObject
 
 - (void)run;
 

@@ -7,14 +7,11 @@
 //
 
 #import "MOClosure.h"
-#import "MOClosure_Private.h"
 
 #import "MOUtilities.h"
 
 
 @implementation MOClosure
-
-@synthesize block=_block;
 
 //
 // The following two structs are taken from clang's source.
@@ -33,10 +30,6 @@ struct Block_literal {
     void *invoke;
     struct Block_descriptor *descriptor;
 };
-
-+ (MOClosure *)closureWithBlock:(id)block {
-    return [[self alloc] initWithBlock:block];
-}
 
 - (id)initWithBlock:(id)block {
     self = [super init];

@@ -7,13 +7,11 @@
 //
 
 #import <Mocha/MochaDefines.h>
-#import <Mocha/MochaRuntime.h>
+
+#import <Mocha/MOJavaScriptFunction.h>
+#import <Mocha/MOJavaScriptObject.h>
 #import <Mocha/MOMethod.h>
 #import <Mocha/MOPointer.h>
+#import <Mocha/MORuntime.h>
+#import <Mocha/MOStruct.h>
 #import <Mocha/MOUndefined.h>
-
-#import <Mocha/MOClassDescription.h>
-#import <Mocha/MOInstanceVariableDescription.h>
-#import <Mocha/MOMethodDescription.h>
-#import <Mocha/MOPropertyDescription.h>
-#import <Mocha/MOProtocolDescription.h>

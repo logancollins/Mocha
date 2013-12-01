@@ -12,20 +12,10 @@
 
 @implementation MOMethod
 
-@synthesize target=_target;
-@synthesize selector=_selector;
-@synthesize block=_block;
-
 + (MOMethod *)methodWithTarget:(id)target selector:(SEL)selector {
     MOMethod *method = [[self alloc] init];
     method.target = target;
     method.selector = selector;
-    return method;
-}
-
-+ (MOMethod *)methodWithBlock:(id)block {
-    MOMethod *method = [[self alloc] init];
-    method.block = block;
     return method;
 }
 

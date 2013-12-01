@@ -9,7 +9,7 @@
 #import <Foundation/Foundation.h>
 #import <getopt.h>
 
-#import <Mocha/MochaRuntime_Private.h>
+#import <Mocha/MORuntime_Private.h>
 
 #import "MOCInterpreter.h"
 #import "NSFileHandle+MochaAdditions.h"
@@ -118,7 +118,7 @@ int main(int argc, const char * argv[]) {
 
 
 void executeScript(NSString *script, NSString *path) {
-    Mocha *runtime = [[Mocha alloc] init];
+    MORuntime *runtime = [[MORuntime alloc] init];
     
     if ([script length] >= 2 && [[script substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"#!"]) {
         // Ignore bash shebangs
@@ -127,7 +127,7 @@ void executeScript(NSString *script, NSString *path) {
     }
     
     @try {
-        [runtime evalJSString:script scriptPath:path];
+        [runtime evaluateJSString:script scriptPath:path];
     }
     @catch (NSException *e) {
         if ([e userInfo] != nil) {

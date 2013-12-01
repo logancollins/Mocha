@@ -11,7 +11,7 @@
 // 
 
 #import "MOFunctionArgument.h"
-#import "MochaRuntime_Private.h"
+#import "MORuntime_Private.h"
 #import "MOPointer.h"
 #import "MOPointerValue.h"
 #import "MOStruct.h"
@@ -719,7 +719,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         return NO;
     }
     
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
     
     switch (typeEncoding) {
         case _C_ID:
@@ -822,7 +822,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         return NO;
     }
     
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
     
     switch (typeEncoding) {
         case _C_ID:    
@@ -985,7 +985,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
 }
 
 + (NSInteger)structureToJSValue:(JSValueRef *)value inContext:(JSContextRef)ctx cString:(char *)c storage:(void **)ptr initialValues:(JSValueRef *)initialValues initialValueCount:(NSInteger)initialValueCount convertedValueCount:(NSInteger *)convertedValueCount {
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
     
     NSString *structureName = [MOFunctionArgument structureNameFromStructureTypeEncoding:[NSString stringWithUTF8String:c]];
     
@@ -1071,7 +1071,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         }
     }
     
-    MOStruct *structure = [MOStruct structureWithName:structureName memberNames:memberNames];
+    MOStruct *structure = [[MOStruct alloc] initWithName:structureName memberNames:memberNames];
     for (NSString *name in memberNames) {
         id value = [memberValues objectForKey:name];
         [structure setObject:value forMemberName:name];

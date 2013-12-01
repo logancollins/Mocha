@@ -1,20 +1,18 @@
 //
-//  MochaRuntime_Private.h
+//  MORuntime_Private.h
 //  Mocha
 //
 //  Created by Logan Collins on 5/10/12.
 //  Copyright (c) 2012 Sunflower Softworks. All rights reserved.
 //
 
-#import <Mocha/MochaRuntime.h>
+#import <Mocha/MORuntime.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
 
-@interface Mocha ()
+@interface MORuntime ()
 
-+ (Mocha *)runtimeWithContext:(JSContextRef)ctx;
-
-- (id)initWithGlobalContext:(JSGlobalContextRef)ctx;
++ (MORuntime *)runtimeWithContext:(JSContextRef)ctx;
 
 @property (readonly) JSGlobalContextRef context;
 
@@ -43,8 +41,8 @@
 - (BOOL)removeObjectWithName:(NSString *)name;
 
 // Evaluation
-- (JSValueRef)evalJSString:(NSString *)string;
-- (JSValueRef)evalJSString:(NSString *)string scriptPath:(NSString *)scriptPath;
+- (JSValueRef)evaluateJSString:(NSString *)string;
+- (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath;
 
 // Functions
 - (JSObjectRef)JSFunctionWithName:(NSString *)functionName;
@@ -58,7 +56,5 @@
 
 // Support
 - (void)installBuiltins;
-- (void)cleanUp;
-//- (void)unlinkAllReferences;
 
 @end

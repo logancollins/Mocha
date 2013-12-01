@@ -8,16 +8,16 @@
 
 #import "MOUtilities.h"
 
-#import "MochaRuntime_Private.h"
+#import "MORuntime_Private.h"
 
 #import "MOFunctionArgument.h"
 #import "MOMethod_Private.h"
-#import "MOClosure_Private.h"
+#import "MOClosure.h"
 #import "MOFunctionArgument.h"
 #import "MOUndefined.h"
-#import "MOJavaScriptObject.h"
+#import "MOJavaScriptObject_Private.h"
 #import "MOPointerValue.h"
-#import "MOPointer_Private.h"
+#import "MOPointer.h"
 
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
@@ -63,7 +63,6 @@ JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, 
         JSStringRelease(string);
         return value;
     }
-    
     return NULL;
 }
 
@@ -82,7 +81,7 @@ NSString * MOJSValueToString(JSContextRef ctx, JSValueRef value, JSValueRef *exc
 #pragma mark Invocation
 
 JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
     
     NSMethodSignature *methodSignature = [target methodSignatureForSelector:selector];
     NSInvocation *invocation = [NSInvocation invocationWithMethodSignature:methodSignature];
@@ -262,14 +261,14 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
 
 
 JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception) {
-    Mocha *runtime = [Mocha runtimeWithContext:ctx];
+    MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
     
     JSValueRef value = NULL;
     BOOL objCCall = NO;
     BOOL blockCall = NO;
     NSMutableArray *argumentEncodings = nil;
     MOFunctionArgument *returnValue = nil;
-    void* callAddress = NULL;
+    void * callAddress = NULL;
     NSUInteger callAddressArgumentCount = 0;
     BOOL variadic = NO;
     
@@ -296,10 +295,9 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
         // Override for Allocators
         if (selector == @selector(alloc)
-            || selector == @selector(allocWithZone:))
-        {
+            || selector == @selector(allocWithZone:)) {
             // Override for -alloc
-            MOAllocator *allocator = [MOAllocator allocator];
+            MOAllocator *allocator = [[MOAllocator alloc] init];
             allocator.objectClass = klass;
             return [runtime JSValueForObject:allocator];
         }
@@ -882,7 +880,7 @@ id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *arg
         // JavaScript functions
         JSObjectRef jsFunction = [function JSObject];
         JSContextRef ctx = [function JSContext];
-        Mocha *runtime = [Mocha runtimeWithContext:ctx];
+        MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
         
         JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
         JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);

@@ -14,9 +14,6 @@
     NSMutableDictionary *_symbols;
 }
 
-@synthesize name=_name;
-@synthesize URL=_URL;
-
 - (id)init {
     self = [super init];
     if (self) {

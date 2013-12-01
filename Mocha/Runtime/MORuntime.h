@@ -1,5 +1,5 @@
 //
-//  MochaRuntime.h
+//  MORuntime.h
 //  Mocha
 //
 //  Created by Logan Collins on 5/10/12.
@@ -10,38 +10,25 @@
 #import <Mocha/MochaDefines.h>
 
 
-@protocol MochaDelegate;
-
-
 /*!
- * @class Mocha
+ * @class MORuntime
  * @abstract The Mocha runtime interface
  */
-@interface Mocha : NSObject
+@interface MORuntime : NSObject
 
 /*!
- * @method sharedRuntime
- * @abstract The shared runtime instance
+ * @method isSyntaxValidForString:
+ * @abstract Validates the syntax of a JavaScript expression
  * 
- * @discussion
- * Additional runtimes can be created by calling -init
+ * @param string
+ * The JavaScript expression to validate
  * 
- * @result A Mocha object
+ * @result A BOOL value
  */
-+ (Mocha *)sharedRuntime;
-
-
-/*!
- * @property delegate
- * @abstract Gets the runtime delegate
- * 
- * @result An object conforming to the MochaDelegate protocol
- */
-@property (unsafe_unretained) id <MochaDelegate> delegate;
-
+- (BOOL)isSyntaxValidForString:(NSString *)string;
 
 /*!
- * @method evalString:
+ * @method evaluateString:
  * @abstract Evalutates the specified JavaScript expression, returning the result
  * 
  * @param string
@@ -49,7 +36,7 @@
  * 
  * @result An object, or nil
  */
-- (id)evalString:(NSString *)string;
+- (id)evaluateString:(NSString *)string;
 
 
 /*!
@@ -90,18 +77,6 @@
  * @result An object, or nil
  */
 - (id)callFunctionWithName:(NSString *)functionName withArgumentsInArray:(NSArray *)arguments;
-
-
-/*!
- * @method isSyntaxValidForString:
- * @abstract Validates the syntax of a JavaScript expression
- * 
- * @param string
- * The JavaScript expression to validate
- * 
- * @result A BOOL value
- */
-- (BOOL)isSyntaxValidForString:(NSString *)string;
 
 
 /*!
@@ -190,15 +165,6 @@
 
 
 /*!
- * @property globalSymbolNames
- * @abstract Gets all symbol names in the global Mocha namespace
- * 
- * @result An NSArray of NSString objects
- */
-@property (copy, readonly) NSArray *globalSymbolNames;
-
-
-/*!
  * @method garbageCollect
  * @abstract Instructs the JavaScript garbage collector to perform a collection
  */
@@ -208,62 +174,11 @@
 
 
 /*!
- * @protocol MochaDelegate
- * @abstract Implemented by objects acting as a runtime delegate
- */
-@protocol MochaDelegate <NSObject>
-
-@optional
-
-@end
-
-
-/*!
- * @category NSObject(MochaScripting)
- * @abstract Methods for customizing object behavior within the runtime
- */
-@interface NSObject (MochaScripting)
-
-/*!
- * @method isSelectorExcludedFromMochaScript:
- * @abstract Whether the specified selector is excluded from runtime access
- * 
- * @param selector
- * The selector to optionally exclude
- * 
- * @discussion
- * By default, this method returns NO, enabling access to all selectors for
- * an object. Returning YES from this method will prevent the given selector
- * from being called by the runtime.
- * 
- * @result A BOOL value
- */
-+ (BOOL)isSelectorExcludedFromMochaScript:(SEL)selector;
-
-/*!
- * @method selectorForMochaScriptPropertyName:
- * @abstract Gets the selector for a specified runtime property name
- * 
- * @result A SEL value
- */
-+ (SEL)selectorForMochaPropertyName:(NSString *)propertyName;
-
-/*!
- * @method finalizeForMochaScript
- * @abstract Invoked before the object is dereferenced in the runtime
- * 
- * @discussion
- * This method allows objects to clear internal caches and data tied to
- * other runtime information in preparation for being remove from the runtime.
- */
-- (void)finalizeForMochaScript;
-
-@end
-
-
-/*!
  * @category NSObject(MochaObjectSubscripting)
  * @abstract Methods for enabling object subscripting within the runtime
+ * 
+ * @discussion
+ * This category defines but does not implement these methods.
  */
 @interface NSObject (MochaObjectSubscripting)
 

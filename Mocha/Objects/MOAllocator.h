@@ -26,14 +26,6 @@
 @interface MOAllocator : NSObject
 
 /*!
- * @method allocator
- * @abstract Creates a new allocator
- * 
- * @result An MOAllocator object
- */
-+ (MOAllocator *)allocator;
-
-/*!
  * @property objectClass
  * @abstract The target object class
  * 

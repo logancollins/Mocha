@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <JavaScriptCore/JavaScriptCore.h>
 
 
 /*!
@@ -17,34 +16,66 @@
 @interface MOJavaScriptObject : NSObject
 
 /*!
- * @method objectWithJSObject:context:
- * @abstract Creates a new JavaScript wrapper object
- * 
- * @param jsObject
- * @abstract The JavaScript object reference
- * 
- * @param context
- * The JavaScript context reference
- * 
+ * @property prototype
+ * @abstract Gets the object's prototype
+ *
  * @result An MOJavaScriptObject object
  */
-+ (MOJavaScriptObject *)objectWithJSObject:(JSObjectRef)jsObject context:(JSContextRef)ctx;
-
-
-/*!
- * @property JSObject
- * @abstract The JavaScript object reference
- * 
- * @result A JSObjectRef value
- */
-@property (readonly) JSObjectRef JSObject;
+@property (readonly) MOJavaScriptObject *prototype;
 
 /*!
- * @property JSContext
- * @abstract The JavaScript context reference
+ * @property propertyNames
+ * @abstract The list of enumerable properties defined for the object
  * 
- * @result A JSContextRef value
+ * @result An NSArray of NSString objects
  */
-@property (readonly) JSContextRef JSContext;
+@property (copy, readonly) NSArray *propertyNames;
+
+/*!
+ * @method containsPropertyWithName:
+ * @abstract Tests whether the object has a given property
+ *
+ * @param propertyName
+ * The name of the property to test
+ * 
+ * @discussion
+ * Testing for property existence through this method can be less
+ * expensive than iterating the object's list of defined properties.
+ *
+ * @result An BOOL value
+ */
+- (BOOL)containsPropertyWithName:(NSString *)propertyName;
+
+/*!
+ * @method objectForPropertyName:
+ * @abstract Gets the value for a given property
+ * 
+ * @param propertyName
+ * The name of the property to fetch
+ * 
+ * @result An object, or nil
+ */
+- (id)objectForPropertyName:(NSString *)propertyName;
+
+/*!
+ * @method setObject:forPropertyName:
+ * @abstract Sets the value for a given property
+ * 
+ * @param object
+ * The value to set
+ *
+ * @param propertyName
+ * The name of the property to set
+ */
+- (void)setObject:(id)object forPropertyName:(NSString *)propertyName;
+
+/*!
+ * @method removeObjectForPropertyName:
+ * @abstract Removes the value for a given property
+ *
+ * @param propertyName
+ * The name of the property to remove
+ */
+- (void)removeObjectForPropertyName:(NSString *)propertyName;
 
 @end

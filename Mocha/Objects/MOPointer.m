@@ -7,12 +7,9 @@
 //
 
 #import "MOPointer.h"
-#import "MOPointer_Private.h"
 
 
 @implementation MOPointer
-
-@synthesize value=_value;
 
 - (id)initWithValue:(id)value {
     self = [super init];

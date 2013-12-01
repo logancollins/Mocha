@@ -42,7 +42,7 @@
         
         STAssertNotNil(testScript, @"Error loading test script: %@", error);
         
-        [runtime evalString:testScript];
+        [runtime evaluateString:testScript];
         
         NSArray *result = [runtime callFunctionWithName:@"main"];
         STAssertTrue([result[0] boolValue], result[1]);

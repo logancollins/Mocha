@@ -7,24 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <Mocha/MOCallable.h>
 
 
 /*!
  * @class MOClosure
  * @abstract A thin wrapper around a block object
  */
-@interface MOClosure : NSObject
-
-/*!
- * @method closureWithBlock:
- * @abstract Creates a new closure
- * 
- * @param block
- * The block object
- *
- * @result An MOClosure object
- */
-+ (MOClosure *)closureWithBlock:(id)block;
+@interface MOClosure : NSObject <MOCallable>
 
 /*!
  * @method initWithBlock:
