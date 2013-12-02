@@ -46,13 +46,13 @@ static JSValueRef   Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSSt
 static void         MOObject_initialize(JSContextRef ctx, JSObjectRef object);
 static void         MOObject_finalize(JSObjectRef object);
 
-static bool         MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName);
-static JSValueRef   MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef *exception);
-static bool         MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef value, JSValueRef *exception);
-static bool         MOBoxedObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef *exception);
-static void         MOBoxedObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames);
-static JSValueRef   MOBoxedObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef *exception);
-static bool         MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception);
+static bool         MOObject_hasProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName);
+static JSValueRef   MOObject_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef *exception);
+static bool         MOObject_setProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef value, JSValueRef *exception);
+static bool         MOObject_deleteProperty(JSContextRef ctx, JSObjectRef object, JSStringRef propertyName, JSValueRef *exception);
+static void         MOObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames);
+static JSValueRef   MOObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef *exception);
+static bool         MOObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception);
 
 static JSObjectRef  MOConstructor_callAsConstructor(JSContextRef ctx, JSObjectRef object, size_t argumentsCount, const JSValueRef arguments[], JSValueRef *exception);
 
@@ -79,46 +79,43 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     if (self == [MORuntime class]) {
         // Global runtime object
         JSClassDefinition MochaClassDefinition      = kJSClassDefinitionEmpty;
-        MochaClassDefinition.className              = "Mocha";
+        MochaClassDefinition.className              = "MORuntime";
         MochaClassDefinition.getProperty            = Mocha_getProperty;
         MochaClass                                  = JSClassCreate(&MochaClassDefinition);
         
-        
         // Runtime object
         JSClassDefinition MOObjectDefinition        = kJSClassDefinitionEmpty;
-        MOObjectDefinition.className                = "MOObject";
+        MOObjectDefinition.className                = "MOAbstractObject";
         MOObjectDefinition.initialize               = MOObject_initialize;
         MOObjectDefinition.finalize                 = MOObject_finalize;
+        MOObjectDefinition.convertToType            = MOObject_convertToType;
         MOObjectClass                               = JSClassCreate(&MOObjectDefinition);
         
         // Boxed Cocoa object
-        JSClassDefinition MOBoxedObjectDefinition  = kJSClassDefinitionEmpty;
-        MOBoxedObjectDefinition.className          = "MOBoxedObject";
-        MOBoxedObjectDefinition.parentClass        = MOObjectClass;
-        MOBoxedObjectDefinition.hasProperty        = MOBoxedObject_hasProperty;
-        MOBoxedObjectDefinition.getProperty        = MOBoxedObject_getProperty;
-        MOBoxedObjectDefinition.setProperty        = MOBoxedObject_setProperty;
-        MOBoxedObjectDefinition.deleteProperty     = MOBoxedObject_deleteProperty;
-        MOBoxedObjectDefinition.getPropertyNames   = MOBoxedObject_getPropertyNames;
-        MOBoxedObjectDefinition.hasInstance        = MOBoxedObject_hasInstance;
-        MOBoxedObjectDefinition.convertToType      = MOBoxedObject_convertToType;
-        MOBoxedObjectClass                         = JSClassCreate(&MOBoxedObjectDefinition);
+        JSClassDefinition MOBoxedObjectDefinition   = kJSClassDefinitionEmpty;
+        MOBoxedObjectDefinition.className           = "MOObject";
+        MOBoxedObjectDefinition.parentClass         = MOObjectClass;
+        MOBoxedObjectDefinition.hasProperty         = MOObject_hasProperty;
+        MOBoxedObjectDefinition.getProperty         = MOObject_getProperty;
+        MOBoxedObjectDefinition.setProperty         = MOObject_setProperty;
+        MOBoxedObjectDefinition.deleteProperty      = MOObject_deleteProperty;
+        MOBoxedObjectDefinition.getPropertyNames    = MOObject_getPropertyNames;
+        MOBoxedObjectDefinition.hasInstance         = MOObject_hasInstance;
+        MOBoxedObjectClass                          = JSClassCreate(&MOBoxedObjectDefinition);
         
         // Constructor object
-        JSClassDefinition MOConstructorDefinition  = kJSClassDefinitionEmpty;
-        MOConstructorDefinition.className          = "MOConstructor";
-        MOConstructorDefinition.parentClass        = MOObjectClass;
-        MOConstructorDefinition.callAsConstructor  = MOConstructor_callAsConstructor;
-        MOConstructorDefinition.convertToType      = MOBoxedObject_convertToType;
-        MOConstructorClass                         = JSClassCreate(&MOConstructorDefinition);
+        JSClassDefinition MOConstructorDefinition   = kJSClassDefinitionEmpty;
+        MOConstructorDefinition.className           = "MOConstructor";
+        MOConstructorDefinition.parentClass         = MOObjectClass;
+        MOConstructorDefinition.callAsConstructor   = MOConstructor_callAsConstructor;
+        MOConstructorClass                          = JSClassCreate(&MOConstructorDefinition);
         
         // Function object
-        JSClassDefinition MOFunctionDefinition     = kJSClassDefinitionEmpty;
-        MOFunctionDefinition.className             = "MOFunction";
-        MOFunctionDefinition.parentClass           = MOObjectClass;
-        MOFunctionDefinition.callAsFunction        = MOFunction_callAsFunction;
-        MOFunctionDefinition.convertToType         = MOBoxedObject_convertToType;
-        MOFunctionClass                            = JSClassCreate(&MOFunctionDefinition);
+        JSClassDefinition MOFunctionDefinition      = kJSClassDefinitionEmpty;
+        MOFunctionDefinition.className              = "MOFunction";
+        MOFunctionDefinition.parentClass            = MOObjectClass;
+        MOFunctionDefinition.callAsFunction         = MOFunction_callAsFunction;
+        MOFunctionClass                             = JSClassCreate(&MOFunctionDefinition);
         
         
         // Swizzle indexed subscripting support for NSArray
@@ -191,17 +188,17 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 #pragma mark -
 #pragma mark Key-Value Coding
 
-- (id)valueForUndefinedKey:(NSString *)key {
-    return [_exportedObjects objectForKey:key];
-}
-
-- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
-    [_exportedObjects setObject:value forKey:key];
-}
-
-- (void)setNilValueForKey:(NSString *)key {
-    [_exportedObjects removeObjectForKey:key];
-}
+//- (id)valueForUndefinedKey:(NSString *)key {
+//    return [_exportedObjects objectForKey:key];
+//}
+//
+//- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
+//    [_exportedObjects setObject:value forKey:key];
+//}
+//
+//- (void)setNilValueForKey:(NSString *)key {
+//    [_exportedObjects removeObjectForKey:key];
+//}
 
 
 #pragma mark -
@@ -431,14 +428,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     [_objectsToBoxes setObject:box forKey:object];
     
     return jsObject;
-}
-
-- (id)unboxedObjectForJSObject:(JSObjectRef)jsObject {
-    id private = (__bridge id)(JSObjectGetPrivate(jsObject));
-    if ([private isKindOfClass:[MOBox class]]) {
-        return [private representedObject];
-    }
-    return nil;
 }
 
 - (void)removeBoxAssociationForObject:(id)object {
@@ -994,7 +983,7 @@ static void MOObject_finalize(JSObjectRef object) {
 #pragma mark -
 #pragma mark Boxed Objects
 
-static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS) {
+static bool MOObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS) {
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, propertyNameJS));
     
 //    Mocha *runtime = [Mocha runtimeWithContext:ctx];
@@ -1094,7 +1083,7 @@ static bool MOBoxedObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     return NO;
 }
 
-static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
+static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, propertyNameJS));
     
     MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
@@ -1200,7 +1189,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
             }
             
             if ([object isKindOfClass:[NSArray class]]) {
-                // See the notes in MOBoxedObject_hasProperty
+                // See the notes in MOObject_hasProperty
                 if ([propertyName isEqualToString:@"length"]) {
                     MOMethod *method = [MOMethod methodWithTarget:object selector:@selector(count)];
                     return MOFunctionInvoke(method, ctx, 0, NULL, exception);
@@ -1234,7 +1223,7 @@ static JSValueRef MOBoxedObject_getProperty(JSContextRef ctx, JSObjectRef object
     return NULL;
 }
 
-static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef valueJS, JSValueRef *exception) {
+static bool MOObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef valueJS, JSValueRef *exception) {
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, propertyNameJS));
     
     MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
@@ -1293,7 +1282,7 @@ static bool MOBoxedObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JS
     return NO;
 }
 
-static bool MOBoxedObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
+static bool MOObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS, JSStringRef propertyNameJS, JSValueRef *exception) {
     NSString *propertyName = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, propertyNameJS));
     
     MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
@@ -1329,7 +1318,7 @@ static bool MOBoxedObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS,
     return NO;
 }
 
-static void MOBoxedObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames) {
+static void MOObject_getPropertyNames(JSContextRef ctx, JSObjectRef object, JSPropertyNameAccumulatorRef propertyNames) {
     MOBox *privateObject = (__bridge MOBox *)(JSObjectGetPrivate(object));
     
     // If we have a dictionary, add keys from allKeys
@@ -1347,11 +1336,11 @@ static void MOBoxedObject_getPropertyNames(JSContextRef ctx, JSObjectRef object,
     }
 }
 
-static JSValueRef MOBoxedObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef *exception) {
+static JSValueRef MOObject_convertToType(JSContextRef ctx, JSObjectRef object, JSType type, JSValueRef *exception) {
     return MOJSValueToType(ctx, object, type, exception);
 }
 
-static bool MOBoxedObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception) {
+static bool MOObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSValueRef possibleInstance, JSValueRef *exception) {
     MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
     MOBox *privateObject = (__bridge MOBox *)(JSObjectGetPrivate(constructor));
     id representedObject = [privateObject representedObject];

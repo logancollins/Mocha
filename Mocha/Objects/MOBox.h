@@ -25,7 +25,7 @@
  * 
  * @result An object
  */
-@property (strong) id representedObject;
+@property (assign) id representedObject;
 
 /*!
  * @property JSObject
@@ -41,6 +41,6 @@
  * 
  * @result An MORuntime object
  */
-@property (weak) MORuntime *runtime;
+@property (assign) MORuntime *runtime;
 
 @end
