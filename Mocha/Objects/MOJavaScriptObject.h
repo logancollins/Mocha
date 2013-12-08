@@ -78,4 +78,27 @@
  */
 - (void)removeObjectForPropertyName:(NSString *)propertyName;
 
+/*!
+ * @method objectAtPropertyIndex:
+ * @abstract Gets the value for the given property index
+ * 
+ * @param propertyIdx
+ * The property index to get
+ * 
+ * @result An object, or nil
+ */
+- (id)objectAtPropertyIndex:(NSUInteger)propertyIdx;
+
+/*!
+ * @method setObject:atPropertyIndex:
+ * @abstract Sets the value for the given property index
+ *
+ * @param object
+ * The value to set
+ *
+ * @param propertyIdx
+ * The property index to set
+ */
+- (void)setObject:(id)object atPropertyIndex:(NSUInteger)propertyIdx;
+
 @end

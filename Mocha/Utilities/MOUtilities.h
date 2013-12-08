@@ -16,7 +16,7 @@
 #endif
 
 
-@class MOBridgeSupportFunction, MOFunctionArgument, MOJavaScriptObject;
+@class MOFunctionArgument;
 
 
 JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, JSValueRef *exception);
@@ -33,7 +33,6 @@ NSArray * MOParseObjCMethodEncoding(const char *typeEncoding);
 
 SEL MOSelectorFromPropertyName(NSString *propertyName);
 NSString * MOSelectorToPropertyName(SEL selector);
-
 NSString * MOPropertyNameToSetterName(NSString *propertyName);
 
-id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *argCount);
+void * MOBlockGetCallAddress(id block, const char ** typeEncoding);

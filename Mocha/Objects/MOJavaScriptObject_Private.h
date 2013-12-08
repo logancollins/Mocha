@@ -24,7 +24,7 @@
  *
  * @result An MOJavaScriptObject object
  */
-+ (MOJavaScriptObject *)objectWithJSObject:(JSObjectRef)jsObject context:(JSContextRef)ctx;
++ (instancetype)objectWithJSObject:(JSObjectRef)jsObject context:(JSContextRef)ctx;
 
 
 /*!

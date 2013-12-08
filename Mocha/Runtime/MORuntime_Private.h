@@ -32,7 +32,6 @@
 
 // JSObject <-> id
 - (JSObjectRef)boxedJSObjectForObject:(id)object;
-- (id)unboxedObjectForJSObject:(JSObjectRef)jsObject;
 
 // Object storage
 - (id)objectWithName:(NSString *)name;
@@ -41,13 +40,7 @@
 - (BOOL)removeObjectWithName:(NSString *)name;
 
 // Evaluation
-- (JSValueRef)evaluateJSString:(NSString *)string;
 - (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath;
-
-// Functions
-- (JSObjectRef)JSFunctionWithName:(NSString *)functionName;
-- (JSValueRef)callJSFunctionWithName:(NSString *)functionName withArgumentsInArray:(NSArray *)arguments;
-- (JSValueRef)callJSFunction:(JSObjectRef)jsFunction withArgumentsInArray:(NSArray *)arguments;
 
 // Exceptions
 + (NSException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx;

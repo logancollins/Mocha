@@ -12,8 +12,8 @@
 #import "MOBox.h"
 #import "MOUndefined.h"
 #import "MOMethod_Private.h"
-#import "MOClosure.h"
 #import "MOJavaScriptObject_Private.h"
+#import "MOJavaScriptFunction.h"
 #import "MOPointer.h"
 #import "MOUtilities.h"
 #import "MOFunctionArgument.h"
@@ -70,9 +70,7 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 
 @implementation MORuntime {
     JSGlobalContextRef _ctx;
-    NSMutableDictionary *_exportedObjects;
     NSMapTable *_objectsToBoxes;
-    NSMutableArray *_frameworkSearchPaths;
 }
 
 + (void)initialize {
@@ -160,12 +158,14 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     self = [super init];
     if (self) {
         _ctx = JSGlobalContextCreate(MochaClass);
-        _exportedObjects = [[NSMutableDictionary alloc] init];
         _objectsToBoxes = [NSMapTable strongToStrongObjectsMapTable];
-        _frameworkSearchPaths = [[NSMutableArray alloc] initWithObjects:
+        
+#if !TARGET_OS_IPHONE
+        self.frameworkSearchPaths = [[NSMutableArray alloc] initWithObjects:
                                  @"/System/Library/Frameworks",
                                  @"/Library/Frameworks",
                                  nil];
+#endif
         
         // Add the runtime as a property of the context
         [self setObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
@@ -183,22 +183,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 - (JSGlobalContextRef)context {
     return _ctx;
 }
-
-
-#pragma mark -
-#pragma mark Key-Value Coding
-
-//- (id)valueForUndefinedKey:(NSString *)key {
-//    return [_exportedObjects objectForKey:key];
-//}
-//
-//- (void)setValue:(id)value forUndefinedKey:(NSString *)key {
-//    [_exportedObjects setObject:value forKey:key];
-//}
-//
-//- (void)setNilValueForKey:(NSString *)key {
-//    [_exportedObjects removeObjectForKey:key];
-//}
 
 
 #pragma mark -
@@ -248,15 +232,8 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     if (private != nil) {
         if ([private isKindOfClass:[MOBox class]]) {
             if (unboxObjects == YES) {
-                // Boxed ObjC object
-                id object = [private representedObject];
-                if ([object isKindOfClass:[MOClosure class]]) {
-                    // Auto-unbox closures
-                    return [object block];
-                }
-                else {
-                    return object;
-                }
+                // Boxed object
+                return [private representedObject];
             }
             else {
                 return private;
@@ -270,10 +247,15 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         BOOL isFunction = JSObjectIsFunction(ctx, jsObject);
         if (isFunction) {
             // Function
+            return [MOJavaScriptFunction objectWithJSObject:jsObject context:ctx];
+        }
+        
+        BOOL isConstructor = JSObjectIsConstructor(ctx, jsObject);
+        if (isConstructor) {
+            // Constructor
             return [MOJavaScriptObject objectWithJSObject:jsObject context:ctx];
         }
         
-        // Normal JS object
         JSStringRef scriptJS = JSStringCreateWithUTF8CString("return arguments[0].constructor == Array.prototype.constructor");
         JSObjectRef fn = JSObjectMakeFunction(ctx, NULL, 0, NULL, scriptJS, NULL, 1, NULL);
         JSValueRef result = JSObjectCallAsFunction(ctx, fn, NULL, 1, (JSValueRef *)&jsObject, NULL);
@@ -281,13 +263,12 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         
         BOOL isArray = JSValueToBoolean(ctx, result);
         if (isArray) {
-            // Array
+            // Arrays should be automatically converted to NSArray
             return [self arrayForJSArray:jsObject inContext:ctx];
         }
-        else {
-            // Object
-            return [self dictionaryForJSHash:jsObject inContext:ctx];
-        }
+        
+        // Object
+        return [MOJavaScriptObject objectWithJSObject:jsObject context:ctx];
     }
     
     return nil;
@@ -371,11 +352,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
         double doubleValue = [object doubleValue];
         value = JSValueMakeNumber(_ctx, doubleValue);
     }*/
-    else if ([object isKindOfClass:NSClassFromString(@"NSBlock")]) {
-        // Auto-box blocks inside of a closure object
-        MOClosure *closure = [[MOClosure alloc] initWithBlock:object];
-        value = [self boxedJSObjectForObject:closure];
-    }
     else if (object == nil/* || [object isKindOfClass:[NSNull class]]*/) {
         value = JSValueMakeNull(_ctx);
     }
@@ -414,12 +390,12 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     
     JSObjectRef jsObject = NULL;
     
-    if ([object isKindOfClass:[MOMethod class]]
-        || [object isKindOfClass:[MOClosure class]]
-        || [object isKindOfClass:[MOBridgeSupportFunction class]]) {
+    if ([object conformsToProtocol:@protocol(MOCallable)]) {
+        // Callables should be functions
         jsObject = JSObjectMake(_ctx, MOFunctionClass, (__bridge void *)(box));
     }
     else {
+        // All other objects should be simple boxes
         jsObject = JSObjectMake(_ctx, MOBoxedObjectClass, (__bridge void *)(box));
     }
     
@@ -497,12 +473,8 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 #pragma mark Evaluation
 
 - (id)evaluateString:(NSString *)string {
-    JSValueRef jsValue = [self evaluateJSString:string];
+    JSValueRef jsValue = [self evaluateJSString:string scriptPath:nil];
     return [self objectForJSValue:jsValue];
-}
-
-- (JSValueRef)evaluateJSString:(NSString *)string {
-    return [self evaluateJSString:string scriptPath:nil];
 }
 
 - (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath {
@@ -533,79 +505,38 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 
 
 #pragma mark -
-#pragma mark Functions
+#pragma mark Objects
 
-- (id)callFunctionWithName:(NSString *)functionName {
-    return [self callFunctionWithName:functionName withArguments:nil];
-}
-
-- (id)callFunctionWithName:(NSString *)functionName withArguments:(id)firstArg, ... {
-    NSMutableArray *arguments = [NSMutableArray array];
+- (NSArray *)globalObjectNames {
+    JSPropertyNameArrayRef propertyNamesRef = JSObjectCopyPropertyNames(_ctx, JSContextGetGlobalObject(_ctx));
+    size_t count = JSPropertyNameArrayGetCount(propertyNamesRef);
     
-    va_list args;
-    va_start(args, firstArg);
-    for (id arg = firstArg; arg != nil; arg = va_arg(args, id)) {
-        [arguments addObject:arg];
+    NSMutableArray *array = [NSMutableArray arrayWithCapacity:count];
+    for (size_t i=0; i<count; i++) {
+        JSStringRef nameRef = JSPropertyNameArrayGetNameAtIndex(propertyNamesRef, i);
+        NSString *name = CFBridgingRelease(JSStringCopyCFString(NULL, nameRef));
+        [array addObject:name];
     }
-    va_end(args);
     
-    return [self callFunctionWithName:functionName withArgumentsInArray:arguments];
+    JSPropertyNameArrayRelease(propertyNamesRef);
+    
+    return array;
 }
 
-- (id)callFunctionWithName:(NSString *)functionName withArgumentsInArray:(NSArray *)arguments {
-    JSValueRef value = [self callJSFunctionWithName:functionName withArgumentsInArray:arguments];
-    return [self objectForJSValue:value];
-}
-
-- (JSObjectRef)JSFunctionWithName:(NSString *)functionName {
+- (id)globalObjectWithName:(NSString *)objectName {
     JSValueRef exception = NULL;
     
     // Get function as property of global object
-    JSStringRef jsFunctionName = JSStringCreateWithUTF8CString([functionName UTF8String]);
-    JSValueRef jsFunctionValue = JSObjectGetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsFunctionName, &exception);
-    JSStringRelease(jsFunctionName);
+    JSStringRef jsObjectName = JSStringCreateWithUTF8CString([objectName UTF8String]);
+    JSValueRef jsObjectValue = JSObjectGetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsObjectName, &exception);
+    JSStringRelease(jsObjectName);
     
     if (exception != NULL) {
         [self throwJSException:exception];
         return NULL;
     }
     
-    return JSValueToObject(_ctx, jsFunctionValue, NULL);
-}
-
-- (JSValueRef)callJSFunctionWithName:(NSString *)functionName withArgumentsInArray:(NSArray *)arguments {
-    JSObjectRef jsFunction = [self JSFunctionWithName:functionName];
-    if (jsFunction == NULL) {
-        return NULL;
-    }
-    return [self callJSFunction:jsFunction withArgumentsInArray:arguments];
-}
-
-- (JSValueRef)callJSFunction:(JSObjectRef)jsFunction withArgumentsInArray:(NSArray *)arguments {
-    JSValueRef *jsArguments = NULL;
-    NSUInteger argumentsCount = [arguments count];
-    if (argumentsCount > 0) {
-        jsArguments = malloc(sizeof(JSValueRef) * argumentsCount);
-        for (NSUInteger i=0; i<argumentsCount; i++) {
-            id argument = [arguments objectAtIndex:i];
-            JSValueRef value = [self JSValueForObject:argument];
-            jsArguments[i] = value;
-        }
-    }
-    
-    JSValueRef exception = NULL;
-    JSValueRef returnValue = JSObjectCallAsFunction(_ctx, jsFunction, NULL, argumentsCount, jsArguments, &exception);
-    
-    if (jsArguments != NULL) {
-        free(jsArguments);
-    }
-    
-    if (exception != NULL) {
-        [self throwJSException:exception];
-        return NULL;
-    }
-    
-    return returnValue;
+    return [self objectForJSValue:jsObjectValue];
 }
 
 
@@ -694,41 +625,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 #pragma mark -
 #pragma mark BridgeSupport Metadata
 
-- (BOOL)loadFrameworkWithName:(NSString *)frameworkName {
-    BOOL success = NO;
-    NSFileManager *fileManager = [[NSFileManager alloc] init];
-    
-    for (NSString *path in _frameworkSearchPaths) {
-        NSString *frameworkPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework", frameworkName]];
-        if ([fileManager fileExistsAtPath:frameworkPath]) {
-            success = [self loadFrameworkWithName:frameworkName inDirectory:path];
-            if (success) {
-                break;
-            }
-        }
-    }
-    
-    return success;
-}
-
-- (BOOL)loadFrameworkWithName:(NSString *)frameworkName inDirectory:(NSString *)directory {
-    NSString *frameworkPath = [directory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework", frameworkName]];
-    
-    // Load the framework
-    NSString *libPath = [frameworkPath stringByAppendingPathComponent:frameworkName];
-    void *address = dlopen([libPath UTF8String], RTLD_LAZY);
-    if (!address) {
-        //NSLog(@"ERROR: Could not load framework dylib: %@, %@", frameworkName, libPath);
-        return NO;
-    }
-    
-    // Load the BridgeSupport data
-    NSString *bridgeSupportPath = [frameworkPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Resources/BridgeSupport"]];
-    [self loadBridgeSupportFilesAtPath:bridgeSupportPath];
-    
-    return YES;
-}
-
 - (BOOL)loadBridgeSupportFilesAtPath:(NSString *)path {
     NSFileManager *fileManager = [[NSFileManager alloc] init];
     
@@ -779,25 +675,44 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     }
 }
 
-- (NSArray *)frameworkSearchPaths {
-    return _frameworkSearchPaths;
+#if !TARGET_OS_IPHONE
+
+- (BOOL)loadFrameworkWithName:(NSString *)frameworkName {
+    BOOL success = NO;
+    NSFileManager *fileManager = [[NSFileManager alloc] init];
+    
+    for (NSString *path in _frameworkSearchPaths) {
+        NSString *frameworkPath = [path stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework", frameworkName]];
+        if ([fileManager fileExistsAtPath:frameworkPath]) {
+            success = [self loadFrameworkWithName:frameworkName inDirectory:path];
+            if (success) {
+                break;
+            }
+        }
+    }
+    
+    return success;
 }
 
-- (void)setFrameworkSearchPaths:(NSArray *)frameworkSearchPaths {
-    [_frameworkSearchPaths setArray:frameworkSearchPaths];
+- (BOOL)loadFrameworkWithName:(NSString *)frameworkName inDirectory:(NSString *)directory {
+    NSString *frameworkPath = [directory stringByAppendingPathComponent:[NSString stringWithFormat:@"%@.framework", frameworkName]];
+    
+    // Load the framework
+    NSString *libPath = [frameworkPath stringByAppendingPathComponent:frameworkName];
+    void *address = dlopen([libPath UTF8String], RTLD_LAZY);
+    if (!address) {
+        //NSLog(@"ERROR: Could not load framework dylib: %@, %@", frameworkName, libPath);
+        return NO;
+    }
+    
+    // Load the BridgeSupport data
+    NSString *bridgeSupportPath = [frameworkPath stringByAppendingPathComponent:[NSString stringWithFormat:@"Resources/BridgeSupport"]];
+    [self loadBridgeSupportFilesAtPath:bridgeSupportPath];
+    
+    return YES;
 }
 
-- (void)addFrameworkSearchPath:(NSString *)path {
-    [self insertFrameworkSearchPath:path atIndex:[_frameworkSearchPaths count]];
-}
-
-- (void)insertFrameworkSearchPath:(NSString *)path atIndex:(NSUInteger)idx {
-    [_frameworkSearchPaths insertObject:path atIndex:idx];
-}
-
-- (void)removeFrameworkSearchPathAtIndex:(NSUInteger)idx {
-    [_frameworkSearchPaths removeObjectAtIndex:idx];
-}
+#endif
 
 
 #pragma mark -
@@ -841,15 +756,6 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     }
     
     MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
-    
-    //
-    // Exported objects
-    //
-    id exportedObj = [runtime valueForKey:propertyName];
-    if (exportedObj != nil) {
-        JSValueRef ret = [runtime JSValueForObject:exportedObj];
-        return ret;
-    }
     
     //
     // ObjC class

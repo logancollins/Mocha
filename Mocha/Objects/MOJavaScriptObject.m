@@ -17,7 +17,7 @@
     JSContextRef _JSContext;
 }
 
-+ (MOJavaScriptObject *)objectWithJSObject:(JSObjectRef)jsObject context:(JSContextRef)ctx {
++ (instancetype)objectWithJSObject:(JSObjectRef)jsObject context:(JSContextRef)ctx {
     MOJavaScriptObject *object = [[MOJavaScriptObject alloc] init];
     [object setJSObject:jsObject JSContext:ctx];
     return object;
@@ -27,6 +27,13 @@
     if (_JSObject != NULL) {
         JSValueUnprotect(_JSContext, _JSObject);
     }
+}
+
+- (NSString *)description {
+    JSStringRef string = JSValueToStringCopy(_JSContext, _JSObject, NULL);
+    NSString *description = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, string));
+    JSStringRelease(string);
+    return description;
 }
 
 - (JSObjectRef)JSObject {
@@ -87,8 +94,7 @@
         return object;
     }
     else {
-        NSException *exception = [runtime exceptionWithJSException:exceptionRef];
-        @throw exception;
+        [runtime throwJSException:exceptionRef];
     }
     
     return nil;
@@ -104,8 +110,7 @@
     JSStringRelease(nameRef);
     
     if (exceptionRef != NULL) {
-        NSException *exception = [runtime exceptionWithJSException:exceptionRef];
-        @throw exception;
+        [runtime throwJSException:exceptionRef];
     }
 }
 
@@ -118,8 +123,35 @@
     JSStringRelease(nameRef);
     
     if (exceptionRef != NULL) {
-        NSException *exception = [runtime exceptionWithJSException:exceptionRef];
-        @throw exception;
+        [runtime throwJSException:exceptionRef];
+    }
+}
+
+- (id)objectAtPropertyIndex:(NSUInteger)propertyIdx {
+    MORuntime *runtime = [MORuntime runtimeWithContext:_JSContext];
+    
+    JSValueRef exceptionRef = NULL;
+    JSValueRef valueRef = JSObjectGetPropertyAtIndex(_JSContext, _JSObject, (unsigned int)propertyIdx, &exceptionRef);
+    
+    if (exceptionRef == NULL) {
+        id object = [runtime objectForJSValue:valueRef];
+        return object;
+    }
+    else {
+        [runtime throwJSException:exceptionRef];
+        return nil;
+    }
+}
+
+- (void)setObject:(id)object atPropertyIndex:(NSUInteger)propertyIdx {
+    MORuntime *runtime = [MORuntime runtimeWithContext:_JSContext];
+    
+    JSValueRef exceptionRef = NULL;
+    JSValueRef valueRef = [runtime JSValueForObject:object];
+    JSObjectSetPropertyAtIndex(_JSContext, _JSObject, (unsigned int)propertyIdx, valueRef, &exceptionRef);
+    
+    if (exceptionRef != NULL) {
+        [runtime throwJSException:exceptionRef];
     }
 }
 

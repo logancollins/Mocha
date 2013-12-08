@@ -12,10 +12,7 @@
 
 #import "MOFunctionArgument.h"
 #import "MOMethod_Private.h"
-#import "MOClosure.h"
-#import "MOFunctionArgument.h"
 #import "MOUndefined.h"
-#import "MOJavaScriptObject_Private.h"
 #import "MOPointerValue.h"
 #import "MOPointer.h"
 
@@ -67,7 +64,7 @@ JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, 
 }
 
 NSString * MOJSValueToString(JSContextRef ctx, JSValueRef value, JSValueRef *exception) {
-    if (value == NULL || JSValueIsNull(ctx, value)) {
+    if (value == NULL) {
         return nil;
     }
     JSStringRef resultStringJS = JSValueToStringCopy(ctx, value, exception);
@@ -101,19 +98,13 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
     // Build arguments
     for (size_t i=0; i<argumentCount; i++) {
         JSValueRef argument = arguments[i];
-        __unsafe_unretained id object = [runtime objectForJSValue:argument unboxObjects:NO];
+        __unsafe_unretained id object = [runtime objectForJSValue:argument];
         
         NSUInteger argIndex = i + 2;
         const char * argType = [methodSignature getArgumentTypeAtIndex:argIndex];
         
-        // MOBox
-        if ([object isKindOfClass:[MOBox class]]) {
-            __unsafe_unretained id value = [object representedObject];
-            [invocation setArgument:&value atIndex:argIndex];
-        }
-        
         // NSNumber
-        else if ([object isKindOfClass:[NSNumber class]]) {
+        if ([object isKindOfClass:[NSNumber class]]) {
             // long
             if (strcmp(argType, @encode(long)) == 0
                 || strcmp(argType, @encode(unsigned long)) == 0) {
@@ -362,15 +353,15 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             return NULL;
         }
     }
-    else if ([function isKindOfClass:[MOClosure class]]) {
+    else if ([function isKindOfClass:NSClassFromString(@"NSBlock")]) {
         // C block
         blockCall = YES;
         
-        block = [function block];
+        block = function;
         
-        callAddress = [function callAddress];
+        const char * typeEncoding = NULL;
+        callAddress = MOBlockGetCallAddress(block, &typeEncoding);
         
-        const char *typeEncoding = [(MOClosure *)function typeEncoding];
         argumentEncodings = [MOParseObjCMethodEncoding(typeEncoding) mutableCopy];
         
         if (argumentEncodings == nil) {
@@ -809,7 +800,7 @@ BOOL MOInvocationShouldUseStret(NSArray *arguments) {
 }
 
 void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments) {
-    BOOL usingStret    = MOInvocationShouldUseStret(arguments);
+    BOOL usingStret = MOInvocationShouldUseStret(arguments);
     void *callAddress = NULL;
     if (usingStret)    {
         callAddress = objc_msgSend_stret;
@@ -862,68 +853,106 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName) {
 #pragma mark -
 #pragma mark Blocks
 
-typedef id (^MOJavaScriptClosureBlock)(id obj, ...);
+//typedef id (^MOJavaScriptClosureBlock)(id obj, ...);
+//
+//id MOGetBlockForJavaScriptFunction(MOJavaScriptFunction *function, NSUInteger *argCount) {
+//    JSObjectRef jsFunction = [function JSObject];
+//    JSContextRef ctx = [function JSContext];
+//    
+//    if (argCount != NULL) {
+//        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
+//        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
+//        JSStringRelease(lengthString);
+//        
+//        *argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+//    }
+//    
+//    MOJavaScriptClosureBlock newBlock = (id)^(id obj, ...) {
+//        // JavaScript functions
+//        JSObjectRef jsFunction = [function JSObject];
+//        JSContextRef ctx = [function JSContext];
+//        MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
+//        
+//        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
+//        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
+//        JSStringRelease(lengthString);
+//        
+//        NSUInteger argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+//        
+//        JSValueRef exception = NULL;
+//        
+//        va_list args;
+//        va_start(args, obj);
+//        
+//        id arg = obj;
+//        JSValueRef jsValue = [runtime JSValueForObject:obj];
+//        JSObjectRef jsObject = JSValueToObject(ctx, jsValue, &exception);
+//        if (jsObject == NULL) {
+//            [runtime throwJSException:exception];
+//            return nil;
+//        }
+//        
+//        JSValueRef *jsArguments = (JSValueRef *)malloc(sizeof(JSValueRef) * (argCount - 1));
+//        
+//        // Handle passed arguments
+//        for (NSUInteger i=0; i<argCount; i++) {
+//            arg = va_arg(args, id);
+//            jsArguments[i] = [runtime JSValueForObject:arg];
+//        }
+//        
+//        va_end(args);
+//        
+//        JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunction, jsObject, argCount, jsArguments, &exception);
+//        id returnValue = [runtime objectForJSValue:jsReturnValue];
+//        
+//        if (jsArguments != NULL) {
+//            free(jsArguments);
+//        }
+//        
+//        if (exception != NULL) {
+//            [runtime throwJSException:exception];
+//            return nil;
+//        }
+//        
+//        return (__bridge void*)returnValue;
+//    };
+//    return [newBlock copy];
+//}
 
-id MOGetBlockForJavaScriptFunction(MOJavaScriptObject *function, NSUInteger *argCount) {
-    JSObjectRef jsFunction = [function JSObject];
-    JSContextRef ctx = [function JSContext];
-    
-    if (argCount != NULL) {
-        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
-        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
-        JSStringRelease(lengthString);
+//
+// The following two structs are taken from clang's source.
+//
+
+struct Block_descriptor {
+    unsigned long reserved;
+    unsigned long size;
+    void *rest[1];
+};
+
+struct Block_literal {
+    void *isa;
+    int flags;
+    int reserved;
+    void *invoke;
+    struct Block_descriptor *descriptor;
+};
+
+void * MOBlockGetCallAddress(id blockObj, const char ** typeEncoding) {
+    struct Block_literal *block = (__bridge struct Block_literal *)blockObj;
+    if (typeEncoding != nil) {
+        struct Block_descriptor *descriptor = block->descriptor;
         
-        *argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+        int copyDisposeFlag = 1 << 25;
+        int signatureFlag = 1 << 30;
+        
+        assert(block->flags & signatureFlag);
+        
+        int index = 0;
+        if (block->flags & copyDisposeFlag) {
+            index += 2;
+        }
+        
+        *typeEncoding = descriptor->rest[index];
     }
-    
-    MOJavaScriptClosureBlock newBlock = (id)^(id obj, ...) {
-        // JavaScript functions
-        JSObjectRef jsFunction = [function JSObject];
-        JSContextRef ctx = [function JSContext];
-        MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
-        
-        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
-        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
-        JSStringRelease(lengthString);
-        
-        NSUInteger argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
-        
-        JSValueRef exception = NULL;
-        
-        va_list args;
-        va_start(args, obj);
-        
-        id arg = obj;
-        JSValueRef jsValue = [runtime JSValueForObject:obj];
-        JSObjectRef jsObject = JSValueToObject(ctx, jsValue, &exception);
-        if (jsObject == NULL) {
-            [runtime throwJSException:exception];
-            return nil;
-        }
-        
-        JSValueRef *jsArguments = (JSValueRef *)malloc(sizeof(JSValueRef) * (argCount - 1));
-        
-        // Handle passed arguments
-        for (NSUInteger i=0; i<argCount; i++) {
-            arg = va_arg(args, id);
-            jsArguments[i] = [runtime JSValueForObject:arg];
-        }
-        
-        va_end(args);
-        
-        JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunction, jsObject, argCount, jsArguments, &exception);
-        id returnValue = [runtime objectForJSValue:jsReturnValue];
-        
-        if (jsArguments != NULL) {
-            free(jsArguments);
-        }
-        
-        if (exception != NULL) {
-            [runtime throwJSException:exception];
-            return nil;
-        }
-        
-        return (__bridge void*)returnValue;
-    };
-    return [newBlock copy];
+    return block->invoke;
 }

@@ -40,44 +40,49 @@
 
 
 /*!
- * @method callFunctionWithName:
- * @abstract Calls a JavaScript function in the global context
- * 
- * @param functionName
- * The name of the function
- * 
- * @result An object, or nil
+ * @method garbageCollect
+ * @abstract Instructs the JavaScript garbage collector to perform a collection
  */
-- (id)callFunctionWithName:(NSString *)functionName;
+- (void)garbageCollect;
+
 
 /*!
- * @method callFunctionWithName:withArguments:
- * @abstract Calls a JavaScript function in the global context
- * 
- * @param functionName
- * The name of the function
- * 
- * @param firstArg
- * A variable-length list of arguments to pass to the function
- * 
- * @result An object, or nil
+ * @group Objects
  */
-- (id)callFunctionWithName:(NSString *)functionName withArguments:(id)firstArg, ... NS_REQUIRES_NIL_TERMINATION;
 
 /*!
- * @method callFunctionWithName:withArgumentsInArray:
- * @abstract Calls a JavaScript function in the global context
+ * @property globalObjectNames
+ * @abstract Gets an array of all objects names in the global scope
  * 
- * @param functionName
- * The name of the function
- * 
- * @param arguments
- * An array of arguments to pass to the function
- * 
- * @result An object, or nil
+ * @result An NSArray of NSString objects
  */
-- (id)callFunctionWithName:(NSString *)functionName withArgumentsInArray:(NSArray *)arguments;
+@property (copy, readonly) NSArray *globalObjectNames;
 
+/*!
+ * @method globalObjectWithName:
+ * @abstract Gets an object in the global scope with a specified name
+ * 
+ * @result An object, or MOUndefined if an object with the specified name does not exist
+ */
+- (id)globalObjectWithName:(NSString *)objectName;
+
+
+/*!
+ * @group Bridge Support
+ */
+
+/*!
+ * @method loadBridgeSupportFilesAtPath:
+ * @abstract Loads BridgeSupport info and symbols at a specified location
+ *
+ * @param path
+ * The path to load
+ *
+ * @result A BOOL value
+ */
+- (BOOL)loadBridgeSupportFilesAtPath:(NSString *)path;
+
+#if !TARGET_OS_IPHONE
 
 /*!
  * @method loadFrameworkWithName:
@@ -115,17 +120,6 @@
 - (BOOL)loadFrameworkWithName:(NSString *)frameworkName inDirectory:(NSString *)directory;
 
 /*!
- * @method loadBridgeSupportFilesAtPath:
- * @abstract Loads BridgeSupport info and symbols at a specified location
- *
- * @param path
- * The path to load
- *
- * @result A BOOL value
- */
-- (BOOL)loadBridgeSupportFilesAtPath:(NSString *)path;
-
-/*!
  * @property frameworkSearchPaths
  * @abstract Gets the array of search paths to check when loading a framework
  * 
@@ -133,54 +127,19 @@
  */
 @property (copy) NSArray *frameworkSearchPaths;
 
-/*!
- * @method addFrameworkSearchPath:
- * @abstract Adds a path to the array of framework search paths
- * 
- * @param path
- * The path to add
- */
-- (void)addFrameworkSearchPath:(NSString *)path;
-
-/*!
- * @method insertFrameworkSearchPath:atIndex:
- * @abstract Inserts a path into the array of framework search paths
- * 
- * @param path
- * The path to add
- * 
- * @param idx
- * The index at which to add the path
- */
-- (void)insertFrameworkSearchPath:(NSString *)path atIndex:(NSUInteger)idx;
-
-/*!
- * @method removeFrameworkSearchPathAtIndex:
- * @abstract Removes a path in the array of framework search paths
- *
- * @param idx
- * The index at which to remove the path
- */
-- (void)removeFrameworkSearchPathAtIndex:(NSUInteger)idx;
-
-
-/*!
- * @method garbageCollect
- * @abstract Instructs the JavaScript garbage collector to perform a collection
- */
-- (void)garbageCollect;
+#endif
 
 @end
 
 
 /*!
- * @category NSObject(MochaObjectSubscripting)
+ * @category NSObject(MOObjectSubscripting)
  * @abstract Methods for enabling object subscripting within the runtime
  * 
  * @discussion
  * This category defines but does not implement these methods.
  */
-@interface NSObject (MochaObjectSubscripting)
+@interface NSObject (MOObjectSubscripting)
 
 /*!
  * @method objectForIndexedSubscript:

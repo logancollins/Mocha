@@ -23,4 +23,9 @@
     return [NSString stringWithFormat:@"<%@: %p : target=%@, selector=%@>", [self class], self, [self target], NSStringFromSelector([self selector])];
 }
 
+- (id)callWithArguments:(NSArray *)arguments {
+    
+    return nil;
+}
+
 @end

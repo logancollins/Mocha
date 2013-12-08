@@ -60,16 +60,12 @@ static const char interactivePrompt[] = "> ";
         
         if ([string length] > 0) {
             @try {
-                JSValueRef value = [_runtime evaluateJSString:string];
-                if (value != NULL) {
-                    JSStringRef string = JSValueToStringCopy([_runtime context], value, NULL);
-                    NSString *description = (NSString *)CFBridgingRelease(JSStringCopyCFString(NULL, string));
-                    JSStringRelease(string);
-                    printf("%s\n", [description UTF8String]);
+                id object = [_runtime evaluateString:string];
+                if (object != nil) {
+                    printf("%s\n", [[object description] UTF8String]);
                 }
                 
                 // Set the last result as the special variable "_"
-                id object = [_runtime objectForJSValue:value];
                 if (object != nil) {
                     [_runtime setValue:object forKey:@"_"];
                 }
