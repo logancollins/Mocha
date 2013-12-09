@@ -17,6 +17,7 @@
 #import "MOPointer.h"
 #import "MOUtilities.h"
 #import "MOFunctionArgument.h"
+#import "MOFunctionInvocation.h"
 #import "MOAllocator.h"
 
 #import "MOBridgeSupportController.h"
@@ -155,20 +156,29 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 }
 
 - (id)init {
+    return [self initWithOptions:MORuntimeOptionsNone];
+}
+
+- (id)initWithOptions:(MORuntimeOptions)options {
     self = [super init];
     if (self) {
+        self.options = options;
+        
         _ctx = JSGlobalContextCreate(MochaClass);
         _objectsToBoxes = [NSMapTable strongToStrongObjectsMapTable];
         
 #if !TARGET_OS_IPHONE
-        self.frameworkSearchPaths = [[NSMutableArray alloc] initWithObjects:
-                                 @"/System/Library/Frameworks",
-                                 @"/Library/Frameworks",
-                                 nil];
+        NSArray *libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask, YES);
+        NSMutableArray *frameworkSearchPaths = [NSMutableArray arrayWithCapacity:[libraryPaths count]];
+        for (NSString *libraryPath in libraryPaths) {
+            NSString *frameworkSearchPath = [libraryPath stringByAppendingPathComponent:@"Frameworks"];
+            [frameworkSearchPaths addObject:frameworkSearchPath];
+        }
+        self.frameworkSearchPaths = frameworkSearchPaths;
 #endif
         
         // Add the runtime as a property of the context
-        [self setObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
+        [self setGlobalObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
         
         // Load builtins
         [self installBuiltins];
@@ -414,62 +424,6 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 
 
 #pragma mark -
-#pragma mark Object Storage
-
-- (id)objectWithName:(NSString *)name {
-    JSValueRef exception = NULL;
-    
-    JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-    JSValueRef jsValue = JSObjectGetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, &exception);
-    JSStringRelease(jsName);
-    
-    if (exception != NULL) {
-        [self throwJSException:exception];
-        return NULL;
-    }
-    
-    return [self objectForJSValue:jsValue];
-}
-
-- (JSValueRef)setObject:(id)object withName:(NSString *)name {
-    return [self setObject:object withName:name attributes:(kJSPropertyAttributeNone)];
-}
-
-- (JSValueRef)setObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes {
-    JSValueRef jsValue = [self JSValueForObject:object];
-    
-    // Set
-    JSValueRef exception = NULL;
-    JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-    JSObjectSetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, jsValue, attributes, &exception);
-    JSStringRelease(jsName);
-    
-    if (exception != NULL) {
-        [self throwJSException:exception];
-        return NULL;
-    }
-    
-    return jsValue;
-}
-
-- (BOOL)removeObjectWithName:(NSString *)name {
-    JSValueRef exception = NULL;
-    
-    // Delete
-    JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-    JSObjectDeleteProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, &exception);
-    JSStringRelease(jsName);
-    
-    if (exception != NULL) {
-        [self throwJSException:exception];
-        return NO;
-    }
-    
-    return YES;
-}
-
-
-#pragma mark -
 #pragma mark Evaluation
 
 - (id)evaluateString:(NSString *)string {
@@ -537,6 +491,37 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
     }
     
     return [self objectForJSValue:jsObjectValue];
+}
+
+- (void)setGlobalObject:(id)object withName:(NSString *)name {
+    [self setGlobalObject:object withName:name attributes:(kJSPropertyAttributeNone)];
+}
+
+- (void)setGlobalObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes {
+    JSValueRef jsValue = [self JSValueForObject:object];
+    
+    // Set
+    JSValueRef exception = NULL;
+    JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
+    JSObjectSetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, jsValue, attributes, &exception);
+    JSStringRelease(jsName);
+    
+    if (exception != NULL) {
+        [self throwJSException:exception];
+    }
+}
+
+- (void)removeGlobalObjectWithName:(NSString *)name {
+    JSValueRef exception = NULL;
+    
+    // Delete
+    JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
+    JSObjectDeleteProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, &exception);
+    JSStringRelease(jsName);
+    
+    if (exception != NULL) {
+        [self throwJSException:exception];
+    }
 }
 
 
@@ -727,11 +712,8 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 #pragma mark Support
 
 - (void)installBuiltins {
-    MOMethod *loadFramework = [MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)];
-    [self setValue:loadFramework forKey:@"framework"];
-    
-    MOMethod *print = [MOMethod methodWithTarget:self selector:@selector(print:)];
-    [self setValue:print forKey:@"print"];
+    [self setGlobalObject:[MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)] withName:@"framework"];
+    [self setGlobalObject:[MOMethod methodWithTarget:self selector:@selector(print:)] withName:@"print"];
 }
 
 - (void)print:(id)o {
@@ -757,110 +739,124 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     
     MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
     
-    //
-    // ObjC class
-    //
-//    Class objCClass = NSClassFromString(propertyName);
-//    if (objCClass != Nil && ![propertyName isEqualToString:@"Object"]) {
-//        JSValueRef ret = [runtime JSValueForObject:objCClass];
-//        return ret;
-//    }
+    // Class
+    Class classObject = NSClassFromString(propertyName);
+    if (classObject != nil) {
+        return [runtime JSValueForObject:classObject];
+    }
     
-    //
     // Query BridgeSupport for property
-    //
-    MOBridgeSupportSymbol *symbol = [[MOBridgeSupportController sharedController] performQueryForSymbolName:propertyName];
-    if (symbol != nil) {
-        // Functions
-        if ([symbol isKindOfClass:[MOBridgeSupportFunction class]]) {
-            return [runtime JSValueForObject:symbol];
-        }
-        
-        // Classes
-        if ([symbol isKindOfClass:[MOBridgeSupportClass class]]) {
-            return [runtime JSValueForObject:symbol];
-        }
-        
-        // Constants
-        else if ([symbol isKindOfClass:[MOBridgeSupportConstant class]]) {
-            NSString *type = nil;
+    NSArray *types = [NSArray arrayWithObjects:
+                      [MOBridgeSupportClass class],
+                      [MOBridgeSupportFunction class],
+                      [MOBridgeSupportConstant class],
+                      [MOBridgeSupportStringConstant class],
+                      [MOBridgeSupportEnum class],
+                      nil];
+    NSDictionary *symbols = [[MOBridgeSupportController sharedController] symbolsWithName:propertyName types:types];
+    
+    
+    // Classes
+    MOBridgeSupportClass *aClass = [symbols objectForKey:NSStringFromClass([MOBridgeSupportClass class])];
+    if ([aClass isKindOfClass:[MOBridgeSupportClass class]]) {
+        Class realClass = NSClassFromString(aClass.name);
+        return [runtime JSValueForObject:realClass];
+    }
+    
+    // Functions
+    MOBridgeSupportFunction *function = [symbols objectForKey:NSStringFromClass([MOBridgeSupportFunction class])];
+    if (function != nil) {
+        return [runtime JSValueForObject:function];
+    }
+    
+    // Constants
+    MOBridgeSupportConstant *constant = [symbols objectForKey:NSStringFromClass([MOBridgeSupportConstant class])];
+    if (constant != nil) {
+        NSString *type = nil;
 #if __LP64__
-            type = [(MOBridgeSupportConstant *)symbol type64];
-            if (type == nil) {
-                type = [(MOBridgeSupportConstant *)symbol type];
-            }
+        type = [constant type64];
+        if (type == nil) {
+            type = [constant type];
+        }
 #else
-            type = [(MOBridgeSupportConstant *)symbol type];
+        type = [constant type];
 #endif
-            
-            // Raise if there is no type
-            if (type == nil) {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No type defined for symbol: %@", symbol] userInfo:nil];
-                if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e];
-                }
-                return NULL;
+        
+        // Raise if there is no type
+        if (type == nil) {
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No type defined for symbol: %@", constant] userInfo:nil];
+            if (exception != NULL) {
+                *exception = [runtime JSValueForObject:e];
             }
-            
-            // Grab symbol
-            void *symbol = dlsym(RTLD_DEFAULT, [propertyName UTF8String]);
-            if (!symbol) {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Symbol not found: %@", symbol] userInfo:nil];
-                if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e];
-                }
-                return NULL;
+            return NULL;
+        }
+        
+        // Grab symbol
+        void *symbol = dlsym(RTLD_DEFAULT, [propertyName UTF8String]);
+        if (!symbol) {
+            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Symbol not found: %@", constant] userInfo:nil];
+            if (exception != NULL) {
+                *exception = [runtime JSValueForObject:e];
             }
-            
-            char typeEncodingChar = [type UTF8String][0];
-            MOFunctionArgument *argument = [[MOFunctionArgument alloc] init];
-            
-            if (typeEncodingChar == _C_STRUCT_B) {
-                [argument setStructureTypeEncoding:type withCustomStorage:symbol];
-            }
-            else if (typeEncodingChar == _C_PTR) {
-                if ([type isEqualToString:@"^{__CFString=}"]) {
-                    [argument setTypeEncoding:_C_ID withCustomStorage:symbol];
-                }
-                else {
-                    [argument setPointerTypeEncoding:type withCustomStorage:symbol];
-                }
+            return NULL;
+        }
+        
+        char typeEncodingChar = [type UTF8String][0];
+        MOFunctionArgument *argument = [[MOFunctionArgument alloc] init];
+        
+        if (typeEncodingChar == _C_STRUCT_B) {
+            [argument setStructureTypeEncoding:type withCustomStorage:symbol];
+        }
+        else if (typeEncodingChar == _C_PTR) {
+            if ([type isEqualToString:@"^{__CFString=}"]) {
+                [argument setTypeEncoding:_C_ID withCustomStorage:symbol];
             }
             else {
-                [argument setTypeEncoding:typeEncodingChar withCustomStorage:symbol];
+                [argument setPointerTypeEncoding:type withCustomStorage:symbol];
             }
-            
-            JSValueRef valueJS = [argument getValueAsJSValueInContext:ctx];
-            
-            return valueJS;
+        }
+        else {
+            [argument setTypeEncoding:typeEncodingChar withCustomStorage:symbol];
         }
         
-        // Enums
-        else if ([symbol isKindOfClass:[MOBridgeSupportEnum class]]) {
-            double doubleValue = 0;
-            NSNumber *value = [(MOBridgeSupportEnum *)symbol value];
+        JSValueRef valueJS = [argument getValueAsJSValueInContext:ctx];
+        
+        return valueJS;
+    }
+    
+    // String constants
+    MOBridgeSupportStringConstant *stringConstant = [symbols objectForKey:NSStringFromClass([MOBridgeSupportStringConstant class])];
+    if (stringConstant != nil) {
+        NSString *value = [stringConstant value];
+        return [runtime JSValueForObject:value];
+    }
+    
+    // Enums
+    MOBridgeSupportEnum *anEnum = [symbols objectForKey:NSStringFromClass([MOBridgeSupportEnum class])];
+    if (anEnum != nil) {
+        double doubleValue = 0;
+        NSNumber *value = [anEnum value];
 #if __LP64__
-            NSNumber *value64 = [(MOBridgeSupportEnum *)symbol value64];
-            if (value64 != nil) {
+        NSNumber *value64 = [anEnum value64];
+        if (value64 != nil) {
+            doubleValue = [value doubleValue];
+        }
+        else {
+#endif
+            if (value != nil) {
                 doubleValue = [value doubleValue];
             }
             else {
-#endif
-                if (value != nil) {
-                    doubleValue = [value doubleValue];
+                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", anEnum] userInfo:nil];
+                if (exception != NULL) {
+                    *exception = [runtime JSValueForObject:e];
                 }
-                else {
-                    NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", symbol] userInfo:nil];
-                    if (exception != NULL) {
-                        *exception = [runtime JSValueForObject:e];
-                    }
-                    return NULL;
-                }
-#if __LP64__
+                return NULL;
             }
-#endif
-            return JSValueMakeNumber(ctx, doubleValue);
+#if __LP64__
         }
+#endif
+        return JSValueMakeNumber(ctx, doubleValue);
     }
     
     return NULL;
@@ -936,12 +932,6 @@ static bool MOObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStrin
         if ([object respondsToSelector:selector]) {
             return YES;
         }
-    }
-    
-    // Association object
-    id value = objc_getAssociatedObject(object, (__bridge const void *)(propertyName));
-    if (value != nil) {
-        return YES;
     }
     
     // Method
@@ -1042,12 +1032,6 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
                 JSValueRef value = MOFunctionInvoke(method, ctx, 0, NULL, exception);
                 return value;
             }
-        }
-        
-        // Association object
-        id value = objc_getAssociatedObject(object, (__bridge const void *)(propertyName));
-        if (value != nil) {
-            return [runtime JSValueForObject:value];
         }
         
         // Method

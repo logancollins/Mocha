@@ -511,7 +511,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
 
 + (NSString *)structureFullTypeEncodingFromStructureName:(NSString *)structureName {
     // Fetch structure type encoding from BridgeSupport
-    id symbol = [[MOBridgeSupportController sharedController] performQueryForSymbolName:structureName];
+    id symbol = [[MOBridgeSupportController sharedController] symbolWithName:structureName type:[MOBridgeSupportStruct class]];
     
     if (symbol == nil) {
         @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No structure encoding found for %@", structureName] userInfo:nil];

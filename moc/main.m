@@ -17,10 +17,12 @@
 
 static const char * program_name = "mocha";
 static const char * program_version = "1.0";
+static const char * program_copyright = "Copyright (c) 2013 Sunflower Softworks. All rights reserved.";
 
 
 static const char * short_options = "hv";
 static struct option long_options[] = {
+    { "arc", optional_argument, NULL, 'A' },
     { "help", optional_argument, NULL, 'h' },
     { "version", optional_argument, NULL, 'v' },
     { NULL, 0, NULL, 0 }
@@ -31,6 +33,7 @@ static void printUsage(FILE *stream) {
     fprintf(stream, "%s %s\n", program_name, program_version);
     fprintf(stream, "Usage: %s [-hv] [file]\n", program_name);
     fprintf(stream,
+            "  --arc                     Enable Automatic Reference Counting.\n"
             "  -h, --help                Show this help information.\n"
             "  -v, --version             Show the program's version number.\n"
             );
@@ -42,12 +45,18 @@ static void printVersion(void) {
 }
 
 
+static void printCopyright(void) {
+    printf("%s\n", program_copyright);
+}
+
+
 void executeScript(NSString *script, NSString *path);
 
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         NSMutableArray *filePaths = [NSMutableArray array];
+        MORuntimeOptions options = MORuntimeOptionsNone;
         
         int next_option;
         do {
@@ -57,8 +66,13 @@ int main(int argc, const char * argv[]) {
                 case -1: {
                     break;
                 }
+                case 'A': {
+                    options |= MORuntimeOptionAutomaticReferenceCounting;
+                    break;
+                }
                 case 'v': {
                     printVersion();
+                    printCopyright();
                     exit(0);
                     break;
                 }
@@ -109,7 +123,13 @@ int main(int argc, const char * argv[]) {
         }
         else {
             // Interactive mode
-            MOCInterpreter *interpreter = [[MOCInterpreter alloc] init];
+            printVersion();
+            
+            if (options & MORuntimeOptionAutomaticReferenceCounting) {
+                printf("Automatic Reference Counting enabled.\n");
+            }
+            
+            MOCInterpreter *interpreter = [[MOCInterpreter alloc] initWithOptions:options];
             [interpreter run];
         }
     }

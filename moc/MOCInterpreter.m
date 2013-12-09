@@ -19,36 +19,31 @@
 #import <readline/history.h>
 
 
-static const char interactivePrompt[] = "> ";
-
-
-@interface MOCInterpreter ()
-
-- (void)installBuiltins;
-
-@end
+static const char interactivePrompt[] = ">>> ";
 
 
 @implementation MOCInterpreter {
     MORuntime *_runtime;
 }
 
-- (void)installBuiltins {
-    _runtime = [[MORuntime alloc] init];
-    
-    MOMethod *gc = [MOMethod methodWithTarget:_runtime selector:@selector(garbageCollect)];
-    [_runtime setValue:gc forKey:@"gc"];
-    
-    MOMethod *checkSyntax = [MOMethod methodWithTarget:_runtime selector:@selector(isSyntaxValidForString:)];
-    [_runtime setValue:checkSyntax forKey:@"checkSyntax"];
-    
-    MOMethod *exit = [MOMethod methodWithTarget:self selector:@selector(exit)];
-    [_runtime setValue:exit forKey:@"exit"];
+- (id)initWithOptions:(MORuntimeOptions)options {
+    self = [super init];
+    if (self) {
+        _runtime = [[MORuntime alloc] initWithOptions:options];
+        
+        MOMethod *gc = [MOMethod methodWithTarget:_runtime selector:@selector(garbageCollect)];
+        [_runtime setGlobalObject:gc withName:@"gc"];
+        
+        MOMethod *checkSyntax = [MOMethod methodWithTarget:_runtime selector:@selector(isSyntaxValidForString:)];
+        [_runtime setGlobalObject:checkSyntax withName:@"checkSyntax"];
+        
+        MOMethod *exit = [MOMethod methodWithTarget:self selector:@selector(exit)];
+        [_runtime setGlobalObject:exit withName:@"exit"];
+    }
+    return self;
 }
 
 - (void)run {
-    [self installBuiltins];
-    
     char *line = NULL;
     
     while ((line = readline(interactivePrompt))) {
@@ -67,10 +62,10 @@ static const char interactivePrompt[] = "> ";
                 
                 // Set the last result as the special variable "_"
                 if (object != nil) {
-                    [_runtime setValue:object forKey:@"_"];
+                    [_runtime setGlobalObject:object withName:@"_"];
                 }
                 else {
-                    [_runtime setNilValueForKey:@"_"];
+                    [_runtime removeGlobalObjectWithName:@"_"];
                 }
             }
             @catch (NSException *e) {

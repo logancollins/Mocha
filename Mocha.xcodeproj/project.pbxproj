@@ -87,6 +87,10 @@
 		02BF151A15C096070004CA2C /* MOUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BF151915C096070004CA2C /* MOUnitTests.m */; };
 		02BF152015C096370004CA2C /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
 		02BF152715C0973C0004CA2C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 02BF152615C0973C0004CA2C /* Tests */; };
+		02DCA800185677A60047EF92 /* MOFunctionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */; };
+		02DCA801185677A60047EF92 /* MOFunctionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */; };
+		02DCA802185677A60047EF92 /* MOFunctionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		02DCA803185677A60047EF92 /* MOFunctionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		2D2CB84A1711A12200AFA330 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2CB8491711A12200AFA330 /* libstdc++.dylib */; };
 		2D2CB84C1711A35000AFA330 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2CB8471711A11900AFA330 /* libicucore.dylib */; };
 		2D75F66A1711975C00876CCF /* ffi.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D75F6521711975C00876CCF /* ffi.h */; };
@@ -281,6 +285,8 @@
 		02BF151915C096070004CA2C /* MOUnitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MOUnitTests.m; sourceTree = "<group>"; };
 		02BF151B15C096070004CA2C /* UnitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnitTests-Prefix.pch"; sourceTree = "<group>"; };
 		02BF152615C0973C0004CA2C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tests; sourceTree = "<group>"; };
+		02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionInvocation.h; sourceTree = "<group>"; };
+		02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionInvocation.m; sourceTree = "<group>"; };
 		2D2CB8471711A11900AFA330 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libicucore.dylib; sourceTree = DEVELOPER_DIR; };
 		2D2CB8491711A12200AFA330 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libstdc++.dylib"; sourceTree = DEVELOPER_DIR; };
 		2D75F6521711975C00876CCF /* ffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi.h; sourceTree = "<group>"; };
@@ -690,6 +696,8 @@
 			children = (
 				EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */,
 				EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */,
+				02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */,
+				02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */,
 				02112321155D7BD000415471 /* MOUtilities.h */,
 				02112322155D7BD000415471 /* MOUtilities.m */,
 			);
@@ -767,6 +775,7 @@
 				EA33A29D1569B81800B4A27D /* WebKitAvailability.h in Headers */,
 				EA33A2E51569BB9300B4A27D /* NSOrderedSet+MochaAdditions.h in Headers */,
 				EAB4B15015743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
+				02DCA801185677A60047EF92 /* MOFunctionInvocation.h in Headers */,
 				02B1AE1F15C07A88000E2008 /* MOAllocator.h in Headers */,
 				027CE835184588CD00AFF4B2 /* MORuntime_Private.h in Headers */,
 				020FB3DE15C1EAE300B003DC /* MOPointerValue.h in Headers */,
@@ -793,6 +802,7 @@
 				EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */,
 				EAA45E88155EE97200F93E40 /* MOMethod.h in Headers */,
 				EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */,
+				02DCA800185677A60047EF92 /* MOFunctionInvocation.h in Headers */,
 				02112323155D7BD000415471 /* MOUtilities.h in Headers */,
 				02112327155D973100415471 /* MOBridgeSupportController.h in Headers */,
 				0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */,
@@ -1054,6 +1064,7 @@
 				2D75F6771711975C00876CCF /* darwin.S in Sources */,
 				2D75F6781711975C00876CCF /* ffi.c in Sources */,
 				2D75F6791711975C00876CCF /* closures.c in Sources */,
+				02DCA803185677A60047EF92 /* MOFunctionInvocation.m in Sources */,
 				2D75F67A1711975C00876CCF /* dlmalloc.c in Sources */,
 				2D75F67B1711975C00876CCF /* prep_cif.c in Sources */,
 				2D75F67C1711975C00876CCF /* raw_api.c in Sources */,
@@ -1087,6 +1098,7 @@
 				02B1AE1C15C07A80000E2008 /* MOAllocator.m in Sources */,
 				020FB3DF15C1EAE300B003DC /* MOPointerValue.m in Sources */,
 				02A9EB1215C84D51005C0E8C /* MOPointer.m in Sources */,
+				02DCA802185677A60047EF92 /* MOFunctionInvocation.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,8 @@
 
 @interface MOCInterpreter : NSObject
 
+- (id)initWithOptions:(MORuntimeOptions)options;
+
 - (void)run;
 
 @end

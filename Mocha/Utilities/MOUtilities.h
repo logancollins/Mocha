@@ -9,12 +9,6 @@
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
 
-#if TARGET_OS_IPHONE
-#import "ffi.h"
-#else
-#import <ffi/ffi.h>
-#endif
-
 
 @class MOFunctionArgument;
 
@@ -23,7 +17,6 @@ JSValueRef MOJSValueToType(JSContextRef ctx, JSObjectRef objectJS, JSType type, 
 NSString * MOJSValueToString(JSContextRef ctx, JSValueRef value, JSValueRef *exception);
 
 JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
-JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount, const JSValueRef arguments[], JSValueRef *exception);
 
 BOOL MOSelectorIsVariadic(Class klass, SEL selector);
 void * MOInvocationGetObjCCallAddressForArguments(NSArray *arguments);

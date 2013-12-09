@@ -15,6 +15,7 @@
 + (MORuntime *)runtimeWithContext:(JSContextRef)ctx;
 
 @property (readonly) JSGlobalContextRef context;
+@property (readwrite) MORuntimeOptions options;
 
 // JSValue <-> id
 + (JSValueRef)JSValueForObject:(id)object inContext:(JSContextRef)ctx;
@@ -34,10 +35,7 @@
 - (JSObjectRef)boxedJSObjectForObject:(id)object;
 
 // Object storage
-- (id)objectWithName:(NSString *)name;
-- (JSValueRef)setObject:(id)object withName:(NSString *)name;
-- (JSValueRef)setObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes;
-- (BOOL)removeObjectWithName:(NSString *)name;
+- (void)setGlobalObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes;
 
 // Evaluation
 - (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath;

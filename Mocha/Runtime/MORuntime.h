@@ -11,10 +11,52 @@
 
 
 /*!
+ * @enum MORuntimeOptions
+ * @abstract Options to configure runtime behaviors
+ * 
+ * @constant MORuntimeOptionsNone   No options
+ *
+ * @constant MORuntimeOptionAutomaticReferenceCounting
+ * @abstract Enable automatic management of Objective-C object retain semantics
+ * @discussion
+ * When ARC-mode is enable for a runtime, objects created through the bridge do not need
+ * to be explicitly sent -release messages. This behavior requires that all methods conform
+ * to the Objective-C naming conventions and/or have proper retain semantics declared in
+ * loaded BridgeSupport metdata libraries. If this is not the case, objects may be leaked
+ * and/or lead to unstable behavior.
+ */
+typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
+    MORuntimeOptionsNone = 0,
+    MORuntimeOptionAutomaticReferenceCounting = (1 << 0),
+};
+
+
+/*!
  * @class MORuntime
  * @abstract The Mocha runtime interface
  */
 @interface MORuntime : NSObject
+
+/*!
+ * @method initWithOptions:
+ * @abstract Creates a new runtime
+ * 
+ * @param options
+ * The runtime configuration options
+ * 
+ * @result An MORuntime object
+ */
+- (id)initWithOptions:(MORuntimeOptions)options;
+
+
+/*!
+ * @property options
+ * @abstract The runtime's configuration options
+ * 
+ * @result An MORuntimeOptions value
+ */
+@property (readonly) MORuntimeOptions options;
+
 
 /*!
  * @method isSyntaxValidForString:
@@ -62,9 +104,33 @@
  * @method globalObjectWithName:
  * @abstract Gets an object in the global scope with a specified name
  * 
+ * @param objectName
+ * The name of the global object to get
+ * 
  * @result An object, or MOUndefined if an object with the specified name does not exist
  */
 - (id)globalObjectWithName:(NSString *)objectName;
+
+/*!
+ * @method setGlobalObject:withName:
+ * @abstract Sets an object in the global scope with a specified name
+ *
+ * @param object
+ * The object value to set
+ *
+ * @param objectName
+ * The name of the global object to set
+ */
+- (void)setGlobalObject:(id)object withName:(NSString *)name;
+
+/*!
+ * @method removeGlobalObjectWithName:
+ * @abstract Removes an object in the global scope with a specified name
+ *
+ * @param objectName
+ * The name of the global object to remove
+ */
+- (void)removeGlobalObjectWithName:(NSString *)name;
 
 
 /*!
