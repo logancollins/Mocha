@@ -27,10 +27,10 @@
     Class searchClass = [target class];
     while (searchClass != Nil) {
         MOBridgeSupportClass *aClass = [[MOBridgeSupportController sharedController] symbolWithName:NSStringFromClass(searchClass) type:[MOBridgeSupportClass class]];
-        MOBridgeSupportMethod *method = [aClass methodWithSelector:selector];
+        MOBridgeSupportMethod *bridgeMethod = [aClass methodWithSelector:selector];
         if (method != nil) {
             matchFound = YES;
-            isAlreadyRetained = [[method returnValue] isAlreadyRetained];
+            isAlreadyRetained = [[bridgeMethod returnValue] isAlreadyRetained];
             break;
         }
         searchClass = [searchClass superclass];

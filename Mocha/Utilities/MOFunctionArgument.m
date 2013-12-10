@@ -493,6 +493,9 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     // Extract structure name
     // skip '{'
     char *c = (char *)[encoding UTF8String] + 1;
+    if (c == NULL) {
+        return nil;
+    }
     // skip '_' if it's there
     if (*c == '_') {
         c++;
@@ -734,10 +737,10 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
                 *(void**)ptr = [object pointerValue];
             }
             else if ([object isKindOfClass:[MOStruct class]]) {
-                JSObjectRef object = JSValueToObject(ctx, value, NULL);
+                JSObjectRef objectRef = JSValueToObject(ctx, value, NULL);
                 NSString *type = [MOFunctionArgument structureFullTypeEncodingFromStructureTypeEncoding:[fullTypeEncoding substringFromIndex:1]];
                 
-                NSInteger numParsed = [MOFunctionArgument structureFromJSObject:object inContext:ctx inParentJSValueRef:NULL cString:(char *)[type UTF8String] storage:&ptr];
+                NSInteger numParsed = [MOFunctionArgument structureFromJSObject:objectRef inContext:ctx inParentJSValueRef:NULL cString:(char *)[type UTF8String] storage:&ptr];
                 return numParsed;
             }
             else {
@@ -1073,8 +1076,8 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     
     MOStruct *structure = [[MOStruct alloc] initWithName:structureName memberNames:memberNames];
     for (NSString *name in memberNames) {
-        id value = [memberValues objectForKey:name];
-        [structure setObject:value forMemberName:name];
+        id memberValue = [memberValues objectForKey:name];
+        [structure setObject:memberValue forMemberName:name];
     }
     
     JSValueRef jsValue = [runtime JSValueForObject:structure];

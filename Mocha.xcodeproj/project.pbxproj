@@ -91,6 +91,8 @@
 		02DCA801185677A60047EF92 /* MOFunctionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */; };
 		02DCA802185677A60047EF92 /* MOFunctionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		02DCA803185677A60047EF92 /* MOFunctionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		02DCA80518568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		02DCA80618568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2D2CB84A1711A12200AFA330 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2CB8491711A12200AFA330 /* libstdc++.dylib */; };
 		2D2CB84C1711A35000AFA330 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2CB8471711A11900AFA330 /* libicucore.dylib */; };
 		2D75F66A1711975C00876CCF /* ffi.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D75F6521711975C00876CCF /* ffi.h */; };
@@ -287,6 +289,7 @@
 		02BF152615C0973C0004CA2C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tests; sourceTree = "<group>"; };
 		02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionInvocation.h; sourceTree = "<group>"; };
 		02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionInvocation.m; sourceTree = "<group>"; };
+		02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOJavaScriptFunction_Private.h; sourceTree = "<group>"; };
 		2D2CB8471711A11900AFA330 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libicucore.dylib; sourceTree = DEVELOPER_DIR; };
 		2D2CB8491711A12200AFA330 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libstdc++.dylib"; sourceTree = DEVELOPER_DIR; };
 		2D75F6521711975C00876CCF /* ffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi.h; sourceTree = "<group>"; };
@@ -686,6 +689,7 @@
 				02568B731846653A00DD8D92 /* MOJavaScriptObject_Private.h */,
 				EAB4B14E15743E1F00F4342D /* MOJavaScriptObject.m */,
 				02568B7618466A2000DD8D92 /* MOJavaScriptFunction.h */,
+				02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */,
 				02568B7718466A2000DD8D92 /* MOJavaScriptFunction.m */,
 			);
 			path = Objects;
@@ -780,6 +784,7 @@
 				027CE835184588CD00AFF4B2 /* MORuntime_Private.h in Headers */,
 				020FB3DE15C1EAE300B003DC /* MOPointerValue.h in Headers */,
 				02A9EB1415C84DA2005C0E8C /* MOPointer.h in Headers */,
+				02DCA80618568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */,
 				2D75F66A1711975C00876CCF /* ffi.h in Headers */,
 				2D75F66B1711975C00876CCF /* ffi_armv7.h in Headers */,
 				2D75F66C1711975C00876CCF /* ffi_common.h in Headers */,
@@ -801,6 +806,7 @@
 				EAA45E1C155CE46000F93E40 /* MochaDefines.h in Headers */,
 				EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */,
 				EAA45E88155EE97200F93E40 /* MOMethod.h in Headers */,
+				02DCA80518568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */,
 				EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */,
 				02DCA800185677A60047EF92 /* MOFunctionInvocation.h in Headers */,
 				02112323155D7BD000415471 /* MOUtilities.h in Headers */,
@@ -1318,6 +1324,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;
@@ -1349,6 +1356,7 @@
 				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_SHADOW = YES;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES;
 				GCC_WARN_UNUSED_FUNCTION = YES;

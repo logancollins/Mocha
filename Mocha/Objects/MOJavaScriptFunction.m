@@ -7,6 +7,7 @@
 //
 
 #import "MOJavaScriptFunction.h"
+#import "MOJavaScriptFunction_Private.h"
 #import "MOJavaScriptObject_Private.h"
 
 #import "MORuntime_Private.h"
@@ -41,6 +42,70 @@
     }
     
     return [runtime objectForJSValue:returnValue];
+}
+
+- (MOJavaScriptClosureBlock)blockWithArgumentCount:(NSUInteger *)argCount {
+    if (argCount != NULL) {
+        JSObjectRef jsFunction = [self JSObject];
+        JSContextRef ctx = [self JSContext];
+        
+        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
+        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
+        JSStringRelease(lengthString);
+        
+        *argCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+    }
+    
+    MOJavaScriptClosureBlock newBlock = (id)^(id obj, ...) {
+        // JavaScript functions
+        JSObjectRef jsFunction = [self JSObject];
+        JSContextRef ctx = [self JSContext];
+        MORuntime *runtime = [MORuntime runtimeWithContext:ctx];
+        
+        JSStringRef lengthString = JSStringCreateWithCFString(CFSTR("length"));
+        JSValueRef value = JSObjectGetProperty(ctx, jsFunction, lengthString, NULL);
+        JSStringRelease(lengthString);
+        
+        NSUInteger argumentCount = (NSUInteger)JSValueToNumber(ctx, value, NULL);
+        
+        JSValueRef exception = NULL;
+        
+        va_list args;
+        va_start(args, obj);
+        
+        id arg = obj;
+        JSValueRef jsValue = [runtime JSValueForObject:obj];
+        JSObjectRef jsObject = JSValueToObject(ctx, jsValue, &exception);
+        if (jsObject == NULL) {
+            [runtime throwJSException:exception];
+            return nil;
+        }
+        
+        JSValueRef *jsArguments = (JSValueRef *)malloc(sizeof(JSValueRef) * (argumentCount - 1));
+        
+        // Handle passed arguments
+        for (NSUInteger i=0; i<argumentCount; i++) {
+            arg = va_arg(args, id);
+            jsArguments[i] = [runtime JSValueForObject:arg];
+        }
+        
+        va_end(args);
+        
+        JSValueRef jsReturnValue = JSObjectCallAsFunction(ctx, jsFunction, jsObject, argumentCount, jsArguments, &exception);
+        id returnValue = [runtime objectForJSValue:jsReturnValue];
+        
+        if (jsArguments != NULL) {
+            free(jsArguments);
+        }
+        
+        if (exception != NULL) {
+            [runtime throwJSException:exception];
+            return nil;
+        }
+        
+        return (__bridge void *)returnValue;
+    };
+    return [newBlock copy];
 }
 
 @end

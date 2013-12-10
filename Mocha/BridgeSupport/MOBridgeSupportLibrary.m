@@ -62,7 +62,7 @@
     
     NSMutableDictionary *symbols = [NSMutableDictionary dictionaryWithCapacity:[_symbolsByType count]];
     
-    for (NSString *className in _symbolsByType) {
+    for (NSString *className in types) {
         NSDictionary *typeSymbols = _symbolsByType[className];
         MOBridgeSupportSymbol *symbol = [typeSymbols objectForKey:name];
         if (symbol != nil) {
