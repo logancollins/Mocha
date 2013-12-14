@@ -11,6 +11,10 @@
 
 @implementation NSArray (MochaAdditions)
 
++ (id)constructWithArguments:(NSArray *)arguments {
+    return [[self alloc] initWithArray:arguments];
+}
+
 - (id)mo_objectForIndexedSubscript:(NSUInteger)idx {
     return [self objectAtIndex:idx];
 }
@@ -23,7 +27,7 @@
         if (value != nil) {
             [objects addObject:value];
         }
-        if (localStop == NO) {
+        if (localStop == YES) {
             *stop = YES;
         }
     }];

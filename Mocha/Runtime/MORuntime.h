@@ -22,8 +22,8 @@
  * When ARC-mode is enable for a runtime, objects created through the bridge do not need
  * to be explicitly sent -release messages. This behavior requires that all methods conform
  * to the Objective-C naming conventions and/or have proper retain semantics declared in
- * loaded BridgeSupport metdata libraries. If this is not the case, objects may be leaked
- * and/or lead to unstable behavior.
+ * loaded BridgeSupport metadata libraries. If this is not the case, objects may be leaked
+ * and/or it might lead to unstable behavior.
  */
 typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
     MORuntimeOptionsNone = 0,
@@ -79,13 +79,6 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  * @result An object, or nil
  */
 - (id)evaluateString:(NSString *)string;
-
-
-/*!
- * @method garbageCollect
- * @abstract Instructs the JavaScript garbage collector to perform a collection
- */
-- (void)garbageCollect;
 
 
 /*!
@@ -199,13 +192,41 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
 
 
 /*!
- * @category NSObject(MOObjectSubscripting)
- * @abstract Methods for enabling object subscripting within the runtime
+ * @category NSObject(MOObjectConstructing)
+ * @abstract Methods for enabling calling an object as a constructor within the runtime
+ *
+ * @discussion
+ * This category defines but does not implement these methods.
+ */
+@interface NSObject (MOObjectConstructing)
+
+- (id)constructWithArguments:(NSArray *)arguments;
+
+@end
+
+
+/*!
+ * @category NSObject(MOObjectCalling)
+ * @abstract Methods for enabling calling an object as a function within the runtime
+ *
+ * @discussion
+ * This category defines but does not implement these methods.
+ */
+@interface NSObject (MOObjectCalling)
+
+- (id)callWithArguments:(NSArray *)arguments;
+
+@end
+
+
+/*!
+ * @category NSObject(MOObjectIndexedSubscripting)
+ * @abstract Methods for enabling indexed subscripting within the runtime
  * 
  * @discussion
  * This category defines but does not implement these methods.
  */
-@interface NSObject (MOObjectSubscripting)
+@interface NSObject (MOObjectIndexedSubscripting)
 
 /*!
  * @method objectForIndexedSubscript:
@@ -230,6 +251,17 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  */
 - (void)setObject:(id)obj forIndexedSubscript:(NSUInteger)idx;
 
+@end
+
+
+/*!
+ * @category NSObject(MOObjectKeyedSubscripting)
+ * @abstract Methods for enabling keyed subscripting within the runtime
+ *
+ * @discussion
+ * This category defines but does not implement these methods.
+ */
+@interface NSObject (MOObjectKeyedSubscripting)
 
 /*!
  * @method objectForKeyedSubscript:

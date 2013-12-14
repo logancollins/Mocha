@@ -7,14 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Mocha/MOCallable.h>
 
 
 /*!
  * @class MOMethod
  * @abstract An object representation of an object method
  */
-@interface MOMethod : NSObject <MOCallable>
+@interface MOMethod : NSObject
 
 /*!
  * @method methodWithTarget:selector:
@@ -46,6 +45,14 @@
  * @result A SEL value
  */
 @property (readonly) SEL selector;
+
+/*!
+ * @property variadic
+ * @abstract Whether this method consumes nil-terminated variable arguments
+ *
+ * @result A BOOL value
+ */
+@property (assign, getter=isVariadic) BOOL variadic;
 
 /*!
  * @property returnsRetained

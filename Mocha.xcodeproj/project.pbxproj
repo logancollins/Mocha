@@ -52,7 +52,6 @@
 		020FB3DE15C1EAE300B003DC /* MOPointerValue.h in Headers */ = {isa = PBXBuildFile; fileRef = 020FB3DB15C1EAE300B003DC /* MOPointerValue.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		020FB3DF15C1EAE300B003DC /* MOPointerValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 020FB3DC15C1EAE300B003DC /* MOPointerValue.m */; };
 		020FB3E015C1EAE300B003DC /* MOPointerValue.m in Sources */ = {isa = PBXBuildFile; fileRef = 020FB3DC15C1EAE300B003DC /* MOPointerValue.m */; };
-		02112323155D7BD000415471 /* MOUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112321155D7BD000415471 /* MOUtilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02112327155D973100415471 /* MOBridgeSupportController.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112325155D973100415471 /* MOBridgeSupportController.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211232A155D99F600415471 /* MOBridgeSupportSymbol.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		0211233E155DB8F800415471 /* MOBridgeSupportLibrary.h in Headers */ = {isa = PBXBuildFile; fileRef = 0211233C155DB8F800415471 /* MOBridgeSupportLibrary.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -61,14 +60,6 @@
 		025184A115D182FA005D661F /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 025184A015D182FA005D661F /* Cocoa.framework */; };
 		02568B741846653A00DD8D92 /* MOJavaScriptObject_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02568B731846653A00DD8D92 /* MOJavaScriptObject_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02568B751846653A00DD8D92 /* MOJavaScriptObject_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02568B731846653A00DD8D92 /* MOJavaScriptObject_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		02568B7818466A2000DD8D92 /* MOJavaScriptFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 02568B7618466A2000DD8D92 /* MOJavaScriptFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		02568B7918466A2000DD8D92 /* MOJavaScriptFunction.h in Headers */ = {isa = PBXBuildFile; fileRef = 02568B7618466A2000DD8D92 /* MOJavaScriptFunction.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		02568B7A18466A2000DD8D92 /* MOJavaScriptFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 02568B7718466A2000DD8D92 /* MOJavaScriptFunction.m */; };
-		02568B7B18466A2000DD8D92 /* MOJavaScriptFunction.m in Sources */ = {isa = PBXBuildFile; fileRef = 02568B7718466A2000DD8D92 /* MOJavaScriptFunction.m */; };
-		027CE82C1845878700AFF4B2 /* MOConstructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 027CE82B1845878700AFF4B2 /* MOConstructor.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		027CE82D1845878700AFF4B2 /* MOConstructor.h in Headers */ = {isa = PBXBuildFile; fileRef = 027CE82B1845878700AFF4B2 /* MOConstructor.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		027CE82F184587F500AFF4B2 /* MOCallable.h in Headers */ = {isa = PBXBuildFile; fileRef = 027CE82E184587F500AFF4B2 /* MOCallable.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		027CE830184587F500AFF4B2 /* MOCallable.h in Headers */ = {isa = PBXBuildFile; fileRef = 027CE82E184587F500AFF4B2 /* MOCallable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		027CE834184588CD00AFF4B2 /* MORuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 027CE831184588CD00AFF4B2 /* MORuntime_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		027CE835184588CD00AFF4B2 /* MORuntime_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 027CE831184588CD00AFF4B2 /* MORuntime_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		027CE836184588CD00AFF4B2 /* MORuntime.h in Headers */ = {isa = PBXBuildFile; fileRef = 027CE832184588CD00AFF4B2 /* MORuntime.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -87,12 +78,18 @@
 		02BF151A15C096070004CA2C /* MOUnitTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 02BF151915C096070004CA2C /* MOUnitTests.m */; };
 		02BF152015C096370004CA2C /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
 		02BF152715C0973C0004CA2C /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 02BF152615C0973C0004CA2C /* Tests */; };
+		02C2065218578C90003A316A /* MOWeak.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C2065018578C90003A316A /* MOWeak.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02C2065318578C90003A316A /* MOWeak.h in Headers */ = {isa = PBXBuildFile; fileRef = 02C2065018578C90003A316A /* MOWeak.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		02C2065418578C90003A316A /* MOWeak.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C2065118578C90003A316A /* MOWeak.m */; };
+		02C2065518578C90003A316A /* MOWeak.m in Sources */ = {isa = PBXBuildFile; fileRef = 02C2065118578C90003A316A /* MOWeak.m */; };
+		02CBE13F18593D0900B8D16D /* MOBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CBE13D18593D0900B8D16D /* MOBlock.h */; };
+		02CBE14018593D0900B8D16D /* MOBlock.h in Headers */ = {isa = PBXBuildFile; fileRef = 02CBE13D18593D0900B8D16D /* MOBlock.h */; };
+		02CBE14118593D0900B8D16D /* MOBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CBE13E18593D0900B8D16D /* MOBlock.m */; };
+		02CBE14218593D0900B8D16D /* MOBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CBE13E18593D0900B8D16D /* MOBlock.m */; };
 		02DCA800185677A60047EF92 /* MOFunctionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */; };
 		02DCA801185677A60047EF92 /* MOFunctionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */; };
 		02DCA802185677A60047EF92 /* MOFunctionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		02DCA803185677A60047EF92 /* MOFunctionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		02DCA80518568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		02DCA80618568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		2D2CB84A1711A12200AFA330 /* libstdc++.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2CB8491711A12200AFA330 /* libstdc++.dylib */; };
 		2D2CB84C1711A35000AFA330 /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 2D2CB8471711A11900AFA330 /* libicucore.dylib */; };
 		2D75F66A1711975C00876CCF /* ffi.h in Headers */ = {isa = PBXBuildFile; fileRef = 2D75F6521711975C00876CCF /* ffi.h */; };
@@ -139,7 +136,6 @@
 		EAA34FEF15647BDC00B62244 /* MOBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E92155EEB9400F93E40 /* MOBox.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA34FF115647BE100B62244 /* MOBox.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E93155EEB9400F93E40 /* MOBox.m */; };
 		EAA34FF315647BE500B62244 /* MOMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E86155EE97200F93E40 /* MOMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAA34FF515647BEB00B62244 /* MOMethod_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA34FF715647BF000B62244 /* MOMethod.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E87155EE97200F93E40 /* MOMethod.m */; };
 		EAA34FFA15647BF600B62244 /* MOStruct.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34FA11563986F00B62244 /* MOStruct.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		EAA34FFC15647BFA00B62244 /* MOStruct.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA34FA21563986F00B62244 /* MOStruct.m */; };
@@ -155,8 +151,6 @@
 		EAA3501515647C3300B62244 /* MOBridgeSupportSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211232B155D99F600415471 /* MOBridgeSupportSymbol.m */; };
 		EAA3501815647C4400B62244 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA3501A15647C4A00B62244 /* MOFunctionArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */; };
-		EAA3501B15647C4D00B62244 /* MOUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 02112321155D7BD000415471 /* MOUtilities.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		EAA3501E15647C5400B62244 /* MOUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112322155D7BD000415471 /* MOUtilities.m */; };
 		EAA3502015647C5A00B62244 /* NSArray+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC2155F3E01003653BA /* NSArray+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA3502215647C5F00B62244 /* NSArray+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC3155F3E01003653BA /* NSArray+MochaAdditions.m */; };
 		EAA3502315647C6100B62244 /* NSDictionary+MochaAdditions.h in Headers */ = {isa = PBXBuildFile; fileRef = EAC8BFC7155F3ECD003653BA /* NSDictionary+MochaAdditions.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -170,8 +164,7 @@
 		EAA3503015647DAD00B62244 /* MOBridgeSupportParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112341155DB9A100415471 /* MOBridgeSupportParser.m */; };
 		EAA3503115647DAD00B62244 /* MOBridgeSupportLibrary.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211233D155DB8F800415471 /* MOBridgeSupportLibrary.m */; };
 		EAA3503215647DAD00B62244 /* MOBridgeSupportSymbol.m in Sources */ = {isa = PBXBuildFile; fileRef = 0211232B155D99F600415471 /* MOBridgeSupportSymbol.m */; };
-		EAA3503315647DAD00B62244 /* MOFunctionArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */; };
-		EAA3503415647DAD00B62244 /* MOUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 02112322155D7BD000415471 /* MOUtilities.m */; };
+		EAA3503315647DAD00B62244 /* MOFunctionArgument.m in Sources */ = {isa = PBXBuildFile; fileRef = EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		EAA3503515647DAD00B62244 /* NSArray+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC3155F3E01003653BA /* NSArray+MochaAdditions.m */; };
 		EAA3503615647DAD00B62244 /* NSDictionary+MochaAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = EAC8BFC8155F3ECD003653BA /* NSDictionary+MochaAdditions.m */; };
 		EAA3503715647DD400B62244 /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
@@ -184,7 +177,6 @@
 		EAA45E76155EE5AF00F93E40 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E75155EE5AF00F93E40 /* main.m */; };
 		EAA45E81155EE68000F93E40 /* MOCInterpreter.m in Sources */ = {isa = PBXBuildFile; fileRef = EAA45E80155EE68000F93E40 /* MOCInterpreter.m */; };
 		EAA45E88155EE97200F93E40 /* MOMethod.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E86155EE97200F93E40 /* MOMethod.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		EAA45E8B155EEA3000F93E40 /* MOMethod_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA45E94155EEB9500F93E40 /* MOBox.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA45E92155EEB9400F93E40 /* MOBox.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EAA45EAB155F0B4600F93E40 /* libreadline.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45EAA155F0B4600F93E40 /* libreadline.dylib */; };
 		EAA45EAD155F0CC800F93E40 /* JavaScriptCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */; };
@@ -251,8 +243,6 @@
 /* Begin PBXFileReference section */
 		020FB3DB15C1EAE300B003DC /* MOPointerValue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOPointerValue.h; sourceTree = "<group>"; };
 		020FB3DC15C1EAE300B003DC /* MOPointerValue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOPointerValue.m; sourceTree = "<group>"; };
-		02112321155D7BD000415471 /* MOUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOUtilities.h; sourceTree = "<group>"; };
-		02112322155D7BD000415471 /* MOUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOUtilities.m; sourceTree = "<group>"; usesTabs = 0; };
 		02112325155D973100415471 /* MOBridgeSupportController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBridgeSupportController.h; sourceTree = "<group>"; };
 		02112326155D973100415471 /* MOBridgeSupportController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBridgeSupportController.m; sourceTree = "<group>"; };
 		0211232A155D99F600415471 /* MOBridgeSupportSymbol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBridgeSupportSymbol.h; sourceTree = "<group>"; };
@@ -267,10 +257,6 @@
 		023EB37F1587A2D40072EC4E /* preinstall */ = {isa = PBXFileReference; lastKnownFileType = text.script.python; path = preinstall; sourceTree = "<group>"; };
 		025184A015D182FA005D661F /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = System/Library/Frameworks/Cocoa.framework; sourceTree = SDKROOT; };
 		02568B731846653A00DD8D92 /* MOJavaScriptObject_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOJavaScriptObject_Private.h; sourceTree = "<group>"; };
-		02568B7618466A2000DD8D92 /* MOJavaScriptFunction.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOJavaScriptFunction.h; sourceTree = "<group>"; };
-		02568B7718466A2000DD8D92 /* MOJavaScriptFunction.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOJavaScriptFunction.m; sourceTree = "<group>"; };
-		027CE82B1845878700AFF4B2 /* MOConstructor.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOConstructor.h; sourceTree = "<group>"; };
-		027CE82E184587F500AFF4B2 /* MOCallable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCallable.h; sourceTree = "<group>"; };
 		027CE831184588CD00AFF4B2 /* MORuntime_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MORuntime_Private.h; sourceTree = "<group>"; };
 		027CE832184588CD00AFF4B2 /* MORuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MORuntime.h; sourceTree = "<group>"; };
 		027CE833184588CD00AFF4B2 /* MORuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MORuntime.m; sourceTree = "<group>"; };
@@ -287,9 +273,12 @@
 		02BF151915C096070004CA2C /* MOUnitTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MOUnitTests.m; sourceTree = "<group>"; };
 		02BF151B15C096070004CA2C /* UnitTests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UnitTests-Prefix.pch"; sourceTree = "<group>"; };
 		02BF152615C0973C0004CA2C /* Tests */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Tests; sourceTree = "<group>"; };
+		02C2065018578C90003A316A /* MOWeak.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOWeak.h; sourceTree = "<group>"; };
+		02C2065118578C90003A316A /* MOWeak.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOWeak.m; sourceTree = "<group>"; };
+		02CBE13D18593D0900B8D16D /* MOBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBlock.h; sourceTree = "<group>"; };
+		02CBE13E18593D0900B8D16D /* MOBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBlock.m; sourceTree = "<group>"; };
 		02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionInvocation.h; sourceTree = "<group>"; };
 		02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionInvocation.m; sourceTree = "<group>"; };
-		02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOJavaScriptFunction_Private.h; sourceTree = "<group>"; };
 		2D2CB8471711A11900AFA330 /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libicucore.dylib; sourceTree = DEVELOPER_DIR; };
 		2D2CB8491711A12200AFA330 /* libstdc++.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = "libstdc++.dylib"; path = "Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS6.1.sdk/usr/lib/libstdc++.dylib"; sourceTree = DEVELOPER_DIR; };
 		2D75F6521711975C00876CCF /* ffi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ffi.h; sourceTree = "<group>"; };
@@ -347,7 +336,6 @@
 		EAA45E80155EE68000F93E40 /* MOCInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCInterpreter.m; sourceTree = "<group>"; };
 		EAA45E86155EE97200F93E40 /* MOMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMethod.h; sourceTree = "<group>"; };
 		EAA45E87155EE97200F93E40 /* MOMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMethod.m; sourceTree = "<group>"; };
-		EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMethod_Private.h; sourceTree = "<group>"; };
 		EAA45E92155EEB9400F93E40 /* MOBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBox.h; sourceTree = "<group>"; };
 		EAA45E93155EEB9400F93E40 /* MOBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBox.m; sourceTree = "<group>"; };
 		EAA45EAA155F0B4600F93E40 /* libreadline.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libreadline.dylib; path = usr/lib/libreadline.dylib; sourceTree = SDKROOT; };
@@ -454,8 +442,6 @@
 				027CE832184588CD00AFF4B2 /* MORuntime.h */,
 				027CE831184588CD00AFF4B2 /* MORuntime_Private.h */,
 				027CE833184588CD00AFF4B2 /* MORuntime.m */,
-				027CE82B1845878700AFF4B2 /* MOConstructor.h */,
-				027CE82E184587F500AFF4B2 /* MOCallable.h */,
 			);
 			path = Runtime;
 			sourceTree = "<group>";
@@ -647,8 +633,8 @@
 				EAA45E1B155CE46000F93E40 /* MochaDefines.h */,
 				027CE82A1845876100AFF4B2 /* Runtime */,
 				EAA45E3C155D09AA00F93E40 /* Objects */,
+				EAA45E68155E5E2200F93E40 /* Invocation */,
 				02112329155D99CA00415471 /* BridgeSupport */,
-				EAA45E68155E5E2200F93E40 /* Utilities */,
 				EAC8BFCB155F42D3003653BA /* Categories */,
 				EAA45E0D155CE44B00F93E40 /* Supporting Files */,
 			);
@@ -676,36 +662,34 @@
 				02B1AE1A15C07A80000E2008 /* MOAllocator.m */,
 				02A9EB0F15C84D51005C0E8C /* MOPointer.h */,
 				02A9EB1015C84D51005C0E8C /* MOPointer.m */,
+				02C2065018578C90003A316A /* MOWeak.h */,
+				02C2065118578C90003A316A /* MOWeak.m */,
 				020FB3DB15C1EAE300B003DC /* MOPointerValue.h */,
 				020FB3DC15C1EAE300B003DC /* MOPointerValue.m */,
 				EAA34FA11563986F00B62244 /* MOStruct.h */,
 				EAA34FA21563986F00B62244 /* MOStruct.m */,
 				EAA45E86155EE97200F93E40 /* MOMethod.h */,
-				EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */,
 				EAA45E87155EE97200F93E40 /* MOMethod.m */,
+				02CBE13D18593D0900B8D16D /* MOBlock.h */,
+				02CBE13E18593D0900B8D16D /* MOBlock.m */,
 				EAA34F9C156304A800B62244 /* MOUndefined.h */,
 				EAA34F9D156304A800B62244 /* MOUndefined.m */,
 				EAB4B14D15743E1F00F4342D /* MOJavaScriptObject.h */,
 				02568B731846653A00DD8D92 /* MOJavaScriptObject_Private.h */,
 				EAB4B14E15743E1F00F4342D /* MOJavaScriptObject.m */,
-				02568B7618466A2000DD8D92 /* MOJavaScriptFunction.h */,
-				02DCA80418568E470047EF92 /* MOJavaScriptFunction_Private.h */,
-				02568B7718466A2000DD8D92 /* MOJavaScriptFunction.m */,
 			);
 			path = Objects;
 			sourceTree = "<group>";
 		};
-		EAA45E68155E5E2200F93E40 /* Utilities */ = {
+		EAA45E68155E5E2200F93E40 /* Invocation */ = {
 			isa = PBXGroup;
 			children = (
 				EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */,
 				EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */,
 				02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */,
 				02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */,
-				02112321155D7BD000415471 /* MOUtilities.h */,
-				02112322155D7BD000415471 /* MOUtilities.m */,
 			);
-			path = Utilities;
+			path = Invocation;
 			sourceTree = "<group>";
 		};
 		EAA45E74155EE5AF00F93E40 /* mocha */ = {
@@ -754,19 +738,17 @@
 				EAA34FEA15647BC300B62244 /* MochaDefines.h in Headers */,
 				EAA34FEF15647BDC00B62244 /* MOBox.h in Headers */,
 				EAA34FF315647BE500B62244 /* MOMethod.h in Headers */,
-				027CE82D1845878700AFF4B2 /* MOConstructor.h in Headers */,
 				02568B751846653A00DD8D92 /* MOJavaScriptObject_Private.h in Headers */,
-				EAA34FF515647BEB00B62244 /* MOMethod_Private.h in Headers */,
 				EAA34FFA15647BF600B62244 /* MOStruct.h in Headers */,
 				EAA34FFE15647BFE00B62244 /* MOUndefined.h in Headers */,
 				EAA3500815647C1400B62244 /* MOBridgeSupportController.h in Headers */,
 				EAA3500B15647C1C00B62244 /* MOBridgeSupportParser.h in Headers */,
 				EAA3500F15647C2400B62244 /* MOBridgeSupportLibrary.h in Headers */,
 				EAA3501415647C2D00B62244 /* MOBridgeSupportSymbol.h in Headers */,
-				027CE830184587F500AFF4B2 /* MOCallable.h in Headers */,
 				EAA3501815647C4400B62244 /* MOFunctionArgument.h in Headers */,
-				EAA3501B15647C4D00B62244 /* MOUtilities.h in Headers */,
 				EAA3502015647C5A00B62244 /* NSArray+MochaAdditions.h in Headers */,
+				02C2065318578C90003A316A /* MOWeak.h in Headers */,
+				02CBE14018593D0900B8D16D /* MOBlock.h in Headers */,
 				EAA3502315647C6100B62244 /* NSDictionary+MochaAdditions.h in Headers */,
 				EA33A2951569B81800B4A27D /* JavaScript.h in Headers */,
 				EA33A2961569B81800B4A27D /* JavaScriptCore.h in Headers */,
@@ -784,11 +766,9 @@
 				027CE835184588CD00AFF4B2 /* MORuntime_Private.h in Headers */,
 				020FB3DE15C1EAE300B003DC /* MOPointerValue.h in Headers */,
 				02A9EB1415C84DA2005C0E8C /* MOPointer.h in Headers */,
-				02DCA80618568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */,
 				2D75F66A1711975C00876CCF /* ffi.h in Headers */,
 				2D75F66B1711975C00876CCF /* ffi_armv7.h in Headers */,
 				2D75F66C1711975C00876CCF /* ffi_common.h in Headers */,
-				02568B7918466A2000DD8D92 /* MOJavaScriptFunction.h in Headers */,
 				2D75F66D1711975C00876CCF /* ffi_i386.h in Headers */,
 				2D75F66E1711975C00876CCF /* fficonfig.h in Headers */,
 				2D75F66F1711975C00876CCF /* fficonfig_armv7.h in Headers */,
@@ -806,16 +786,14 @@
 				EAA45E1C155CE46000F93E40 /* MochaDefines.h in Headers */,
 				EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */,
 				EAA45E88155EE97200F93E40 /* MOMethod.h in Headers */,
-				02DCA80518568E470047EF92 /* MOJavaScriptFunction_Private.h in Headers */,
 				EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */,
 				02DCA800185677A60047EF92 /* MOFunctionInvocation.h in Headers */,
-				02112323155D7BD000415471 /* MOUtilities.h in Headers */,
 				02112327155D973100415471 /* MOBridgeSupportController.h in Headers */,
 				0211232C155D99F600415471 /* MOBridgeSupportSymbol.h in Headers */,
+				02C2065218578C90003A316A /* MOWeak.h in Headers */,
 				0211233E155DB8F800415471 /* MOBridgeSupportLibrary.h in Headers */,
-				027CE82F184587F500AFF4B2 /* MOCallable.h in Headers */,
+				02CBE13F18593D0900B8D16D /* MOBlock.h in Headers */,
 				02112342155DB9A100415471 /* MOBridgeSupportParser.h in Headers */,
-				EAA45E8B155EEA3000F93E40 /* MOMethod_Private.h in Headers */,
 				027CE834184588CD00AFF4B2 /* MORuntime_Private.h in Headers */,
 				EAA45E94155EEB9500F93E40 /* MOBox.h in Headers */,
 				EAC8BFC4155F3E01003653BA /* NSArray+MochaAdditions.h in Headers */,
@@ -824,8 +802,6 @@
 				02568B741846653A00DD8D92 /* MOJavaScriptObject_Private.h in Headers */,
 				EAA34FA31563986F00B62244 /* MOStruct.h in Headers */,
 				EABA262615657747005CF076 /* NSOrderedSet+MochaAdditions.h in Headers */,
-				02568B7818466A2000DD8D92 /* MOJavaScriptFunction.h in Headers */,
-				027CE82C1845878700AFF4B2 /* MOConstructor.h in Headers */,
 				027CE836184588CD00AFF4B2 /* MORuntime.h in Headers */,
 				EAB4B14F15743E1F00F4342D /* MOJavaScriptObject.h in Headers */,
 				02B1AE1E15C07A88000E2008 /* MOAllocator.h in Headers */,
@@ -1049,17 +1025,17 @@
 			files = (
 				EAA34FEC15647BCA00B62244 /* Mocha.m in Sources */,
 				EAA34FF115647BE100B62244 /* MOBox.m in Sources */,
-				02568B7B18466A2000DD8D92 /* MOJavaScriptFunction.m in Sources */,
 				EAA34FF715647BF000B62244 /* MOMethod.m in Sources */,
 				027CE839184588CD00AFF4B2 /* MORuntime.m in Sources */,
 				EAA34FFC15647BFA00B62244 /* MOStruct.m in Sources */,
 				EAA34FFF15647C0300B62244 /* MOUndefined.m in Sources */,
+				02C2065518578C90003A316A /* MOWeak.m in Sources */,
 				EAA3500A15647C1900B62244 /* MOBridgeSupportController.m in Sources */,
 				EAA3500D15647C2200B62244 /* MOBridgeSupportParser.m in Sources */,
 				EAA3501115647C2A00B62244 /* MOBridgeSupportLibrary.m in Sources */,
 				EAA3501515647C3300B62244 /* MOBridgeSupportSymbol.m in Sources */,
+				02CBE14218593D0900B8D16D /* MOBlock.m in Sources */,
 				EAA3501A15647C4A00B62244 /* MOFunctionArgument.m in Sources */,
-				EAA3501E15647C5400B62244 /* MOUtilities.m in Sources */,
 				EAA3502215647C5F00B62244 /* NSArray+MochaAdditions.m in Sources */,
 				EAA3502615647C6500B62244 /* NSDictionary+MochaAdditions.m in Sources */,
 				EAB4B15215743E1F00F4342D /* MOJavaScriptObject.m in Sources */,
@@ -1088,6 +1064,8 @@
 				EAA3502A15647DAD00B62244 /* MOBox.m in Sources */,
 				EAA3502B15647DAD00B62244 /* MOMethod.m in Sources */,
 				EAA3502C15647DAD00B62244 /* MOStruct.m in Sources */,
+				02C2065418578C90003A316A /* MOWeak.m in Sources */,
+				02CBE14118593D0900B8D16D /* MOBlock.m in Sources */,
 				EAA3502D15647DAD00B62244 /* MOUndefined.m in Sources */,
 				EAA3502F15647DAD00B62244 /* MOBridgeSupportController.m in Sources */,
 				EAA3503015647DAD00B62244 /* MOBridgeSupportParser.m in Sources */,
@@ -1095,8 +1073,6 @@
 				EAA3503215647DAD00B62244 /* MOBridgeSupportSymbol.m in Sources */,
 				EAA3503315647DAD00B62244 /* MOFunctionArgument.m in Sources */,
 				027CE838184588CD00AFF4B2 /* MORuntime.m in Sources */,
-				02568B7A18466A2000DD8D92 /* MOJavaScriptFunction.m in Sources */,
-				EAA3503415647DAD00B62244 /* MOUtilities.m in Sources */,
 				EAA3503515647DAD00B62244 /* NSArray+MochaAdditions.m in Sources */,
 				EAA3503615647DAD00B62244 /* NSDictionary+MochaAdditions.m in Sources */,
 				EABA262715657747005CF076 /* NSOrderedSet+MochaAdditions.m in Sources */,

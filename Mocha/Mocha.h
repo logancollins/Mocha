@@ -8,10 +8,10 @@
 
 #import <Mocha/MochaDefines.h>
 
-#import <Mocha/MOJavaScriptFunction.h>
 #import <Mocha/MOJavaScriptObject.h>
 #import <Mocha/MOMethod.h>
 #import <Mocha/MOPointer.h>
 #import <Mocha/MORuntime.h>
 #import <Mocha/MOStruct.h>
 #import <Mocha/MOUndefined.h>
+#import <Mocha/MOWeak.h>

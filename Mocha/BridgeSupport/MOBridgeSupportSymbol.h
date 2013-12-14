@@ -7,7 +7,6 @@
 //
 
 #import <Foundation/Foundation.h>
-#import <Mocha/MOCallable.h>
 
 
 @class MOBridgeSupportArgument;
@@ -113,7 +112,7 @@
  * @class MOBridgeSupportFunction
  * @abstract Describes a C function
  */
-@interface MOBridgeSupportFunction : MOBridgeSupportSymbol <MOCallable>
+@interface MOBridgeSupportFunction : MOBridgeSupportSymbol
 
 @property (getter=isVariadic) BOOL variadic;
 @property (copy) NSNumber *sentinel;

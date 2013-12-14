@@ -7,10 +7,19 @@
 //
 
 #import "MOMethod.h"
-#import "MOMethod_Private.h"
 
 #import "MOBridgeSupportController.h"
 #import "MOBridgeSupportSymbol.h"
+
+#import "MOFunctionInvocation.h"
+
+
+@interface MOMethod ()
+
+@property (strong, readwrite) id target;
+@property (readwrite) SEL selector;
+
+@end
 
 
 @implementation MOMethod
@@ -21,8 +30,6 @@
     method.selector = selector;
     
     // Determine the retain semantics of the method via BridgeSupport
-    BOOL isAlreadyRetained = NO;
-    
     BOOL matchFound = NO;
     Class searchClass = [target class];
     while (searchClass != Nil) {
@@ -30,7 +37,8 @@
         MOBridgeSupportMethod *bridgeMethod = [aClass methodWithSelector:selector];
         if (method != nil) {
             matchFound = YES;
-            isAlreadyRetained = [[bridgeMethod returnValue] isAlreadyRetained];
+            method.returnsRetained = [[bridgeMethod returnValue] isAlreadyRetained];
+            method.variadic = [bridgeMethod isVariadic];
             break;
         }
         searchClass = [searchClass superclass];
@@ -41,35 +49,28 @@
         if ([methodName hasPrefix:@"init"]) {
             // -init...
             if ([methodName length] > 4 && [[NSCharacterSet uppercaseLetterCharacterSet] characterIsMember:[methodName characterAtIndex:4]]) {
-                isAlreadyRetained = YES;
+                method.returnsRetained = YES;
             }
             else if ([methodName length] == 4) {
-                isAlreadyRetained = YES;
+                method.returnsRetained = YES;
             }
         }
         else if ([methodName hasPrefix:@"copy"]) {
             // -copy...
             if ([methodName length] > 4 && [[NSCharacterSet uppercaseLetterCharacterSet] characterIsMember:[methodName characterAtIndex:4]]) {
-                isAlreadyRetained = YES;
+                method.returnsRetained = YES;
             }
             else if ([methodName length] == 4) {
-                isAlreadyRetained = YES;
+                method.returnsRetained = YES;
             }
         }
     }
-    
-    method.returnsRetained = isAlreadyRetained;
     
     return method;
 }
 
 - (NSString *)description {
     return [NSString stringWithFormat:@"<%@: %p : target=%@, selector=%@>", [self class], self, [self target], NSStringFromSelector([self selector])];
-}
-
-- (id)callWithArguments:(NSArray *)arguments {
-    
-    return nil;
 }
 
 @end

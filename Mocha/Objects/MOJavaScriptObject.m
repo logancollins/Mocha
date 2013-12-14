@@ -18,7 +18,7 @@
 }
 
 + (instancetype)objectWithJSObject:(JSObjectRef)jsObject context:(JSContextRef)ctx {
-    MOJavaScriptObject *object = [[MOJavaScriptObject alloc] init];
+    MOJavaScriptObject *object = [[self alloc] init];
     [object setJSObject:jsObject JSContext:ctx];
     return object;
 }
@@ -153,6 +153,64 @@
     if (exceptionRef != NULL) {
         [runtime throwJSException:exceptionRef];
     }
+}
+
+- (id)constructWithArguments:(NSArray *)arguments {
+    MORuntime *runtime = [MORuntime runtimeWithContext:[self JSContext]];
+    size_t argumentCount = (size_t)[arguments count];
+    
+    JSValueRef * argumentRefs = NULL;
+    if (argumentCount > 0) {
+        argumentRefs = malloc(sizeof(JSValueRef));
+    }
+    
+    for (size_t i=0; i<argumentCount; i++) {
+        id object = arguments[i];
+        JSValueRef value = [runtime JSValueForObject:object];
+        argumentRefs[i] = value;
+    }
+    
+    JSValueRef exceptionRef = NULL;
+    JSValueRef returnValue = JSObjectCallAsConstructor([self JSContext], [self JSObject], argumentCount, (const JSValueRef *)argumentRefs, &exceptionRef);
+    
+    if (argumentRefs != NULL) {
+        free(argumentRefs);
+    }
+    
+    if (exceptionRef != NULL) {
+        [runtime throwJSException:exceptionRef];
+    }
+    
+    return [runtime objectForJSValue:returnValue];
+}
+
+- (id)callWithArguments:(NSArray *)arguments {
+    MORuntime *runtime = [MORuntime runtimeWithContext:[self JSContext]];
+    size_t argumentCount = (size_t)[arguments count];
+    
+    JSValueRef * argumentRefs = NULL;
+    if (argumentCount > 0) {
+        argumentRefs = malloc(sizeof(JSValueRef));
+    }
+    
+    for (size_t i=0; i<argumentCount; i++) {
+        id object = arguments[i];
+        JSValueRef value = [runtime JSValueForObject:object];
+        argumentRefs[i] = value;
+    }
+    
+    JSValueRef exceptionRef = NULL;
+    JSValueRef returnValue = JSObjectCallAsFunction([self JSContext], [self JSObject], NULL, argumentCount, (const JSValueRef *)argumentRefs, &exceptionRef);
+    
+    if (argumentRefs != NULL) {
+        free(argumentRefs);
+    }
+    
+    if (exceptionRef != NULL) {
+        [runtime throwJSException:exceptionRef];
+    }
+    
+    return [runtime objectForJSValue:returnValue];
 }
 
 @end

@@ -101,4 +101,28 @@
  */
 - (void)setObject:(id)object atPropertyIndex:(NSUInteger)propertyIdx;
 
+
+/*!
+ * @method constructWithArguments:
+ * @abstract Calls the object as a constructor
+ * 
+ * @param arguments
+ * The objects to pass as arguments to the constructor
+ * 
+ * @result An object, or nil
+ */
+- (id)constructWithArguments:(NSArray *)arguments;
+
+/*!
+ * @method callWithArguments:
+ * @abstract Calls the object as a function
+ * 
+ * @param arguments
+ * The objects to pass as arguments to the function
+ * 
+ * @result An object, or nil
+ */
+- (id)callWithArguments:(NSArray *)arguments;
+
 @end
+

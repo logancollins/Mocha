@@ -31,8 +31,8 @@ static const char interactivePrompt[] = ">>> ";
     if (self) {
         _runtime = [[MORuntime alloc] initWithOptions:options];
         
-        MOMethod *gc = [MOMethod methodWithTarget:_runtime selector:@selector(garbageCollect)];
-        [_runtime setGlobalObject:gc withName:@"gc"];
+//        MOMethod *gc = [MOMethod methodWithTarget:_runtime selector:@selector(garbageCollect)];
+//        [_runtime setGlobalObject:gc withName:@"gc"];
         
         MOMethod *checkSyntax = [MOMethod methodWithTarget:_runtime selector:@selector(isSyntaxValidForString:)];
         [_runtime setGlobalObject:checkSyntax withName:@"checkSyntax"];

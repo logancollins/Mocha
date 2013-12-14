@@ -18,13 +18,10 @@
 @property (readwrite) MORuntimeOptions options;
 
 // JSValue <-> id
-+ (JSValueRef)JSValueForObject:(id)object inContext:(JSContextRef)ctx;
-
 + (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx;
 + (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx unboxObjects:(BOOL)unboxObjects;
 
 + (NSArray *)arrayForJSArray:(JSObjectRef)arrayValue inContext:(JSContextRef)ctx;
-+ (NSDictionary *)dictionaryForJSHash:(JSObjectRef)hashValue inContext:(JSContextRef)ctx;
 
 - (JSValueRef)JSValueForObject:(id)object;
 

@@ -25,7 +25,7 @@
  * 
  * @result An object
  */
-@property (assign) id representedObject;
+@property (strong) id representedObject;
 
 /*!
  * @property JSObject

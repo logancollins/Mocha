@@ -22,7 +22,7 @@ static const char * program_copyright = "Copyright (c) 2013 Sunflower Softworks.
 
 static const char * short_options = "hv";
 static struct option long_options[] = {
-    { "arc", optional_argument, NULL, 'A' },
+    { "no-arc", optional_argument, NULL, 'A' },
     { "help", optional_argument, NULL, 'h' },
     { "version", optional_argument, NULL, 'v' },
     { NULL, 0, NULL, 0 }
@@ -33,7 +33,7 @@ static void printUsage(FILE *stream) {
     fprintf(stream, "%s %s\n", program_name, program_version);
     fprintf(stream, "Usage: %s [-hv] [file]\n", program_name);
     fprintf(stream,
-            "  --arc                     Enable Automatic Reference Counting.\n"
+            "  --no-arc                  Disable Automatic Reference Counting.\n"
             "  -h, --help                Show this help information.\n"
             "  -v, --version             Show the program's version number.\n"
             );
@@ -50,13 +50,13 @@ static void printCopyright(void) {
 }
 
 
-void executeScript(NSString *script, NSString *path);
+void executeScript(NSString *script, NSString *path, MORuntimeOptions options);
 
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         NSMutableArray *filePaths = [NSMutableArray array];
-        MORuntimeOptions options = MORuntimeOptionsNone;
+        MORuntimeOptions options = MORuntimeOptionAutomaticReferenceCounting;
         
         int next_option;
         do {
@@ -67,7 +67,7 @@ int main(int argc, const char * argv[]) {
                     break;
                 }
                 case 'A': {
-                    options |= MORuntimeOptionAutomaticReferenceCounting;
+                    options -= MORuntimeOptionAutomaticReferenceCounting;
                     break;
                 }
                 case 'v': {
@@ -112,21 +112,21 @@ int main(int argc, const char * argv[]) {
                     exit(1);
                 }
                 
-                executeScript(s, path);
+                executeScript(s, path, options);
             }
         }
         else if ([stdinHandle mo_isReadable]) {
             // Execute contents of stdin
             NSData *stdinData = [stdinHandle readDataToEndOfFile];
             NSString *string = [[NSString alloc] initWithData:stdinData encoding:NSUTF8StringEncoding];
-            executeScript(string, nil);
+            executeScript(string, nil, options);
         }
         else {
             // Interactive mode
             printVersion();
             
-            if (options & MORuntimeOptionAutomaticReferenceCounting) {
-                printf("Automatic Reference Counting enabled.\n");
+            if (!(options & MORuntimeOptionAutomaticReferenceCounting)) {
+                printf("Automatic Reference Counting disabled.\n");
             }
             
             MOCInterpreter *interpreter = [[MOCInterpreter alloc] initWithOptions:options];
@@ -137,8 +137,8 @@ int main(int argc, const char * argv[]) {
 }
 
 
-void executeScript(NSString *script, NSString *path) {
-    MORuntime *runtime = [[MORuntime alloc] init];
+void executeScript(NSString *script, NSString *path, MORuntimeOptions options) {
+    MORuntime *runtime = [[MORuntime alloc] initWithOptions:options];
     
     if ([script length] >= 2 && [[script substringWithRange:NSMakeRange(0, 2)] isEqualToString:@"#!"]) {
         // Ignore bash shebangs
