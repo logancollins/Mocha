@@ -114,7 +114,7 @@ SEL __proxySelector = NULL;
     free(jsArguments);
         
     if (exception != NULL) {
-        [runtime throwJSException:exception];
+        [runtime throwJSException:exception inContext:ctx];
     }
 }
 

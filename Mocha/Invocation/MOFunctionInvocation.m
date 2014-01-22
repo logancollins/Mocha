@@ -78,7 +78,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             // Override for -alloc
             MOAllocator *allocator = [[MOAllocator alloc] init];
             allocator.objectClass = klass;
-            return [runtime JSValueForObject:allocator];
+            return [runtime JSValueForObject:allocator inContext:ctx];
         }
         
         // Override for -release and -autorelease
@@ -86,7 +86,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
                  && runtime.options & MORuntimeOptionAutomaticReferenceCounting) {
             // ARC-mode disallows explicit release of objects
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Automatic reference counting disallows explicit calls to -%@.", NSStringFromSelector(selector)] userInfo:nil];
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
             return NULL;
         }
         
@@ -111,7 +111,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if (method == NULL) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to locate method %@ of class %@", NSStringFromSelector(selector), klass] userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -122,7 +122,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if (argumentEncodings == nil) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), klass] userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -146,7 +146,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             NSString *reason = [NSString stringWithFormat:@"Objective-C method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -166,7 +166,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if (argumentEncodings == nil) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -177,7 +177,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             NSString *reason = [NSString stringWithFormat:@"Block requires %lu %@, but JavaScript passed %zd %@", (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -193,7 +193,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if (callAddress == NULL) {
             if (exception != NULL) {
                 NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to find function with name: %@", functionName] userInfo:nil];
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -253,7 +253,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %zd %@", functionName, (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -319,14 +319,14 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             }
             
             if (jsValue != NULL) {
-                id object = [runtime objectForJSValue:jsValue];
+                id object = [runtime objectForJSValue:jsValue inContext:ctx];
                 
                 if ([object isKindOfClass:[MOPointer class]]) {
                     // Pointers
                     [arg setPointer:object];
                     
                     id objValue = [(MOPointer *)object value];
-                    JSValueRef pointerJSValue = [runtime JSValueForObject:objValue];
+                    JSValueRef pointerJSValue = [runtime JSValueForObject:objValue inContext:ctx];
                     [arg setValueAsJSValue:pointerJSValue context:ctx dereference:YES];
                 }
                 else {
@@ -362,7 +362,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
                 free(values);
             }
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -378,7 +378,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     if (prep_status != FFI_OK) {
         NSException *e = [NSException exceptionWithName:MORuntimeException reason:@"ffi_prep_cif failed" userInfo:nil];
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
         }
         return NULL;
     }
@@ -388,7 +388,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         MOPointer *pointer = [arg pointer];
         if (pointer != nil) {
             JSValueRef pointerJSValue = [arg getValueAsJSValueInContext:ctx dereference:YES];
-            id pointerValue = [runtime objectForJSValue:pointerJSValue];
+            id pointerValue = [runtime objectForJSValue:pointerJSValue inContext:ctx];
             pointer.value = pointerValue;
         }
     }
@@ -406,7 +406,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             
             if (runtime.options & MORuntimeOptionAutomaticReferenceCounting) {
                 // If the return value is an object, apply ARC-style retain semantics
-                id object = [runtime objectForJSValue:value];
+                id object = [runtime objectForJSValue:value inContext:ctx];
                 
                 BOOL shouldRelease = NO;
                 if ([function isKindOfClass:[MOMethod class]]) {
@@ -424,7 +424,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     }
     @catch (NSException *e) {
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
         }
         return NULL;
     }
@@ -445,7 +445,7 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
         NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), (unsigned long)methodArgumentCount, (methodArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
         NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
         }
         return NULL;
     }
@@ -453,7 +453,7 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
     // Build arguments
     for (size_t i=0; i<argumentCount; i++) {
         JSValueRef argument = arguments[i];
-        __unsafe_unretained id object = [runtime objectForJSValue:argument];
+        __unsafe_unretained id object = [runtime objectForJSValue:argument inContext:ctx];
         
         NSUInteger argIndex = i + 2;
         const char * argType = [methodSignature getArgumentTypeAtIndex:argIndex];
@@ -530,7 +530,7 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
              || strcmp(returnType, @encode(Class)) == 0) {
         __unsafe_unretained id object = nil;
         [invocation getReturnValue:&object];
-        returnValue = [runtime JSValueForObject:object];
+        returnValue = [runtime JSValueForObject:object inContext:ctx];
     }
     // SEL
     /*else if (strcmp(returnType, @encode(SEL)) == 0) {
@@ -552,54 +552,54 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
              || strcmp(returnType, @encode(_Bool)) == 0) {
         BOOL value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithBool:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithBool:value] inContext:ctx];
     }
     // int
     else if (strcmp(returnType, @encode(int)) == 0
              || strcmp(returnType, @encode(unsigned int)) == 0) {
         int value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithInt:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithInt:value] inContext:ctx];
     }
     // long
     else if (strcmp(returnType, @encode(long)) == 0
              || strcmp(returnType, @encode(unsigned long)) == 0) {
         long value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithLong:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithLong:value] inContext:ctx];
     }
     // long long
     else if (strcmp(returnType, @encode(long long)) == 0
              || strcmp(returnType, @encode(unsigned long long)) == 0) {
         long long value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithLongLong:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithLongLong:value] inContext:ctx];
     }
     // short
     else if (strcmp(returnType, @encode(short)) == 0
              || strcmp(returnType, @encode(unsigned short)) == 0) {
         short value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithShort:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithShort:value] inContext:ctx];
     }
     // char
     else if (strcmp(returnType, @encode(char)) == 0
              || strcmp(returnType, @encode(unsigned char)) == 0) {
         char value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithChar:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithChar:value] inContext:ctx];
     }
     // float
     else if (strcmp(returnType, @encode(float)) == 0) {
         float value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithFloat:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithFloat:value] inContext:ctx];
     }
     // double
     else if (strcmp(returnType, @encode(double)) == 0) {
         double value;
         [invocation getReturnValue:&value];
-        returnValue = [runtime JSValueForObject:[NSNumber numberWithDouble:value]];
+        returnValue = [runtime JSValueForObject:[NSNumber numberWithDouble:value] inContext:ctx];
     }
     
     return returnValue;

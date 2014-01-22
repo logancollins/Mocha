@@ -777,12 +777,12 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
     switch (typeEncoding) {
         case _C_ID:
         case _C_CLASS: {
-            id object = [runtime objectForJSValue:value];
+            id object = [runtime objectForJSValue:value inContext:ctx];
             *(void **)ptr = (__bridge void *)object;
             return YES;
         }
         case _C_PTR: {
-            id object = [runtime objectForJSValue:value];
+            id object = [runtime objectForJSValue:value inContext:ctx];
             if ([object isKindOfClass:[MOPointerValue class]]) {
                 *(void **)ptr = [object pointerValue];
             }
@@ -881,13 +881,13 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         case _C_ID:    
         case _C_CLASS: {
             id object = (__bridge id)(*(void**)ptr);
-            *value = [runtime JSValueForObject:object];
+            *value = [runtime JSValueForObject:object inContext:ctx];
             return YES;
         }
         case _C_PTR: {
             void * pointer = *(void**)ptr;
             MOPointerValue *object = [[[MOPointerValue alloc] initWithPointerValue:pointer typeEncoding:fullTypeEncoding] autorelease];
-            *value = [runtime JSValueForObject:object];
+            *value = [runtime JSValueForObject:object inContext:ctx];
             return YES;
         }
         case _C_VOID: {
@@ -1121,7 +1121,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
                 }
             }
             
-            id objValue = [runtime objectForJSValue:valueJS];
+            id objValue = [runtime objectForJSValue:valueJS inContext:ctx];
             [memberNames addObject:propertyName];
             [memberValues setObject:objValue forKey:propertyName];
             
@@ -1135,7 +1135,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         [structure setObject:memberValue forMemberName:name];
     }
     
-    JSValueRef jsValue = [runtime JSValueForObject:structure];
+    JSValueRef jsValue = [runtime JSValueForObject:structure inContext:ctx];
     JSObjectRef jsObject = JSValueToObject(ctx, jsValue, NULL);
     
     if (!*value) {

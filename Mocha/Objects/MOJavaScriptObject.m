@@ -54,7 +54,7 @@
 - (MOJavaScriptObject *)prototype {
     MORuntime *runtime = [MORuntime runtimeWithContext:_JSContext];
     JSValueRef value = JSObjectGetPrototype(_JSContext, _JSObject);
-    id object = [runtime objectForJSValue:value];
+    id object = [runtime objectForJSValue:value inContext:_JSContext];
     return object;
 }
 
@@ -90,11 +90,11 @@
     JSStringRelease(nameRef);
     
     if (exceptionRef == NULL) {
-        id object = [runtime objectForJSValue:value];
+        id object = [runtime objectForJSValue:value inContext:_JSContext];
         return object;
     }
     else {
-        [runtime throwJSException:exceptionRef];
+        [runtime throwJSException:exceptionRef inContext:_JSContext];
     }
     
     return nil;
@@ -105,12 +105,12 @@
     
     JSStringRef nameRef = JSStringCreateWithCFString((__bridge CFStringRef)propertyName);
     JSValueRef exceptionRef = NULL;
-    JSValueRef valueRef = [runtime JSValueForObject:object];
+    JSValueRef valueRef = [runtime JSValueForObject:object inContext:_JSContext];
     JSObjectSetProperty(_JSContext, _JSObject, nameRef, valueRef, kJSPropertyAttributeNone, &exceptionRef);
     JSStringRelease(nameRef);
     
     if (exceptionRef != NULL) {
-        [runtime throwJSException:exceptionRef];
+        [runtime throwJSException:exceptionRef inContext:_JSContext];
     }
 }
 
@@ -123,7 +123,7 @@
     JSStringRelease(nameRef);
     
     if (exceptionRef != NULL) {
-        [runtime throwJSException:exceptionRef];
+        [runtime throwJSException:exceptionRef inContext:_JSContext];
     }
 }
 
@@ -134,11 +134,11 @@
     JSValueRef valueRef = JSObjectGetPropertyAtIndex(_JSContext, _JSObject, (unsigned int)propertyIdx, &exceptionRef);
     
     if (exceptionRef == NULL) {
-        id object = [runtime objectForJSValue:valueRef];
+        id object = [runtime objectForJSValue:valueRef inContext:_JSContext];
         return object;
     }
     else {
-        [runtime throwJSException:exceptionRef];
+        [runtime throwJSException:exceptionRef inContext:_JSContext];
         return nil;
     }
 }
@@ -147,16 +147,16 @@
     MORuntime *runtime = [MORuntime runtimeWithContext:_JSContext];
     
     JSValueRef exceptionRef = NULL;
-    JSValueRef valueRef = [runtime JSValueForObject:object];
+    JSValueRef valueRef = [runtime JSValueForObject:object inContext:_JSContext];
     JSObjectSetPropertyAtIndex(_JSContext, _JSObject, (unsigned int)propertyIdx, valueRef, &exceptionRef);
     
     if (exceptionRef != NULL) {
-        [runtime throwJSException:exceptionRef];
+        [runtime throwJSException:exceptionRef inContext:_JSContext];
     }
 }
 
 - (id)constructWithArguments:(NSArray *)arguments {
-    MORuntime *runtime = [MORuntime runtimeWithContext:[self JSContext]];
+    MORuntime *runtime = [MORuntime runtimeWithContext:_JSContext];
     size_t argumentCount = (size_t)[arguments count];
     
     JSValueRef * argumentRefs = NULL;
@@ -166,26 +166,26 @@
     
     for (size_t i=0; i<argumentCount; i++) {
         id object = arguments[i];
-        JSValueRef value = [runtime JSValueForObject:object];
+        JSValueRef value = [runtime JSValueForObject:object inContext:_JSContext];
         argumentRefs[i] = value;
     }
     
     JSValueRef exceptionRef = NULL;
-    JSValueRef returnValue = JSObjectCallAsConstructor([self JSContext], [self JSObject], argumentCount, (const JSValueRef *)argumentRefs, &exceptionRef);
+    JSValueRef returnValue = JSObjectCallAsConstructor(_JSContext, _JSObject, argumentCount, (const JSValueRef *)argumentRefs, &exceptionRef);
     
     if (argumentRefs != NULL) {
         free(argumentRefs);
     }
     
     if (exceptionRef != NULL) {
-        [runtime throwJSException:exceptionRef];
+        [runtime throwJSException:exceptionRef inContext:_JSContext];
     }
     
-    return [runtime objectForJSValue:returnValue];
+    return [runtime objectForJSValue:returnValue inContext:_JSContext];
 }
 
 - (id)callWithArguments:(NSArray *)arguments {
-    MORuntime *runtime = [MORuntime runtimeWithContext:[self JSContext]];
+    MORuntime *runtime = [MORuntime runtimeWithContext:_JSContext];
     size_t argumentCount = (size_t)[arguments count];
     
     JSValueRef * argumentRefs = NULL;
@@ -195,22 +195,22 @@
     
     for (size_t i=0; i<argumentCount; i++) {
         id object = arguments[i];
-        JSValueRef value = [runtime JSValueForObject:object];
+        JSValueRef value = [runtime JSValueForObject:object inContext:_JSContext];
         argumentRefs[i] = value;
     }
     
     JSValueRef exceptionRef = NULL;
-    JSValueRef returnValue = JSObjectCallAsFunction([self JSContext], [self JSObject], NULL, argumentCount, (const JSValueRef *)argumentRefs, &exceptionRef);
+    JSValueRef returnValue = JSObjectCallAsFunction(_JSContext, _JSObject, NULL, argumentCount, (const JSValueRef *)argumentRefs, &exceptionRef);
     
     if (argumentRefs != NULL) {
         free(argumentRefs);
     }
     
     if (exceptionRef != NULL) {
-        [runtime throwJSException:exceptionRef];
+        [runtime throwJSException:exceptionRef inContext:_JSContext];
     }
     
-    return [runtime objectForJSValue:returnValue];
+    return [runtime objectForJSValue:returnValue inContext:_JSContext];
 }
 
 @end

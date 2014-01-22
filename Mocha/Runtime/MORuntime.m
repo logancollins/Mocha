@@ -155,7 +155,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
         self.options = options;
         
         _ctx = JSGlobalContextCreate(MochaClass);
-        _objectsToBoxes = [NSMapTable strongToStrongObjectsMapTable];
+        _objectsToBoxes = [NSMapTable weakToStrongObjectsMapTable];
         
 #if !TARGET_OS_IPHONE
         NSArray *libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask, YES);
@@ -188,11 +188,60 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
 #pragma mark -
 #pragma mark Object Conversion
 
-+ (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx {
-    return [self objectForJSValue:value inContext:ctx unboxObjects:YES];
+- (JSValueRef)JSValueForObject:(id)object inContext:(JSContextRef)ctx {
+    if (ctx == NULL) {
+        ctx = _ctx;
+    }
+    
+    JSValueRef value = NULL;
+    
+    if ([object isKindOfClass:[MOBox class]]) {
+        value = [object JSObject];
+    }
+    else if ([object isKindOfClass:[MOJavaScriptObject class]]) {
+        value = [object JSObject];
+    }
+    else if (object == nil) {
+        value = JSValueMakeNull(ctx);
+    }
+    else if (object == [MOUndefined undefined]) {
+        value = JSValueMakeUndefined(ctx);
+    }
+    
+    if (value == NULL) {
+        MOBox *box = [_objectsToBoxes objectForKey:object];
+        if (box != nil) {
+            value = [box JSObject];
+        }
+        else {
+            box = [[MOBox alloc] init];
+            box.runtime = self;
+            box.representedObject = object;
+            
+            JSObjectRef jsObject = JSObjectMake(ctx, MOObjectClass, (__bridge void *)(box));
+            
+            box.JSObject = jsObject;
+            
+            [_objectsToBoxes setObject:box forKey:object];
+            
+            value = jsObject;
+        }
+    }
+    
+    return value;
 }
 
-+ (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx unboxObjects:(BOOL)unboxObjects {
+- (void)removeBoxAssociationForObject:(id)object {
+    if (object != nil) {
+        [_objectsToBoxes removeObjectForKey:object];
+    }
+}
+
+- (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx {
+    return [MORuntime objectForJSValue:value inContext:ctx];
+}
+
++ (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx {
     if (value == NULL || JSValueIsUndefined(ctx, value)) {
         return [MOUndefined undefined];
     }
@@ -227,13 +276,8 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     
     if (private != nil) {
         if ([private isKindOfClass:[MOBox class]]) {
-            if (unboxObjects == YES) {
-                // Boxed object
-                return [private representedObject];
-            }
-            else {
-                return private;
-            }
+            // Boxed object
+            return [private representedObject];
         }
         else {
             return private;
@@ -269,7 +313,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
     
     NSMutableArray *array = [NSMutableArray arrayWithCapacity:length];
-
+    
     for (NSUInteger i=0; i<length; i++) {
         id obj = nil;
         JSValueRef jsValue = JSObjectGetPropertyAtIndex(ctx, arrayValue, (unsigned int)i, &exception);
@@ -277,7 +321,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
             return nil;
         }
         
-        obj = [self objectForJSValue:jsValue inContext:ctx unboxObjects:YES];
+        obj = [self objectForJSValue:jsValue inContext:ctx];
         if (obj == nil) {
             obj = [NSNull null];
         }
@@ -288,73 +332,13 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     return [array copy];
 }
 
-- (JSValueRef)JSValueForObject:(id)object {
-    JSValueRef value = NULL;
-    
-    if ([object isKindOfClass:[MOBox class]]) {
-        value = [object JSObject];
-    }
-    else if ([object isKindOfClass:[MOJavaScriptObject class]]) {
-        value = [object JSObject];
-    }
-    else if (object == nil) {
-        value = JSValueMakeNull(_ctx);
-    }
-    else if (object == [MOUndefined undefined]) {
-        value = JSValueMakeUndefined(_ctx);
-    }
-    
-    if (value == NULL) {
-        value = [self boxedJSObjectForObject:object];
-    }
-    
-    return value;
-}
-
-- (id)objectForJSValue:(JSValueRef)value {
-    return [self objectForJSValue:value unboxObjects:YES];
-}
-
-- (id)objectForJSValue:(JSValueRef)value unboxObjects:(BOOL)unboxObjects {
-    return [MORuntime objectForJSValue:value inContext:_ctx unboxObjects:unboxObjects];
-}
-
-- (JSObjectRef)boxedJSObjectForObject:(id)object {
-    if (object == nil) {
-        return NULL;
-    }
-    
-    MOBox *box = [_objectsToBoxes objectForKey:object];
-    if (box != nil) {
-        return [box JSObject];
-    }
-    
-    box = [[MOBox alloc] init];
-    box.runtime = self;
-    box.representedObject = object;
-    
-    JSObjectRef jsObject = JSObjectMake(_ctx, MOObjectClass, (__bridge void *)(box));
-    
-    box.JSObject = jsObject;
-    
-    [_objectsToBoxes setObject:box forKey:object];
-    
-    return jsObject;
-}
-
-- (void)removeBoxAssociationForObject:(id)object {
-    if (object != nil) {
-        [_objectsToBoxes removeObjectForKey:object];
-    }
-}
-
 
 #pragma mark -
 #pragma mark Evaluation
 
 - (id)evaluateString:(NSString *)string {
     JSValueRef jsValue = [self evaluateJSString:string scriptPath:nil];
-    return [self objectForJSValue:jsValue];
+    return [self objectForJSValue:jsValue inContext:_ctx];
 }
 
 - (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath {
@@ -376,7 +360,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
     
     if (exception != NULL) {
-        [self throwJSException:exception];
+        [self throwJSException:exception inContext:_ctx];
         return NULL;
     }
     
@@ -412,11 +396,11 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     JSStringRelease(jsObjectName);
     
     if (exception != NULL) {
-        [self throwJSException:exception];
+        [self throwJSException:exception inContext:_ctx];
         return NULL;
     }
     
-    return [self objectForJSValue:jsObjectValue];
+    return [self objectForJSValue:jsObjectValue inContext:_ctx];
 }
 
 - (void)setGlobalObject:(id)object withName:(NSString *)name {
@@ -424,7 +408,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
 }
 
 - (void)setGlobalObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes {
-    JSValueRef jsValue = [self JSValueForObject:object];
+    JSValueRef jsValue = [self JSValueForObject:object inContext:_ctx];
     
     // Set
     JSValueRef exception = NULL;
@@ -433,7 +417,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     JSStringRelease(jsName);
     
     if (exception != NULL) {
-        [self throwJSException:exception];
+        [self throwJSException:exception inContext:_ctx];
     }
 }
 
@@ -446,7 +430,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     JSStringRelease(jsName);
     
     if (exception != NULL) {
-        [self throwJSException:exception];
+        [self throwJSException:exception inContext:_ctx];
     }
 }
 
@@ -464,7 +448,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
     
     if (exception != NULL) {
-        [self throwJSException:exception];
+        [self throwJSException:exception inContext:_ctx];
     }
     
     return success;
@@ -513,19 +497,15 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
 }
 
-- (NSException *)exceptionWithJSException:(JSValueRef)exception {
-    return [MORuntime exceptionWithJSException:exception context:_ctx];
-}
-
-- (void)throwJSException:(JSValueRef)exceptionJS {
-    id object = [self objectForJSValue:exceptionJS];
+- (void)throwJSException:(JSValueRef)exceptionJS inContext:(JSContextRef)ctx {
+    id object = [self objectForJSValue:exceptionJS inContext:ctx];
     if ([object isKindOfClass:[NSException class]]) {
         // Rethrow ObjC exceptions that were boxed within the runtime
         @throw object;
     }
     else {
         // Throw all other types of exceptions as an NSException
-        NSException *exception = [self exceptionWithJSException:exceptionJS];
+        NSException *exception = [MORuntime exceptionWithJSException:exceptionJS context:ctx];
         if (exception != nil) {
             @throw exception;
         }
@@ -711,13 +691,13 @@ static bool Mocha_hasProperty(JSContextRef ctx, JSObjectRef object, JSStringRef 
     MOBridgeSupportClass *aClass = [symbols objectForKey:NSStringFromClass([MOBridgeSupportClass class])];
     if ([aClass isKindOfClass:[MOBridgeSupportClass class]]) {
         Class realClass = NSClassFromString(aClass.name);
-        return [runtime JSValueForObject:realClass];
+        return [runtime JSValueForObject:realClass inContext:ctx];
     }
     
     // Functions
     MOBridgeSupportFunction *function = [symbols objectForKey:NSStringFromClass([MOBridgeSupportFunction class])];
     if (function != nil) {
-        return [runtime JSValueForObject:function];
+        return [runtime JSValueForObject:function inContext:ctx];
     }
     
     // Constants
@@ -751,16 +731,16 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     
     // Class overrides
     if ([propertyName isEqualToString:@"Object"]) {
-        return [runtime JSValueForObject:[NSObject class]];
+        return [runtime JSValueForObject:[NSObject class] inContext:ctx];
     }
     else if ([propertyName isEqualToString:@"String"]) {
-        return [runtime JSValueForObject:[NSString class]];
+        return [runtime JSValueForObject:[NSString class] inContext:ctx];
     }
     else if ([propertyName isEqualToString:@"Array"]) {
-        return [runtime JSValueForObject:[NSArray class]];
+        return [runtime JSValueForObject:[NSArray class] inContext:ctx];
     }
     else if ([propertyName isEqualToString:@"RegExp"]) {
-        return [runtime JSValueForObject:[NSRegularExpression class]];
+        return [runtime JSValueForObject:[NSRegularExpression class] inContext:ctx];
     }
     
     // Class
@@ -768,7 +748,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         // The old NeXT Object root class interferes with the JavaScript Object constructor
         Class classObject = NSClassFromString(propertyName);
         if (classObject != nil && [classObject conformsToProtocol:@protocol(NSObject)]) {
-            return [runtime JSValueForObject:classObject];
+            return [runtime JSValueForObject:classObject inContext:ctx];
         }
     }
     
@@ -787,13 +767,13 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     MOBridgeSupportClass *aClass = [symbols objectForKey:NSStringFromClass([MOBridgeSupportClass class])];
     if ([aClass isKindOfClass:[MOBridgeSupportClass class]]) {
         Class realClass = NSClassFromString(aClass.name);
-        return [runtime JSValueForObject:realClass];
+        return [runtime JSValueForObject:realClass inContext:ctx];
     }
     
     // Functions
     MOBridgeSupportFunction *function = [symbols objectForKey:NSStringFromClass([MOBridgeSupportFunction class])];
     if (function != nil) {
-        return [runtime JSValueForObject:function];
+        return [runtime JSValueForObject:function inContext:ctx];
     }
     
     // Constants
@@ -813,7 +793,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         if (type == nil) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No type defined for symbol: %@", constant] userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -823,7 +803,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         if (!symbol) {
             NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Symbol not found: %@", constant] userInfo:nil];
             if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
             return NULL;
         }
@@ -840,7 +820,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
     MOBridgeSupportStringConstant *stringConstant = [symbols objectForKey:NSStringFromClass([MOBridgeSupportStringConstant class])];
     if (stringConstant != nil) {
         NSString *value = [stringConstant value];
-        return [runtime JSValueForObject:value];
+        return [runtime JSValueForObject:value inContext:ctx];
     }
     
     // Enums
@@ -861,7 +841,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
             else {
                 NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", anEnum] userInfo:nil];
                 if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e];
+                    *exception = [runtime JSValueForObject:e inContext:ctx];
                 }
                 return NULL;
             }
@@ -1001,7 +981,7 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
         // String conversion
         if ([propertyName isEqualToString:@"toString"]) {
             MOMethod *function = [MOMethod methodWithTarget:object selector:@selector(description)];
-            return [runtime JSValueForObject:function];
+            return [runtime JSValueForObject:function inContext:ctx];
         }
         
         // Allocators
@@ -1018,7 +998,7 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
             }
             if (methodSignature != nil) {
                 MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
-                return [runtime JSValueForObject:function];
+                return [runtime JSValueForObject:function inContext:ctx];
             }
         }
         
@@ -1052,7 +1032,7 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
         }
         if (methodSignature != nil) {
             MOMethod *function = [MOMethod methodWithTarget:object selector:selector];
-            return [runtime JSValueForObject:function];
+            return [runtime JSValueForObject:function inContext:ctx];
         }
         
         // Indexed subscript
@@ -1062,7 +1042,7 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
             if ([scanner scanInteger:&integerValue]) {
                 id value = [object objectForIndexedSubscript:integerValue];
                 if (value != nil) {
-                    return [runtime JSValueForObject:value];
+                    return [runtime JSValueForObject:value inContext:ctx];
                 }
             }
         }
@@ -1071,7 +1051,7 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
         if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
             id value = [object objectForKeyedSubscript:propertyName];
             if (value != nil) {
-                return [runtime JSValueForObject:value];
+                return [runtime JSValueForObject:value inContext:ctx];
             }
             else {
                 return JSValueMakeNull(ctx);
@@ -1114,7 +1094,7 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
         }
     }
     
@@ -1129,7 +1109,7 @@ static bool MOObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JSStrin
     id private = (__bridge id)(JSObjectGetPrivate(objectJS));
     id object = [private representedObject];
     Class objectClass = [object class];
-    id value = [runtime objectForJSValue:valueJS];
+    id value = [runtime objectForJSValue:valueJS inContext:ctx];
     
     // Perform the lookup
     @try {
@@ -1173,7 +1153,7 @@ static bool MOObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JSStrin
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
         }
     }
     
@@ -1209,7 +1189,7 @@ static bool MOObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS, JSSt
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
         }
     }
     
@@ -1294,7 +1274,7 @@ static bool MOObject_hasInstance(JSContextRef ctx, JSObjectRef constructor, JSVa
     @catch (NSException *e) {
         // Catch ObjC exceptions and propogate them up as JS exceptions
         if (exception != nil) {
-            *exception = [runtime JSValueForObject:e];
+            *exception = [runtime JSValueForObject:e inContext:ctx];
         }
     }
     
@@ -1311,7 +1291,7 @@ static JSObjectRef MOObject_callAsConstructor(JSContextRef ctx, JSObjectRef obje
         NSMutableArray *args = [NSMutableArray arrayWithCapacity:argumentsCount];
         for (size_t i=0; i<argumentsCount; i++) {
             JSValueRef argument = arguments[i];
-            id argumentObj = [runtime objectForJSValue:argument];
+            id argumentObj = [runtime objectForJSValue:argument inContext:ctx];
             [args addObject:argumentObj];
         }
         
@@ -1320,12 +1300,12 @@ static JSObjectRef MOObject_callAsConstructor(JSContextRef ctx, JSObjectRef obje
         // Perform the invocation
         @try {
             id result = [constructor constructWithArguments:args];
-            value = [runtime JSValueForObject:result];
+            value = [runtime JSValueForObject:result inContext:ctx];
         }
         @catch (NSException *e) {
             // Catch ObjC exceptions and propogate them up as JS exceptions
             if (exception != nil) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
         }
         
@@ -1333,7 +1313,7 @@ static JSObjectRef MOObject_callAsConstructor(JSContextRef ctx, JSObjectRef obje
     }
     else {
         NSException *e = [NSException exceptionWithName:NSInvalidArgumentException reason:@"Object cannot be called as a constructor" userInfo:nil];
-        *exception = [runtime JSValueForObject:e];
+        *exception = [runtime JSValueForObject:e inContext:ctx];
         return NULL;
     }
 }
@@ -1347,7 +1327,7 @@ static JSValueRef MOObject_callAsFunction(JSContextRef ctx, JSObjectRef function
         NSMutableArray *args = [NSMutableArray arrayWithCapacity:argumentCount];
         for (size_t i=0; i<argumentCount; i++) {
             JSValueRef argument = arguments[i];
-            id argumentObj = [runtime objectForJSValue:argument];
+            id argumentObj = [runtime objectForJSValue:argument inContext:ctx];
             [args addObject:argumentObj];
         }
         
@@ -1356,12 +1336,12 @@ static JSValueRef MOObject_callAsFunction(JSContextRef ctx, JSObjectRef function
         // Perform the invocation
         @try {
             id result = [function callWithArguments:args];
-            value = [runtime JSValueForObject:result];
+            value = [runtime JSValueForObject:result inContext:ctx];
         }
         @catch (NSException *e) {
             // Catch ObjC exceptions and propogate them up as JS exceptions
             if (exception != nil) {
-                *exception = [runtime JSValueForObject:e];
+                *exception = [runtime JSValueForObject:e inContext:ctx];
             }
         }
         
@@ -1375,7 +1355,7 @@ static JSValueRef MOObject_callAsFunction(JSContextRef ctx, JSObjectRef function
     }
     else {
         NSException *e = [NSException exceptionWithName:NSInvalidArgumentException reason:@"Object cannot be called as a function" userInfo:nil];
-        *exception = [runtime JSValueForObject:e];
+        *exception = [runtime JSValueForObject:e inContext:ctx];
         return NULL;
     }
 }

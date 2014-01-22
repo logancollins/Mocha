@@ -19,17 +19,10 @@
 
 // JSValue <-> id
 + (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx;
-+ (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx unboxObjects:(BOOL)unboxObjects;
-
 + (NSArray *)arrayForJSArray:(JSObjectRef)arrayValue inContext:(JSContextRef)ctx;
 
-- (JSValueRef)JSValueForObject:(id)object;
-
-- (id)objectForJSValue:(JSValueRef)value;
-- (id)objectForJSValue:(JSValueRef)value unboxObjects:(BOOL)unboxObjects;
-
-// JSObject <-> id
-- (JSObjectRef)boxedJSObjectForObject:(id)object;
+- (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx;
+- (JSValueRef)JSValueForObject:(id)object inContext:(JSContextRef)ctx;
 
 // Object storage
 - (void)setGlobalObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes;
@@ -39,8 +32,7 @@
 
 // Exceptions
 + (NSException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx;
-- (NSException *)exceptionWithJSException:(JSValueRef)exception;
-- (void)throwJSException:(JSValueRef)exception;
+- (void)throwJSException:(JSValueRef)exceptionJS inContext:(JSContextRef)ctx;
 
 // Support
 - (void)installBuiltins;
