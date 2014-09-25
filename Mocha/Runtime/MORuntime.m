@@ -412,6 +412,14 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
 }
 
+void MORaiseRuntimeException(JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx) {
+    NSLog(@"raising exception for reason %@", reason);
+    NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
+    if (exception != NULL) {
+        *exception = [runtime JSValueForObject:e inContext:ctx];
+    }
+    
+}
 
 #pragma mark -
 #pragma mark BridgeSupport Metadata
@@ -683,20 +691,14 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         
         // Raise if there is no type
         if (type == nil) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No type defined for symbol: %@", constant] userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"No type defined for symbol: %@", constant], runtime, ctx);
             return NULL;
         }
         
         // Grab symbol
         void *symbol = dlsym(RTLD_DEFAULT, [propertyName UTF8String]);
         if (!symbol) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Symbol not found: %@", constant] userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"Symbol not found: %@", constant], runtime, ctx);
             return NULL;
         }
         
@@ -731,10 +733,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
                 doubleValue = [value doubleValue];
             }
             else {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", anEnum] userInfo:nil];
-                if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e inContext:ctx];
-                }
+                MORaiseRuntimeException(exception, [NSString stringWithFormat:@"No value for enum: %@", anEnum], runtime, ctx);
                 return NULL;
             }
 #if __LP64__

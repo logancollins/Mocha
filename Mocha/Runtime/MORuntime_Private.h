@@ -35,3 +35,6 @@
 - (void)installBuiltins;
 
 @end
+
+extern void MORaiseRuntimeException(JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx);
+
