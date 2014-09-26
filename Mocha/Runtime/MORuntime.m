@@ -367,7 +367,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
     
     if (JSValueGetType(ctx, exception) != kJSTypeObject) {
-        NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:nil];
+        NSException *mochaException = MOThrowableExceptionNamed(MOJavaScriptException, error);
         return mochaException;
     }
     else {
@@ -392,7 +392,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
         
         JSPropertyNameArrayRelease(jsNames);
         
-        NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:userInfo];
+        NSException *mochaException = MOThrowableExceptionNamedWithInfo(MOJavaScriptException, error, userInfo);
         return mochaException;
     }
 }
@@ -413,13 +413,30 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
 }
 
 void MORaiseRuntimeException(JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx) {
-    NSLog(@"raising exception for reason %@", reason);
-    NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
+    MORaiseRuntimeExceptionNamed(MORuntimeException, exception, reason, runtime, ctx);
+}
+
+void MORaiseRuntimeExceptionNamed(NSString* name, JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx) {
+    NSLog(@"raising exception %@ for reason %@", name, reason);
+    NSException *e = MOThrowableExceptionNamed(name, reason);
     if (exception != NULL) {
         *exception = [runtime JSValueForObject:e inContext:ctx];
     }
-    
 }
+
+NSException* MOThrowableRuntimeException(NSString* reason) {
+    return MOThrowableExceptionNamedWithInfo(MORuntimeException, reason, nil);
+}
+
+NSException* MOThrowableExceptionNamed(NSString* name, NSString* reason) {
+    return MOThrowableExceptionNamedWithInfo(name, reason, nil);
+}
+
+NSException* MOThrowableExceptionNamedWithInfo(NSString* name, NSString* reason, NSDictionary* info) {
+    NSLog(@"throwing exception for reason %@", reason);
+    return [NSException exceptionWithName:name reason:reason userInfo:info];
+}
+
 
 #pragma mark -
 #pragma mark BridgeSupport Metadata

@@ -37,4 +37,7 @@
 @end
 
 extern void MORaiseRuntimeException(JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx);
+extern void MORaiseRuntimeExceptionNamed(NSString* name, JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx);
+extern NSException* MOThrowableRuntimeException(NSString* reason);
+extern NSException* MOThrowableExceptionNamed(NSString* name, NSString* reason);
 

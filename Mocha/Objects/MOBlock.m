@@ -41,7 +41,7 @@ SEL __proxySelector = NULL;
     if ([arguments count] != 2
         || ![arguments[0] isKindOfClass:[NSString class]]
         || ![arguments[1] isKindOfClass:[MOJavaScriptObject class]]) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Block objects require two arguments: a type encoding and a function object" userInfo:nil];
+        @throw MOThrowableExceptionNamed(NSInvalidArgumentException, @"Block objects require two arguments: a type encoding and a function object");
     }
     return [[self alloc] initWithJavaScriptObject:arguments[1] typeEncoding:arguments[0]];
 }

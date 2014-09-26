@@ -232,7 +232,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         }
     }
     else {
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Invalid object for function invocation: %@", function] userInfo:nil];
+        @throw MOThrowableRuntimeException([NSString stringWithFormat:@"Invalid object for function invocation: %@", function]);
     }
     
     
