@@ -318,17 +318,21 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
 }
 
 - (id)evaluateString:(NSString *)string {
-    JSValueRef jsValue = [self evaluateJSString:string scriptPath:nil];
+    return [self evaluateString:string withSourceURL:nil];
+}
+
+- (id)evaluateString:(NSString *)string withSourceURL:(NSURL *)sourceURL {
+    JSValueRef jsValue = [self evaluateJSString:string scriptURL:sourceURL];
     return [self objectForJSValue:jsValue inContext:_ctx];
 }
 
-- (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath {
+- (JSValueRef)evaluateJSString:(NSString *)string scriptURL:(NSURL *)scriptURL {
     if (string == nil) {
         return NULL;
     }
     
     JSStringRef jsString = JSStringCreateWithCFString((__bridge CFStringRef)string);
-    JSStringRef jsScriptPath = (scriptPath != nil ? JSStringCreateWithUTF8CString([scriptPath UTF8String]) : NULL);
+    JSStringRef jsScriptPath = (scriptURL != nil ? JSStringCreateWithUTF8CString([scriptURL.absoluteString UTF8String]) : NULL);
     JSValueRef exception = NULL;
     
     JSValueRef result = JSEvaluateScript(_ctx, jsString, NULL, jsScriptPath, 1, &exception);
@@ -830,7 +834,7 @@ static bool MOObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStrin
     }
     
     // Keyed subscript
-    if ([object respondsToSelector:@selector(objectAtKeyedSubscript:)]) {
+    if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
         return YES;
     }
     

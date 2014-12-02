@@ -91,6 +91,20 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  */
 - (id)evaluateString:(NSString *)string;
 
+/*!
+ * @method evaluateString:
+ * @abstract Evalutates the specified JavaScript expression, returning the result
+ *
+ * @param string
+ * The JavaScript expression to evaluate
+ *
+ * @param sourceURL
+ * The source URL for the expression
+ *
+ * @result An object, or nil
+ */
+- (id)evaluateString:(NSString *)string withSourceURL:(NSURL *)sourceURL;
+
 
 /*!
  * @group Bridge Support

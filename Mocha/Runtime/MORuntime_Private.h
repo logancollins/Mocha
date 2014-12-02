@@ -25,7 +25,7 @@
 - (JSValueRef)JSValueForObject:(id)object inContext:(JSContextRef)ctx;
 
 // Evaluation
-- (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath;
+- (JSValueRef)evaluateJSString:(NSString *)string scriptURL:(NSURL *)scriptURL;
 
 // Exceptions
 + (NSException *)exceptionWithJSException:(JSValueRef)exception context:(JSContextRef)ctx;
