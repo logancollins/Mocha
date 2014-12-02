@@ -20,7 +20,7 @@
     return [[self alloc] initWithValue:[arguments objectAtIndex:0]];
 }
 
-- (id)initWithValue:(id)value {
+- (instancetype)initWithValue:(id)value {
     self = [super init];
     if (self) {
         _value = value;

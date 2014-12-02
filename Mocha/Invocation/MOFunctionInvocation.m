@@ -25,12 +25,7 @@
 #import <objc/runtime.h>
 #import <objc/message.h>
 #import <dlfcn.h>
-
-#if TARGET_OS_IPHONE
-#import "ffi.h"
-#else
 #import <ffi/ffi.h>
-#endif
 
 
 void * MOGetObjCCallAddressForArguments(NSArray *arguments);

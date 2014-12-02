@@ -32,7 +32,7 @@
     return sharedController;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _loadedURLs = [[NSMutableArray alloc] init];

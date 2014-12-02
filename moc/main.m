@@ -16,8 +16,8 @@
 
 
 static const char * program_name = "mocha";
-static const char * program_version = "1.0";
-static const char * program_copyright = "Copyright (c) 2013 Sunflower Softworks. All rights reserved.";
+static const char * program_version = "2.0";
+static const char * program_copyright = "Copyright (c) 2014 Sunflower Softworks. All rights reserved.";
 
 
 static const char * short_options = "hv";

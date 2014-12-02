@@ -27,7 +27,7 @@
  * 
  * @result An MOStruct object
  */
-- (id)initWithName:(NSString *)name memberNames:(NSArray *)memberNames;
+- (instancetype)initWithName:(NSString *)name memberNames:(NSArray *)memberNames;
 
 
 /*!

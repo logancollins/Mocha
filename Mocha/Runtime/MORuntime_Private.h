@@ -24,9 +24,6 @@
 - (id)objectForJSValue:(JSValueRef)value inContext:(JSContextRef)ctx;
 - (JSValueRef)JSValueForObject:(id)object inContext:(JSContextRef)ctx;
 
-// Object storage
-- (void)setGlobalObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes;
-
 // Evaluation
 - (JSValueRef)evaluateJSString:(NSString *)string scriptPath:(NSString *)scriptPath;
 

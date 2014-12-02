@@ -20,7 +20,7 @@
     }
 }
 
-- (id)initWithValue:(id)value {
+- (instancetype)initWithValue:(id)value {
     self = [super init];
     if (self) {
         self.value = value;

@@ -15,7 +15,7 @@
 
 @interface MOBlock : NSObject
 
-- (id)initWithJavaScriptObject:(MOJavaScriptObject *)object typeEncoding:(NSString *)typeEncoding;
+- (instancetype)initWithJavaScriptObject:(MOJavaScriptObject *)object typeEncoding:(NSString *)typeEncoding;
 
 @property (readonly) MOJavaScriptObject *javaScriptObject;
 @property (readonly) NSString *typeEncoding;

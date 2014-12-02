@@ -25,7 +25,7 @@
     NSMutableArray *_symbolStack;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         

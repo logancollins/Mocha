@@ -14,7 +14,7 @@
     NSMutableDictionary *_symbolsByType;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _dependencies = [[NSMutableArray alloc] init];

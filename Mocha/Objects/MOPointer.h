@@ -24,7 +24,7 @@
  * 
  * @result An MOPointer object
  */
-- (id)initWithValue:(id)value;
+- (instancetype)initWithValue:(id)value;
 
 
 /*!

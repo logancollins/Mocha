@@ -15,7 +15,7 @@
     NSMutableDictionary *_memberValues;
 }
 
-- (id)initWithName:(NSString *)name memberNames:(NSArray *)memberNames {
+- (instancetype)initWithName:(NSString *)name memberNames:(NSArray *)memberNames {
     self = [super init];
     if (self) {
         _name = [name copy];
@@ -25,7 +25,7 @@
     return self;
 }
 
-- (id)init {
+- (instancetype)init {
     return [self initWithName:nil memberNames:nil];
 }
 

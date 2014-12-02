@@ -11,15 +11,6 @@
 
 @interface NSArray (MochaAdditions)
 
-- (id)mo_objectForIndexedSubscript:(NSUInteger)idx;
-
 - (NSArray *)mo_objectsByApplyingBlock:(id (^)(id obj, NSUInteger idx, BOOL *stop))block;
-
-@end
-
-
-@interface NSMutableArray (MochaAdditions)
-
-- (void)mo_setObject:(id)obj forIndexedSubscript:(NSUInteger)idx;
 
 @end

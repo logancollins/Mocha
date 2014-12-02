@@ -19,7 +19,7 @@
 
 @implementation MOPointerValue
 
-- (id)initWithPointerValue:(void *)pointerValue typeEncoding:(NSString *)typeEncoding {
+- (instancetype)initWithPointerValue:(void *)pointerValue typeEncoding:(NSString *)typeEncoding {
     self = [super init];
     if (self) {
         self.pointerValue = pointerValue;

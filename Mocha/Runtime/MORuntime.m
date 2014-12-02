@@ -24,8 +24,6 @@
 #import "MOBridgeSupportSymbol.h"
 
 #import "NSArray+MochaAdditions.h"
-#import "NSDictionary+MochaAdditions.h"
-#import "NSOrderedSet+MochaAdditions.h"
 
 #import <objc/runtime.h>
 #import <dlfcn.h>
@@ -66,13 +64,6 @@ NSString * MOSelectorToPropertyName(SEL selector);
 NSString * MOPropertyNameToSetterName(NSString *propertyName);
 
 
-@interface MORuntimeProxy : NSObject
-
-@property (weak) MORuntime *runtime;
-
-@end
-
-
 #pragma mark -
 #pragma mark Runtime
 
@@ -105,36 +96,6 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
         MOObjectDefinition.callAsConstructor        = MOObject_callAsConstructor;
         MOObjectDefinition.callAsFunction           = MOObject_callAsFunction;
         MOObjectClass                               = JSClassCreate(&MOObjectDefinition);
-        
-        
-        // Swizzle indexed subscripting support for NSArray
-        SEL indexedSubscriptSelector = @selector(objectForIndexedSubscript:);
-        if (![NSArray instancesRespondToSelector:indexedSubscriptSelector]) {
-            IMP imp = class_getMethodImplementation([NSArray class], @selector(mo_objectForIndexedSubscript:));
-            class_addMethod([NSArray class], @selector(objectForIndexedSubscript:), imp, "@@:l");
-            
-            imp = class_getMethodImplementation([NSMutableArray class], @selector(mo_setObject:forIndexedSubscript:));
-            class_addMethod([NSMutableArray class], @selector(setObject:forIndexedSubscript:), imp, "@@:@l");
-        }
-        
-        // Swizzle indexed subscripting support for NSOrderedSet
-        if (![NSOrderedSet instancesRespondToSelector:indexedSubscriptSelector]) {
-            IMP imp = class_getMethodImplementation([NSOrderedSet class], @selector(mo_objectForIndexedSubscript:));
-            class_addMethod([NSOrderedSet class], @selector(objectForIndexedSubscript:), imp, "@@:l");
-            
-            imp = class_getMethodImplementation([NSMutableOrderedSet class], @selector(mo_setObject:forIndexedSubscript:));
-            class_addMethod([NSMutableOrderedSet class], @selector(setObject:forIndexedSubscript:), imp, "@@:@l");
-        }
-        
-        // Swizzle keyed subscripting support for NSDictionary
-        SEL keyedSubscriptSelector = @selector(objectForKeyedSubscript:);
-        if (![NSDictionary instancesRespondToSelector:keyedSubscriptSelector]) {
-            IMP imp = class_getMethodImplementation([NSDictionary class], @selector(mo_objectForKeyedSubscript:));
-            class_addMethod([NSDictionary class], @selector(objectForKeyedSubscript:), imp, "@@:@");
-            
-            imp = class_getMethodImplementation([NSMutableDictionary class], @selector(mo_setObject:forKeyedSubscript:));
-            class_addMethod([NSMutableDictionary class], @selector(setObject:forKeyedSubscript:), imp, "@@:@@");
-        }
     }
 }
 
@@ -145,11 +106,11 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     return [self objectForJSValue:jsValue inContext:ctx];
 }
 
-- (id)init {
+- (instancetype)init {
     return [self initWithOptions:MORuntimeOptionsNone];
 }
 
-- (id)initWithOptions:(MORuntimeOptions)options {
+- (instancetype)initWithOptions:(MORuntimeOptions)options {
     self = [super init];
     if (self) {
         self.options = options;
@@ -157,7 +118,6 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
         _ctx = JSGlobalContextCreate(MochaClass);
         _objectsToBoxes = [NSMapTable weakToStrongObjectsMapTable];
         
-#if !TARGET_OS_IPHONE
         NSArray *libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask, YES);
         NSMutableArray *frameworkSearchPaths = [NSMutableArray arrayWithCapacity:[libraryPaths count]];
         for (NSString *libraryPath in libraryPaths) {
@@ -165,10 +125,12 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
             [frameworkSearchPaths addObject:frameworkSearchPath];
         }
         self.frameworkSearchPaths = frameworkSearchPaths;
-#endif
         
         // Add the runtime as a property of the context
-        [self setGlobalObject:self withName:@"__mocha__" attributes:(kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete)];
+        JSValueRef jsValue = [self JSValueForObject:self inContext:_ctx];
+        JSStringRef jsName = JSStringCreateWithUTF8CString([@"__mocha__" UTF8String]);
+        JSObjectSetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, jsValue, (kJSPropertyAttributeReadOnly|kJSPropertyAttributeDontEnum|kJSPropertyAttributeDontDelete), NULL);
+        JSStringRelease(jsName);
         
         // Load builtins
         [self installBuiltins];
@@ -182,6 +144,10 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
 
 - (JSGlobalContextRef)context {
     return _ctx;
+}
+
+- (MOJavaScriptObject *)globalObject {
+    return [self objectForJSValue:JSContextGetGlobalObject(_ctx) inContext:_ctx];
 }
 
 
@@ -219,7 +185,6 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
             box.representedObject = object;
             
             JSObjectRef jsObject = JSObjectMake(ctx, MOObjectClass, (__bridge void *)(box));
-            
             box.JSObject = jsObject;
             
             [_objectsToBoxes setObject:box forKey:object];
@@ -336,6 +301,22 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
 #pragma mark -
 #pragma mark Evaluation
 
+- (BOOL)isSyntaxValidForString:(NSString *)string {
+    JSStringRef jsScript = JSStringCreateWithUTF8CString([string UTF8String]);
+    JSValueRef exception = NULL;
+    bool success = JSCheckScriptSyntax(_ctx, jsScript, NULL, 1, &exception);
+    
+    if (jsScript != NULL) {
+        JSStringRelease(jsScript);
+    }
+    
+    if (exception != NULL) {
+        [self throwJSException:exception inContext:_ctx];
+    }
+    
+    return success;
+}
+
 - (id)evaluateString:(NSString *)string {
     JSValueRef jsValue = [self evaluateJSString:string scriptPath:nil];
     return [self objectForJSValue:jsValue inContext:_ctx];
@@ -365,93 +346,6 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
     
     return result;
-}
-
-
-#pragma mark -
-#pragma mark Objects
-
-- (NSArray *)globalObjectNames {
-    JSPropertyNameArrayRef propertyNamesRef = JSObjectCopyPropertyNames(_ctx, JSContextGetGlobalObject(_ctx));
-    size_t count = JSPropertyNameArrayGetCount(propertyNamesRef);
-    
-    NSMutableArray *array = [NSMutableArray arrayWithCapacity:count];
-    for (size_t i=0; i<count; i++) {
-        JSStringRef nameRef = JSPropertyNameArrayGetNameAtIndex(propertyNamesRef, i);
-        NSString *name = CFBridgingRelease(JSStringCopyCFString(NULL, nameRef));
-        [array addObject:name];
-    }
-    
-    JSPropertyNameArrayRelease(propertyNamesRef);
-    
-    return array;
-}
-
-- (id)globalObjectWithName:(NSString *)objectName {
-    JSValueRef exception = NULL;
-    
-    // Get function as property of global object
-    JSStringRef jsObjectName = JSStringCreateWithUTF8CString([objectName UTF8String]);
-    JSValueRef jsObjectValue = JSObjectGetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsObjectName, &exception);
-    JSStringRelease(jsObjectName);
-    
-    if (exception != NULL) {
-        [self throwJSException:exception inContext:_ctx];
-        return NULL;
-    }
-    
-    return [self objectForJSValue:jsObjectValue inContext:_ctx];
-}
-
-- (void)setGlobalObject:(id)object withName:(NSString *)name {
-    [self setGlobalObject:object withName:name attributes:(kJSPropertyAttributeNone)];
-}
-
-- (void)setGlobalObject:(id)object withName:(NSString *)name attributes:(JSPropertyAttributes)attributes {
-    JSValueRef jsValue = [self JSValueForObject:object inContext:_ctx];
-    
-    // Set
-    JSValueRef exception = NULL;
-    JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-    JSObjectSetProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, jsValue, attributes, &exception);
-    JSStringRelease(jsName);
-    
-    if (exception != NULL) {
-        [self throwJSException:exception inContext:_ctx];
-    }
-}
-
-- (void)removeGlobalObjectWithName:(NSString *)name {
-    JSValueRef exception = NULL;
-    
-    // Delete
-    JSStringRef jsName = JSStringCreateWithUTF8CString([name UTF8String]);
-    JSObjectDeleteProperty(_ctx, JSContextGetGlobalObject(_ctx), jsName, &exception);
-    JSStringRelease(jsName);
-    
-    if (exception != NULL) {
-        [self throwJSException:exception inContext:_ctx];
-    }
-}
-
-
-#pragma mark -
-#pragma mark Syntax Validation
-
-- (BOOL)isSyntaxValidForString:(NSString *)string {
-    JSStringRef jsScript = JSStringCreateWithUTF8CString([string UTF8String]);
-    JSValueRef exception = NULL;
-    bool success = JSCheckScriptSyntax(_ctx, jsScript, NULL, 1, &exception);
-    
-    if (jsScript != NULL) {
-        JSStringRelease(jsScript);
-    }
-    
-    if (exception != NULL) {
-        [self throwJSException:exception inContext:_ctx];
-    }
-    
-    return success;
 }
 
 
@@ -551,12 +445,10 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
                     return NO;
                 }
             }
-#if !TARGET_OS_IPHONE
             else if ([[filePath pathExtension] isEqualToString:@"dylib"]) {
                 // dylib
                 dlopen([filePath UTF8String], RTLD_LAZY);
             }
-#endif
         }
         
         return YES;
@@ -565,8 +457,6 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
         return NO;
     }
 }
-
-#if !TARGET_OS_IPHONE
 
 - (BOOL)loadFrameworkWithName:(NSString *)frameworkName {
     BOOL success = NO;
@@ -592,7 +482,6 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     NSString *libPath = [frameworkPath stringByAppendingPathComponent:frameworkName];
     void *address = dlopen([libPath UTF8String], RTLD_LAZY);
     if (!address) {
-        //NSLog(@"ERROR: Could not load framework dylib: %@, %@", frameworkName, libPath);
         return NO;
     }
     
@@ -603,26 +492,24 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     return YES;
 }
 
-#endif
-
 
 #pragma mark -
 #pragma mark Support
 
 - (void)installBuiltins {
-    MORuntimeProxy *proxy = [[MORuntimeProxy alloc] init];
-    proxy.runtime = self;
-    [self setGlobalObject:proxy withName:@"Mocha"];
+    MOJavaScriptObject *globalObject = self.globalObject;
     
-    [self setGlobalObject:[MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)] withName:@"framework"];
+    globalObject[@"framework"] = [MOMethod methodWithTarget:self selector:@selector(loadFrameworkWithName:)];
     
     MOMethod *print = [MOMethod methodWithTarget:self selector:@selector(print:)];
     print.variadic = YES;
-    [self setGlobalObject:print withName:@"print"];
+    globalObject[@"print"] = print;
     
-    [self setGlobalObject:[MOBlock class] withName:@"Block"];
-    [self setGlobalObject:[MOPointer class] withName:@"Pointer"];
-    [self setGlobalObject:[MOWeak class] withName:@"Weak"];
+    globalObject[@"Block"] = [MOBlock class];
+    globalObject[@"Pointer"] = [MOPointer class];
+    globalObject[@"Weak"] = [MOWeak class];
+    
+    [self loadFrameworkWithName:@"Foundation"];
 }
 
 - (void)print:(id)o, ... NS_REQUIRES_NIL_TERMINATION {
@@ -685,7 +572,6 @@ static bool Mocha_hasProperty(JSContextRef ctx, JSObjectRef object, JSStringRef 
                       [MOBridgeSupportEnum class],
                       nil];
     NSDictionary *symbols = [[MOBridgeSupportController sharedController] symbolsWithName:propertyName types:types];
-    
     
     // Classes
     MOBridgeSupportClass *aClass = [symbols objectForKey:NSStringFromClass([MOBridgeSupportClass class])];
@@ -1393,11 +1279,6 @@ static JSValueRef MOJSPrototypeFunctionForOBJCInstance(JSContextRef ctx, id inst
     
     return nil;
 }
-
-
-@implementation MORuntimeProxy
-
-@end
 
 
 SEL MOSelectorFromPropertyName(NSString *propertyName) {

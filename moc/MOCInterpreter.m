@@ -26,7 +26,7 @@ static const char interactivePrompt[] = ">>> ";
     MORuntime *_runtime;
 }
 
-- (id)initWithOptions:(MORuntimeOptions)options {
+- (instancetype)initWithOptions:(MORuntimeOptions)options {
     self = [super init];
     if (self) {
         _runtime = [[MORuntime alloc] initWithOptions:options];

@@ -27,7 +27,7 @@
  * 
  * @result An MOPointerValue object
  */
-- (id)initWithPointerValue:(void *)pointerValue typeEncoding:(NSString *)typeEncoding;
+- (instancetype)initWithPointerValue:(void *)pointerValue typeEncoding:(NSString *)typeEncoding;
 
 
 /*!

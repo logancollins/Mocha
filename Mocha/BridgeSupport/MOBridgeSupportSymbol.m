@@ -52,7 +52,7 @@
     NSMutableArray *_arguments;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _arguments = [[NSMutableArray alloc] init];
@@ -125,7 +125,7 @@
     NSMutableArray *_methods;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _methods = [[NSMutableArray alloc] init];
@@ -174,7 +174,7 @@
     NSMutableArray *_methods;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _methods = [[NSMutableArray alloc] init];
@@ -223,7 +223,7 @@
     NSMutableArray *_arguments;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _arguments = [[NSMutableArray alloc] init];
@@ -262,7 +262,7 @@
     NSMutableArray *_arguments;
 }
 
-- (id)init {
+- (instancetype)init {
     self = [super init];
     if (self) {
         _arguments = [[NSMutableArray alloc] init];

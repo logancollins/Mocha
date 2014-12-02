@@ -31,6 +31,9 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
 };
 
 
+@class MOJavaScriptObject;
+
+
 /*!
  * @class MORuntime
  * @abstract The Mocha runtime interface
@@ -46,7 +49,7 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  * 
  * @result An MORuntime object
  */
-- (id)initWithOptions:(MORuntimeOptions)options;
+- (instancetype)initWithOptions:(MORuntimeOptions)options;
 
 
 /*!
@@ -56,6 +59,14 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  * @result An MORuntimeOptions value
  */
 @property (readonly) MORuntimeOptions options;
+
+/*!
+ * @property globalObject
+ * @abstract The global JavaScript object
+ *
+ * @result An MOJavaScriptObject
+ */
+@property (readonly) MOJavaScriptObject *globalObject;
 
 
 /*!
@@ -82,51 +93,6 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
 
 
 /*!
- * @group Objects
- */
-
-/*!
- * @property globalObjectNames
- * @abstract Gets an array of all objects names in the global scope
- * 
- * @result An NSArray of NSString objects
- */
-@property (copy, readonly) NSArray *globalObjectNames;
-
-/*!
- * @method globalObjectWithName:
- * @abstract Gets an object in the global scope with a specified name
- * 
- * @param objectName
- * The name of the global object to get
- * 
- * @result An object, or MOUndefined if an object with the specified name does not exist
- */
-- (id)globalObjectWithName:(NSString *)objectName;
-
-/*!
- * @method setGlobalObject:withName:
- * @abstract Sets an object in the global scope with a specified name
- *
- * @param object
- * The object value to set
- *
- * @param objectName
- * The name of the global object to set
- */
-- (void)setGlobalObject:(id)object withName:(NSString *)name;
-
-/*!
- * @method removeGlobalObjectWithName:
- * @abstract Removes an object in the global scope with a specified name
- *
- * @param objectName
- * The name of the global object to remove
- */
-- (void)removeGlobalObjectWithName:(NSString *)name;
-
-
-/*!
  * @group Bridge Support
  */
 
@@ -140,8 +106,6 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  * @result A BOOL value
  */
 - (BOOL)loadBridgeSupportFilesAtPath:(NSString *)path;
-
-#if !TARGET_OS_IPHONE
 
 /*!
  * @method loadFrameworkWithName:
@@ -185,8 +149,6 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  * @result An NSArray of NSString objects
  */
 @property (copy) NSArray *frameworkSearchPaths;
-
-#endif
 
 @end
 

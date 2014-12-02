@@ -46,7 +46,7 @@ SEL __proxySelector = NULL;
     return [[self alloc] initWithJavaScriptObject:arguments[1] typeEncoding:arguments[0]];
 }
 
-- (id)initWithJavaScriptObject:(MOJavaScriptObject *)object typeEncoding:(NSString *)typeEncoding {
+- (instancetype)initWithJavaScriptObject:(MOJavaScriptObject *)object typeEncoding:(NSString *)typeEncoding {
     self = [super init];
     if (self) {
         _javaScriptObject = object;

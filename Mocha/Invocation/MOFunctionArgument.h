@@ -12,12 +12,7 @@
 
 #import <Foundation/Foundation.h>
 #import <JavaScriptCore/JavaScriptCore.h>
-
-#if TARGET_OS_IPHONE
-#import "ffi.h"
-#else
 #import <ffi/ffi.h>
-#endif
 
 
 @class MOPointer;
@@ -27,9 +22,9 @@
 
 + (NSArray *)argumentsFromTypeSignature:(NSString *)typeSignature;
 
-- (id)initWithTypeEncoding:(NSString *)typeEncoding;
-- (id)initWithTypeEncoding:(NSString *)typeEncoding storage:(void **)storagePtr;
-- (id)initWithBaseTypeEncoding:(char)baseTypeEncoding;
+- (instancetype)initWithTypeEncoding:(NSString *)typeEncoding;
+- (instancetype)initWithTypeEncoding:(NSString *)typeEncoding storage:(void **)storagePtr;
+- (instancetype)initWithBaseTypeEncoding:(char)baseTypeEncoding;
 
 @property (strong) NSString *typeEncoding;
 - (void)setTypeEncoding:(NSString *)typeEncoding storage:(void **)storagePtr;

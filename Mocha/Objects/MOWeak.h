@@ -20,7 +20,7 @@
  *
  * @result An MOWeak object
  */
-- (id)initWithValue:(id)value;
+- (instancetype)initWithValue:(id)value;
 
 
 /*!

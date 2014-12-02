@@ -61,21 +61,21 @@ NSString * MOJSValueToString(JSContextRef ctx, JSValueRef value, JSValueRef *exc
     ffi_type _structureType;
 }
 
-- (id)init {
+- (instancetype)init {
     return [self initWithBaseTypeEncoding:_C_ID];
 }
 
-- (id)initWithBaseTypeEncoding:(char)baseTypeEncoding {
+- (instancetype)initWithBaseTypeEncoding:(char)baseTypeEncoding {
     unichar character = (unichar)baseTypeEncoding;
     NSString *typeEncoding = [NSString stringWithCharacters:&character length:1];
     return [self initWithTypeEncoding:typeEncoding];
 }
 
-- (id)initWithTypeEncoding:(NSString *)typeEncoding {
+- (instancetype)initWithTypeEncoding:(NSString *)typeEncoding {
     return [self initWithTypeEncoding:typeEncoding storage:NULL];
 }
 
-- (id)initWithTypeEncoding:(NSString *)typeEncoding storage:(void **)storagePtr {
+- (instancetype)initWithTypeEncoding:(NSString *)typeEncoding storage:(void **)storagePtr {
     self = [super init];
     if (self) {
         [self setTypeEncoding:typeEncoding storage:storagePtr];
@@ -905,7 +905,7 @@ typedef struct { char a; BOOL b; } struct_C_BOOL;
         case _C_ULNG_LNG:
         case _C_FLT:
         case _C_DBL: {
-            double number;
+            double number = 0.0;
             switch (typeEncoding) {
                 case _C_CHR:        number = *(char *)ptr; break;
                 case _C_UCHR:       number = *(unsigned char *)ptr; break;
