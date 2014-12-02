@@ -213,4 +213,25 @@
     return [runtime objectForJSValue:returnValue inContext:_JSContext];
 }
 
+- (id)objectAtIndexedSubscript:(NSUInteger)idx {
+    return [self objectAtPropertyIndex:idx];
+}
+
+- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)idx {
+    [self setObject:obj atPropertyIndex:idx];
+}
+
+- (id)objectForKeyedSubscript:(NSString *)key {
+    return [self objectForPropertyName:key];
+}
+
+- (void)setObject:(id)obj forKeyedSubscript:(NSString *)key {
+    if (obj != nil) {
+        [self setObject:obj forPropertyName:key];
+    }
+    else {
+        [self removeObjectForPropertyName:key];
+    }
+}
+
 @end

@@ -124,5 +124,13 @@
  */
 - (id)callWithArguments:(NSArray *)arguments;
 
+
+// Subscripting
+- (id)objectAtIndexedSubscript:(NSUInteger)idx;
+- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)idx;
+
+- (id)objectForKeyedSubscript:(NSString *)key;
+- (void)setObject:(id)obj forKeyedSubscript:(NSString *)key;
+
 @end
 

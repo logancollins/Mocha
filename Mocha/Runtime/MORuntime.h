@@ -191,7 +191,7 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
 @interface NSObject (MOObjectIndexedSubscripting)
 
 /*!
- * @method objectForIndexedSubscript:
+ * @method objectAtIndexedSubscript:
  * @abstract Gets the object for a given index
  * 
  * @param idx
@@ -199,10 +199,10 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  * 
  * @result An object
  */
-- (id)objectForIndexedSubscript:(NSUInteger)idx;
+- (id)objectAtIndexedSubscript:(NSUInteger)idx;
 
 /*!
- * @method setObject:forIndexedSubscript:
+ * @method setObject:atIndexedSubscript:
  * @abstract Sets the object for a given index
  * 
  * @param obj
@@ -211,7 +211,7 @@ typedef NS_OPTIONS(NSUInteger, MORuntimeOptions) {
  * @param idx
  * The index for which to get an object
  */
-- (void)setObject:(id)obj forIndexedSubscript:(NSUInteger)idx;
+- (void)setObject:(id)obj atIndexedSubscript:(NSUInteger)idx;
 
 @end
 

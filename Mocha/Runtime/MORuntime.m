@@ -821,7 +821,7 @@ static bool MOObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStrin
     }
     
     // Indexed subscript
-    if ([object respondsToSelector:@selector(objectForIndexedSubscript:)]) {
+    if ([object respondsToSelector:@selector(objectAtIndexedSubscript:)]) {
         NSScanner *scanner = [NSScanner scannerWithString:propertyName];
         NSInteger integerValue;
         if ([scanner scanInteger:&integerValue]) {
@@ -830,7 +830,7 @@ static bool MOObject_hasProperty(JSContextRef ctx, JSObjectRef objectJS, JSStrin
     }
     
     // Keyed subscript
-    if ([object respondsToSelector:@selector(objectForKeyedSubscript:)]) {
+    if ([object respondsToSelector:@selector(objectAtKeyedSubscript:)]) {
         return YES;
     }
     
@@ -922,11 +922,11 @@ static JSValueRef MOObject_getProperty(JSContextRef ctx, JSObjectRef objectJS, J
         }
         
         // Indexed subscript
-        if ([object respondsToSelector:@selector(objectForIndexedSubscript:)]) {
+        if ([object respondsToSelector:@selector(objectAtIndexedSubscript:)]) {
             NSScanner *scanner = [NSScanner scannerWithString:propertyName];
             NSInteger integerValue;
             if ([scanner scanInteger:&integerValue]) {
-                id value = [object objectForIndexedSubscript:integerValue];
+                id value = [object objectAtIndexedSubscript:integerValue];
                 if (value != nil) {
                     return [runtime JSValueForObject:value inContext:ctx];
                 }
@@ -1021,11 +1021,11 @@ static bool MOObject_setProperty(JSContextRef ctx, JSObjectRef objectJS, JSStrin
         }
         
         // Indexed subscript
-        if ([object respondsToSelector:@selector(setObject:forIndexedSubscript:)]) {
+        if ([object respondsToSelector:@selector(setObject:atIndexedSubscript:)]) {
             NSScanner *scanner = [NSScanner scannerWithString:propertyName];
             NSInteger integerValue;
             if ([scanner scanInteger:&integerValue]) {
-                [object setObject:value forIndexedSubscript:integerValue];
+                [object setObject:value atIndexedSubscript:integerValue];
                 return YES;
             }
         }
@@ -1057,11 +1057,11 @@ static bool MOObject_deleteProperty(JSContextRef ctx, JSObjectRef objectJS, JSSt
     // Perform the lookup
     @try {
         // Indexed subscript
-        if ([object respondsToSelector:@selector(setObject:forIndexedSubscript:)]) {
+        if ([object respondsToSelector:@selector(setObject:atIndexedSubscript:)]) {
             NSScanner *scanner = [NSScanner scannerWithString:propertyName];
             NSInteger integerValue;
             if ([scanner scanInteger:&integerValue]) {
-                [object setObject:nil forIndexedSubscript:integerValue];
+                [object setObject:nil atIndexedSubscript:integerValue];
                 return YES;
             }
         }

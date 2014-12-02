@@ -11,6 +11,8 @@
 
 @interface NSArray (MochaAdditions)
 
++ (id)constructWithArguments:(NSArray *)arguments;
+
 - (NSArray *)mo_objectsByApplyingBlock:(id (^)(id obj, NSUInteger idx, BOOL *stop))block;
 
 @end
