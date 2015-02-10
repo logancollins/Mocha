@@ -39,7 +39,7 @@
         NSError *error = nil;
         NSString *testScript = [NSString stringWithContentsOfURL:fileURL usedEncoding:NULL error:&error];
         
-        NSLog(@"Starting test script: %@", [[URL lastPathComponent] stringByDeletingPathExtension]);
+        NSLog(@"Starting test script: %@", [[fileURL lastPathComponent] stringByDeletingPathExtension]);
         
         XCTAssertNotNil(testScript, @"Error loading test script: %@", error);
         

@@ -34,11 +34,8 @@ static const char interactivePrompt[] = ">>> ";
 //        MOMethod *gc = [MOMethod methodWithTarget:_runtime selector:@selector(garbageCollect)];
 //        [_runtime setGlobalObject:gc withName:@"gc"];
         
-        MOMethod *checkSyntax = [MOMethod methodWithTarget:_runtime selector:@selector(isSyntaxValidForString:)];
-        [_runtime setGlobalObject:checkSyntax withName:@"checkSyntax"];
-        
-        MOMethod *exit = [MOMethod methodWithTarget:self selector:@selector(exit)];
-        [_runtime setGlobalObject:exit withName:@"exit"];
+        _runtime.globalObject[@"checkSyntax"] = [MOMethod methodWithTarget:_runtime selector:@selector(isSyntaxValidForString:)];
+        _runtime.globalObject[@"exit"] = [MOMethod methodWithTarget:self selector:@selector(exit)];
     }
     return self;
 }
@@ -62,10 +59,10 @@ static const char interactivePrompt[] = ">>> ";
                 
                 // Set the last result as the special variable "_"
                 if (object != nil) {
-                    [_runtime setGlobalObject:object withName:@"_"];
+                    _runtime.globalObject[@"_"] = object;
                 }
                 else {
-                    [_runtime removeGlobalObjectWithName:@"_"];
+                    _runtime.globalObject[@"_"] = nil;
                 }
             }
             @catch (NSException *e) {

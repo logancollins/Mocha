@@ -147,7 +147,8 @@ void executeScript(NSString *script, NSString *path, MORuntimeOptions options) {
     }
     
     @try {
-        [runtime evaluateJSString:script scriptPath:path];
+        NSURL *fileURL = [NSURL fileURLWithPath:path];
+        [runtime evaluateJSString:script scriptURL:fileURL];
     }
     @catch (NSException *e) {
         if ([e userInfo] != nil) {
