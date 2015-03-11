@@ -97,6 +97,14 @@
 		2D75F67B1711975C00876CCF /* prep_cif.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D75F6671711975C00876CCF /* prep_cif.c */; };
 		2D75F67C1711975C00876CCF /* raw_api.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D75F6681711975C00876CCF /* raw_api.c */; };
 		2D75F67D1711975C00876CCF /* types.c in Sources */ = {isa = PBXBuildFile; fileRef = 2D75F6691711975C00876CCF /* types.c */; };
+		9F446F241A963D3F000910E6 /* MochaTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F446F231A963D3F000910E6 /* MochaTests.m */; };
+		9F446F251A963D3F000910E6 /* Mocha.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EAA45E03155CE44B00F93E40 /* Mocha.framework */; };
+		9F446F2B1A963D5E000910E6 /* Tests in Resources */ = {isa = PBXBuildFile; fileRef = 02BF152615C0973C0004CA2C /* Tests */; };
+		9F446F301A96433A000910E6 /* MOMethodTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F446F2F1A96433A000910E6 /* MOMethodTests.m */; };
+		9F9554F01AB0C53B000E70CA /* MOObjectKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F9554EE1AB0C53B000E70CA /* MOObjectKey.h */; };
+		9F9554F11AB0C53B000E70CA /* MOObjectKey.h in Headers */ = {isa = PBXBuildFile; fileRef = 9F9554EE1AB0C53B000E70CA /* MOObjectKey.h */; };
+		9F9554F21AB0C53B000E70CA /* MOObjectKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9554EF1AB0C53B000E70CA /* MOObjectKey.m */; };
+		9F9554F31AB0C53B000E70CA /* MOObjectKey.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F9554EF1AB0C53B000E70CA /* MOObjectKey.m */; };
 		EA037E701560B4C100D3E7C8 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA1A1232156160F200A1F1A4 /* libffi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A1231156160F200A1F1A4 /* libffi.dylib */; };
 		EA2DE2F91571904D0017EF88 /* MOClassDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = EA2DE2F71571904D0017EF88 /* MOClassDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -255,6 +263,13 @@
 			remoteGlobalIDString = EAA45E02155CE44B00F93E40;
 			remoteInfo = Mocha;
 		};
+		9F446F261A963D3F000910E6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = EAA45E02155CE44B00F93E40;
+			remoteInfo = Framework;
+		};
 		EAA3503815647DEA00B62244 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = EAA45DF9155CE44B00F93E40 /* Project object */;
@@ -331,6 +346,12 @@
 		2D75F6671711975C00876CCF /* prep_cif.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = prep_cif.c; sourceTree = "<group>"; };
 		2D75F6681711975C00876CCF /* raw_api.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = raw_api.c; sourceTree = "<group>"; };
 		2D75F6691711975C00876CCF /* types.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = types.c; sourceTree = "<group>"; };
+		9F446F1F1A963D3F000910E6 /* MochaTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MochaTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		9F446F221A963D3F000910E6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		9F446F231A963D3F000910E6 /* MochaTests.m */ = {isa = PBXFileReference; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = MochaTests.m; sourceTree = "<group>"; };
+		9F446F2F1A96433A000910E6 /* MOMethodTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMethodTests.m; sourceTree = "<group>"; };
+		9F9554EE1AB0C53B000E70CA /* MOObjectKey.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOObjectKey.h; sourceTree = "<group>"; };
+		9F9554EF1AB0C53B000E70CA /* MOObjectKey.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOObjectKey.m; sourceTree = "<group>"; };
 		EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionArgument.h; sourceTree = "<group>"; };
 		EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionArgument.m; sourceTree = "<group>"; };
 		EA1A1231156160F200A1F1A4 /* libffi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffi.dylib; path = usr/lib/libffi.dylib; sourceTree = SDKROOT; };
@@ -373,7 +394,7 @@
 		EAA45E1B155CE46000F93E40 /* MochaDefines.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaDefines.h; sourceTree = "<group>"; };
 		EAA45E1E155CE4CB00F93E40 /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
 		EAA45E22155CE57600F93E40 /* MochaRuntime.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime.h; sourceTree = "<group>"; wrapsLines = 1; };
-		EAA45E23155CE57600F93E40 /* MochaRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochaRuntime.m; sourceTree = "<group>"; };
+		EAA45E23155CE57600F93E40 /* MochaRuntime.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = MochaRuntime.m; sourceTree = "<group>"; };
 		EAA45E26155CE66600F93E40 /* MochaRuntime_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MochaRuntime_Private.h; sourceTree = "<group>"; };
 		EAA45E71155EE5AF00F93E40 /* mocha */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mocha; sourceTree = BUILT_PRODUCTS_DIR; };
 		EAA45E75155EE5AF00F93E40 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -381,7 +402,7 @@
 		EAA45E7F155EE68000F93E40 /* MOCInterpreter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOCInterpreter.h; sourceTree = "<group>"; };
 		EAA45E80155EE68000F93E40 /* MOCInterpreter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOCInterpreter.m; sourceTree = "<group>"; };
 		EAA45E86155EE97200F93E40 /* MOMethod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMethod.h; sourceTree = "<group>"; };
-		EAA45E87155EE97200F93E40 /* MOMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOMethod.m; sourceTree = "<group>"; };
+		EAA45E87155EE97200F93E40 /* MOMethod.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = MOMethod.m; sourceTree = "<group>"; };
 		EAA45E8A155EEA2F00F93E40 /* MOMethod_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOMethod_Private.h; sourceTree = "<group>"; };
 		EAA45E92155EEB9400F93E40 /* MOBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBox.h; sourceTree = "<group>"; };
 		EAA45E93155EEB9400F93E40 /* MOBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBox.m; sourceTree = "<group>"; };
@@ -412,6 +433,14 @@
 				025184A115D182FA005D661F /* Cocoa.framework in Frameworks */,
 				02BF150B15C096070004CA2C /* SenTestingKit.framework in Frameworks */,
 				02BF152015C096370004CA2C /* Mocha.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9F446F1C1A963D3F000910E6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F446F251A963D3F000910E6 /* Mocha.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -578,6 +607,24 @@
 			path = src;
 			sourceTree = "<group>";
 		};
+		9F446F201A963D3F000910E6 /* MochaTests */ = {
+			isa = PBXGroup;
+			children = (
+				9F446F231A963D3F000910E6 /* MochaTests.m */,
+				9F446F211A963D3F000910E6 /* Supporting Files */,
+				9F446F2F1A96433A000910E6 /* MOMethodTests.m */,
+			);
+			path = MochaTests;
+			sourceTree = "<group>";
+		};
+		9F446F211A963D3F000910E6 /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				9F446F221A963D3F000910E6 /* Info.plist */,
+			);
+			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
 		EA2DE2FE157190F70017EF88 /* Objective-C Runtime */ = {
 			isa = PBXGroup;
 			children = (
@@ -691,6 +738,7 @@
 				EAA45E74155EE5AF00F93E40 /* mocha */,
 				023EB37B1587A2AE0072EC4E /* InstallPackage */,
 				02BF151215C096070004CA2C /* UnitTests */,
+				9F446F201A963D3F000910E6 /* MochaTests */,
 				EAA45E05155CE44B00F93E40 /* Frameworks */,
 				EAA45E04155CE44B00F93E40 /* Products */,
 			);
@@ -704,6 +752,7 @@
 				EAA45E71155EE5AF00F93E40 /* mocha */,
 				EAA34FC815647AD700B62244 /* libMocha.a */,
 				02BF150915C096070004CA2C /* UnitTests.octest */,
+				9F446F1F1A963D3F000910E6 /* MochaTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -758,10 +807,12 @@
 			children = (
 				EAA45E92155EEB9400F93E40 /* MOBox.h */,
 				EAA45E93155EEB9400F93E40 /* MOBox.m */,
-				EA2DE3001571910F0017EF88 /* Types */,
-				EA2DE2FF157191030017EF88 /* Callables */,
 				EAA34FB61563B3A500B62244 /* MOObjCRuntime.h */,
 				EAA34FB71563B3A500B62244 /* MOObjCRuntime.m */,
+				9F9554EE1AB0C53B000E70CA /* MOObjectKey.h */,
+				9F9554EF1AB0C53B000E70CA /* MOObjectKey.m */,
+				EA2DE3001571910F0017EF88 /* Types */,
+				EA2DE2FF157191030017EF88 /* Callables */,
 				EA2DE2FE157190F70017EF88 /* Objective-C Runtime */,
 			);
 			path = Objects;
@@ -850,6 +901,7 @@
 				EA33A29B1569B81800B4A27D /* JSStringRefCF.h in Headers */,
 				EA33A29C1569B81800B4A27D /* JSValueRef.h in Headers */,
 				EA33A29D1569B81800B4A27D /* WebKitAvailability.h in Headers */,
+				9F9554F11AB0C53B000E70CA /* MOObjectKey.h in Headers */,
 				EA33A2D71569BACC00B4A27D /* MOProtocolDescription.h in Headers */,
 				EA33A2E41569BB8800B4A27D /* NSObject+MochaAdditions.h in Headers */,
 				EA33A2E51569BB9300B4A27D /* NSOrderedSet+MochaAdditions.h in Headers */,
@@ -883,6 +935,7 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				9F9554F01AB0C53B000E70CA /* MOObjectKey.h in Headers */,
 				EAA45E1C155CE46000F93E40 /* MochaDefines.h in Headers */,
 				EAA45E1D155CE46400F93E40 /* Mocha.h in Headers */,
 				EAA45E24155CE57600F93E40 /* MochaRuntime.h in Headers */,
@@ -942,6 +995,24 @@
 			productName = UnitTests;
 			productReference = 02BF150915C096070004CA2C /* UnitTests.octest */;
 			productType = "com.apple.product-type.bundle.ocunit-test";
+		};
+		9F446F1E1A963D3F000910E6 /* MochaTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 9F446F2A1A963D3F000910E6 /* Build configuration list for PBXNativeTarget "MochaTests" */;
+			buildPhases = (
+				9F446F1B1A963D3F000910E6 /* Sources */,
+				9F446F1C1A963D3F000910E6 /* Frameworks */,
+				9F446F1D1A963D3F000910E6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				9F446F271A963D3F000910E6 /* PBXTargetDependency */,
+			);
+			name = MochaTests;
+			productName = MochaTests;
+			productReference = 9F446F1F1A963D3F000910E6 /* MochaTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		EAA34FC715647AD700B62244 /* libMocha (iOS) */ = {
 			isa = PBXNativeTarget;
@@ -1006,6 +1077,11 @@
 				LastTestingUpgradeCheck = 0620;
 				LastUpgradeCheck = 0620;
 				ORGANIZATIONNAME = "Sunflower Softworks";
+				TargetAttributes = {
+					9F446F1E1A963D3F000910E6 = {
+						CreatedOnToolsVersion = 6.1.1;
+					};
+				};
 			};
 			buildConfigurationList = EAA45DFC155CE44B00F93E40 /* Build configuration list for PBXProject "Mocha" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1026,6 +1102,7 @@
 				023EB3801587A31A0072EC4E /* FrameworkComplete */,
 				023EB3841587A3210072EC4E /* InstallPackage */,
 				028D627D15C064AF00C12842 /* Documentation */,
+				9F446F1E1A963D3F000910E6 /* MochaTests */,
 			);
 		};
 /* End PBXProject section */
@@ -1037,6 +1114,14 @@
 			files = (
 				02BF151715C096070004CA2C /* InfoPlist.strings in Resources */,
 				02BF152715C0973C0004CA2C /* Tests in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		9F446F1D1A963D3F000910E6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F446F2B1A963D5E000910E6 /* Tests in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1132,6 +1217,15 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		9F446F1B1A963D3F000910E6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				9F446F301A96433A000910E6 /* MOMethodTests.m in Sources */,
+				9F446F241A963D3F000910E6 /* MochaTests.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		EAA34FC415647AD700B62244 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1144,6 +1238,7 @@
 				EAA34FFF15647C0300B62244 /* MOUndefined.m in Sources */,
 				EAA3500515647C0D00B62244 /* MOObjCRuntime.m in Sources */,
 				EAA3500A15647C1900B62244 /* MOBridgeSupportController.m in Sources */,
+				9F9554F31AB0C53B000E70CA /* MOObjectKey.m in Sources */,
 				EAA3500D15647C2200B62244 /* MOBridgeSupportParser.m in Sources */,
 				EAA3501115647C2A00B62244 /* MOBridgeSupportLibrary.m in Sources */,
 				EAA3501515647C3300B62244 /* MOBridgeSupportSymbol.m in Sources */,
@@ -1192,6 +1287,7 @@
 				EAA3503115647DAD00B62244 /* MOBridgeSupportLibrary.m in Sources */,
 				EAA3503215647DAD00B62244 /* MOBridgeSupportSymbol.m in Sources */,
 				EAA3503315647DAD00B62244 /* MOFunctionArgument.m in Sources */,
+				9F9554F21AB0C53B000E70CA /* MOObjectKey.m in Sources */,
 				EAA3503415647DAD00B62244 /* MOUtilities.m in Sources */,
 				EAA3503515647DAD00B62244 /* NSArray+MochaAdditions.m in Sources */,
 				EAA3503615647DAD00B62244 /* NSDictionary+MochaAdditions.m in Sources */,
@@ -1243,6 +1339,11 @@
 			isa = PBXTargetDependency;
 			target = EAA45E02155CE44B00F93E40 /* Framework */;
 			targetProxy = 028D628215C064BC00C12842 /* PBXContainerItemProxy */;
+		};
+		9F446F271A963D3F000910E6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = EAA45E02155CE44B00F93E40 /* Framework */;
+			targetProxy = 9F446F261A963D3F000910E6 /* PBXContainerItemProxy */;
 		};
 		EAA3503915647DEA00B62244 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
@@ -1352,6 +1453,57 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = octest;
+			};
+			name = Release;
+		};
+		9F446F281A963D3F000910E6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MochaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		9F446F291A963D3F000910E6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				COMBINE_HIDPI_IMAGES = YES;
+				ENABLE_NS_ASSERTIONS = NO;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					"$(inherited)",
+				);
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				INFOPLIST_FILE = MochaTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;
 		};
@@ -1560,6 +1712,15 @@
 			buildConfigurations = (
 				02BF151C15C096070004CA2C /* Debug */,
 				02BF151D15C096070004CA2C /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		9F446F2A1A963D3F000910E6 /* Build configuration list for PBXNativeTarget "MochaTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				9F446F281A963D3F000910E6 /* Debug */,
+				9F446F291A963D3F000910E6 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
