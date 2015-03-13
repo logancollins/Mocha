@@ -491,7 +491,8 @@ NSString * const MOJavaScriptException = @"MOJavaScriptException";
 
 - (void)removeBoxAssociationForObject:(id)object {
     if (object != nil) {
-        [_objectsToBoxes removeObjectForKey:object];
+        MOObjectKey *key = [[MOObjectKey alloc] initWithObject: object];
+        [_objectsToBoxes removeObjectForKey: key];
     }
 }
 
