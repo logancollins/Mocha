@@ -116,7 +116,10 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
         self.options = options;
         
         _ctx = JSGlobalContextCreate(MochaClass);
-        _objectsToBoxes = [NSMapTable weakToStrongObjectsMapTable];
+        _objectsToBoxes = [NSMapTable
+                           mapTableWithKeyOptions:NSPointerFunctionsWeakMemory | NSPointerFunctionsObjectPointerPersonality
+                           valueOptions:NSPointerFunctionsStrongMemory | NSPointerFunctionsObjectPersonality];
+//        _objectsToBoxes = [NSMapTable weakToStrongObjectsMapTable];
         
         NSArray *libraryPaths = NSSearchPathForDirectoriesInDomains(NSLibraryDirectory, NSAllDomainsMask, YES);
         NSMutableArray *frameworkSearchPaths = [NSMutableArray arrayWithCapacity:[libraryPaths count]];
