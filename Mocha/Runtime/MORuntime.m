@@ -367,7 +367,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
     }
     
     if (JSValueGetType(ctx, exception) != kJSTypeObject) {
-        NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:nil];
+        NSException *mochaException = MOThrowableExceptionNamed(MOJavaScriptException, error);
         return mochaException;
     }
     else {
@@ -392,7 +392,7 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
         
         JSPropertyNameArrayRelease(jsNames);
         
-        NSException *mochaException = [NSException exceptionWithName:MOJavaScriptException reason:error userInfo:userInfo];
+        NSException *mochaException = MOThrowableExceptionNamedWithInfo(MOJavaScriptException, error, userInfo);
         return mochaException;
     }
 }
@@ -410,6 +410,31 @@ NSString * MOPropertyNameToSetterName(NSString *propertyName);
             @throw exception;
         }
     }
+}
+
+void MORaiseRuntimeException(JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx) {
+    MORaiseRuntimeExceptionNamed(MORuntimeException, exception, reason, runtime, ctx);
+}
+
+void MORaiseRuntimeExceptionNamed(NSString* name, JSValueRef *exception, NSString* reason, MORuntime* runtime, JSContextRef ctx) {
+    NSLog(@"raising exception %@ for reason %@", name, reason);
+    NSException *e = MOThrowableExceptionNamed(name, reason);
+    if (exception != NULL) {
+        *exception = [runtime JSValueForObject:e inContext:ctx];
+    }
+}
+
+NSException* MOThrowableRuntimeException(NSString* reason) {
+    return MOThrowableExceptionNamedWithInfo(MORuntimeException, reason, nil);
+}
+
+NSException* MOThrowableExceptionNamed(NSString* name, NSString* reason) {
+    return MOThrowableExceptionNamedWithInfo(name, reason, nil);
+}
+
+NSException* MOThrowableExceptionNamedWithInfo(NSString* name, NSString* reason, NSDictionary* info) {
+    NSLog(@"throwing exception for reason %@", reason);
+    return [NSException exceptionWithName:name reason:reason userInfo:info];
 }
 
 
@@ -683,20 +708,14 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
         
         // Raise if there is no type
         if (type == nil) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No type defined for symbol: %@", constant] userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"No type defined for symbol: %@", constant], runtime, ctx);
             return NULL;
         }
         
         // Grab symbol
         void *symbol = dlsym(RTLD_DEFAULT, [propertyName UTF8String]);
         if (!symbol) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Symbol not found: %@", constant] userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"Symbol not found: %@", constant], runtime, ctx);
             return NULL;
         }
         
@@ -731,10 +750,7 @@ JSValueRef Mocha_getProperty(JSContextRef ctx, JSObjectRef object, JSStringRef p
                 doubleValue = [value doubleValue];
             }
             else {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"No value for enum: %@", anEnum] userInfo:nil];
-                if (exception != NULL) {
-                    *exception = [runtime JSValueForObject:e inContext:ctx];
-                }
+                MORaiseRuntimeException(exception, [NSString stringWithFormat:@"No value for enum: %@", anEnum], runtime, ctx);
                 return NULL;
             }
 #if __LP64__
@@ -1246,8 +1262,7 @@ static JSValueRef MOObject_callAsFunction(JSContextRef ctx, JSObjectRef function
         return MOFunctionInvoke(function, ctx, argumentCount, arguments, exception);
     }
     else {
-        NSException *e = [NSException exceptionWithName:NSInvalidArgumentException reason:@"Object cannot be called as a function" userInfo:nil];
-        *exception = [runtime JSValueForObject:e inContext:ctx];
+        MORaiseRuntimeExceptionNamed(NSInvalidArgumentException, exception, [NSString stringWithFormat:@"Object %@ cannot be called as a function", function], runtime, ctx);
         return NULL;
     }
 }

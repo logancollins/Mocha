@@ -8,6 +8,7 @@
 
 #import "MOStruct.h"
 #import "MORuntime.h"
+#import "MORuntime_Private.h"
 
 
 @implementation MOStruct {
@@ -69,14 +70,14 @@
 
 - (id)objectForMemberName:(NSString *)name {
     if (![_memberNames containsObject:name]) {
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, name] userInfo:nil];
+        @throw MOThrowableRuntimeException([NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, name]);
     }
     return [_memberValues objectForKey:name];
 }
 
 - (void)setObject:(id)obj forMemberName:(NSString *)name {
     if (![_memberNames containsObject:name]) {
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, name] userInfo:nil];
+        @throw MOThrowableRuntimeException([NSString stringWithFormat:@"Struct %@ has no member named %@", self.name, name]);
     }
     [_memberValues setObject:obj forKey:name];
 }

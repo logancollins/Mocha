@@ -80,8 +80,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         if ((selector == @selector(release) || selector == @selector(autorelease))
                  && runtime.options & MORuntimeOptionAutomaticReferenceCounting) {
             // ARC-mode disallows explicit release of objects
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Automatic reference counting disallows explicit calls to -%@.", NSStringFromSelector(selector)] userInfo:nil];
-            *exception = [runtime JSValueForObject:e inContext:ctx];
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"Automatic reference counting disallows explicit calls to -%@.", NSStringFromSelector(selector)], runtime, ctx);
             return NULL;
         }
         
@@ -104,10 +103,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         variadic = [function isVariadic];
         
         if (method == NULL) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to locate method %@ of class %@", NSStringFromSelector(selector), klass] userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"Unable to locate method %@ of class %@", NSStringFromSelector(selector), klass], runtime, ctx);
             return NULL;
         }
         
@@ -115,10 +111,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         argumentEncodings = [[MOFunctionArgument argumentsFromTypeSignature:[NSString stringWithCString:encoding encoding:NSUTF8StringEncoding]] mutableCopy];
         
         if (argumentEncodings == nil) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), klass] userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), klass], runtime, ctx);
             return NULL;
         }
         
@@ -139,10 +132,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             || (!variadic && (callAddressArgumentCount != argumentCount)))
         {
             NSString *reason = [NSString stringWithFormat:@"Objective-C method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, reason, runtime, ctx);
             return NULL;
         }
     }
@@ -159,10 +149,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         argumentEncodings = [[MOFunctionArgument argumentsFromTypeSignature:[NSString stringWithCString:typeEncoding encoding:NSUTF8StringEncoding]] mutableCopy];
         
         if (argumentEncodings == nil) {
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), [target class]] userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"Unable to parse method encoding for method %@ of class %@", NSStringFromSelector(selector), [target class]], runtime, ctx);
             return NULL;
         }
         
@@ -170,10 +157,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
         if (callAddressArgumentCount != argumentCount) {
             NSString *reason = [NSString stringWithFormat:@"Block requires %lu %@, but JavaScript passed %zd %@", (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, reason, runtime, ctx);
             return NULL;
         }
     }
@@ -186,10 +170,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
         
         // If the function cannot be found, raise an exception (instead of crashing)
         if (callAddress == NULL) {
-            if (exception != NULL) {
-                NSException *e = [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Unable to find function with name: %@", functionName] userInfo:nil];
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, [NSString stringWithFormat:@"Unable to find function with name: %@", functionName], runtime, ctx);
             return NULL;
         }
         
@@ -246,15 +227,12 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
             || (!variadic && (callAddressArgumentCount != argumentCount)))
         {
             NSString *reason = [NSString stringWithFormat:@"C function %@ requires %lu %@, but JavaScript passed %zd %@", functionName, (unsigned long)callAddressArgumentCount, (callAddressArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
-            NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
-            if (exception != NULL) {
-                *exception = [runtime JSValueForObject:e inContext:ctx];
-            }
+            MORaiseRuntimeException(exception, reason, runtime, ctx);
             return NULL;
         }
     }
     else {
-        @throw [NSException exceptionWithName:MORuntimeException reason:[NSString stringWithFormat:@"Invalid object for function invocation: %@", function] userInfo:nil];
+        @throw MOThrowableRuntimeException([NSString stringWithFormat:@"Invalid object for function invocation: %@", function]);
     }
     
     
@@ -371,10 +349,7 @@ JSValueRef MOFunctionInvoke(id function, JSContextRef ctx, size_t argumentCount,
     
     // Throw an exception if the prep call failed
     if (prep_status != FFI_OK) {
-        NSException *e = [NSException exceptionWithName:MORuntimeException reason:@"ffi_prep_cif failed" userInfo:nil];
-        if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e inContext:ctx];
-        }
+        MORaiseRuntimeException(exception, @"ffi_prep_cif failed", runtime, ctx);
         return NULL;
     }
     
@@ -438,10 +413,7 @@ JSValueRef MOSelectorInvoke(id target, SEL selector, JSContextRef ctx, size_t ar
     NSUInteger methodArgumentCount = [methodSignature numberOfArguments] - 2;
     if (methodArgumentCount != argumentCount) {
         NSString *reason = [NSString stringWithFormat:@"ObjC method %@ requires %lu %@, but JavaScript passed %zd %@", NSStringFromSelector(selector), (unsigned long)methodArgumentCount, (methodArgumentCount == 1 ? @"argument" : @"arguments"), argumentCount, (argumentCount == 1 ? @"argument" : @"arguments")];
-        NSException *e = [NSException exceptionWithName:MORuntimeException reason:reason userInfo:nil];
-        if (exception != NULL) {
-            *exception = [runtime JSValueForObject:e inContext:ctx];
-        }
+        MORaiseRuntimeException(exception, reason, runtime, ctx);
         return NULL;
     }
     

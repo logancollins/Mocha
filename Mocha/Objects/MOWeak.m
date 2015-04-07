@@ -7,6 +7,7 @@
 //
 
 #import "MOWeak.h"
+#import "MORuntime_Private.h"
 
 
 @implementation MOWeak {
@@ -15,7 +16,7 @@
 
 + (id)constructWithArguments:(NSArray *)arguments {
     if ([arguments count] == 0) {
-        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"Weak references require one argument" userInfo:nil];
+        @throw MOThrowableExceptionNamed(NSInvalidArgumentException, @"Weak references require one argument");
     }
     return [[self alloc] initWithValue:[arguments objectAtIndex:0]];
 }
