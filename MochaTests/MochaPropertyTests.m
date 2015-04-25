@@ -52,13 +52,12 @@ id dynamicMethodIMP(id self, SEL _cmd) {
 @implementation MochaPropertyTests
 {
   MORuntime *runtime;
-  NSURL *testModelURL;
   NSManagedObjectContext *moContext;
 }
 
 - (void)setUp {
   [super setUp];
-  testModelURL = [[NSBundle bundleForClass: [self class]] URLForResource:@"Model" withExtension:@"momd"];
+  NSURL *testModelURL = [[NSBundle bundleForClass: [self class]] URLForResource:@"Model" withExtension:@"momd"];
   runtime = [[MORuntime alloc] init];
 
   NSError *error = nil;
@@ -106,28 +105,6 @@ id dynamicMethodIMP(id self, SEL _cmd) {
 - (void)testSetSubclassedManagedObjectProperty_ShouldReturnSimpleObject
 {
   NSManagedObject *modelObject = [NSEntityDescription insertNewObjectForEntityForName: @"Product" inManagedObjectContext: moContext];  
-  [runtime evaluateString: @"function setTestProperty(object) { object.name = \"testValue\" }"];
-  id callable = runtime.globalObject[@"setTestProperty"];
-  [callable callWithArguments: @[modelObject]];
-  
-  XCTAssertTrue([[modelObject valueForKey: @"name"] isEqualToString: @"testValue"], @"Property not set");
-}
-
-- (void)testCallDynamicManagedObjectProperty_ShouldReturnSimpleObject
-{
-  NSManagedObject *modelObject = [NSEntityDescription insertNewObjectForEntityForName: @"ManagedItem" inManagedObjectContext: moContext];
-  [modelObject setValue: @"testValue" forKey: @"name"];
-  
-  [runtime evaluateString: @"function getTestProperty(object) { return object.name }"];
-  id callable = runtime.globalObject[@"getTestProperty"];
-  id result = [callable callWithArguments: @[modelObject]];
-  
-  XCTAssertEqual(result, @"testValue", @"Property not correct");
-}
-
-- (void)testSetDynamicManagedObjectProperty_ShouldReturnSimpleObject
-{
-  NSManagedObject *modelObject = [NSEntityDescription insertNewObjectForEntityForName: @"ManagedItem" inManagedObjectContext: moContext];
   [runtime evaluateString: @"function setTestProperty(object) { object.name = \"testValue\" }"];
   id callable = runtime.globalObject[@"setTestProperty"];
   [callable callWithArguments: @[modelObject]];
