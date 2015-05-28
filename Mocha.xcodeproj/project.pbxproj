@@ -73,6 +73,8 @@
 		02CBE14118593D0900B8D16D /* MOBlock.m in Sources */ = {isa = PBXBuildFile; fileRef = 02CBE13E18593D0900B8D16D /* MOBlock.m */; };
 		02DCA800185677A60047EF92 /* MOFunctionInvocation.h in Headers */ = {isa = PBXBuildFile; fileRef = 02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		02DCA802185677A60047EF92 /* MOFunctionInvocation.m in Sources */ = {isa = PBXBuildFile; fileRef = 02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		9F54B8DA1AEB431400AB4378 /* Model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 9F54B8D81AEB431400AB4378 /* Model.xcdatamodeld */; };
+		9F54B8DC1AEB432B00AB4378 /* MochaPropertyTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9F54B8DB1AEB432B00AB4378 /* MochaPropertyTests.m */; };
 		EA037E701560B4C100D3E7C8 /* MOFunctionArgument.h in Headers */ = {isa = PBXBuildFile; fileRef = EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		EA1A1232156160F200A1F1A4 /* libffi.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = EA1A1231156160F200A1F1A4 /* libffi.dylib */; };
 		EAA34F9E156304A800B62244 /* MOUndefined.h in Headers */ = {isa = PBXBuildFile; fileRef = EAA34F9C156304A800B62244 /* MOUndefined.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -191,7 +193,9 @@
 		02CBE13D18593D0900B8D16D /* MOBlock.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOBlock.h; sourceTree = "<group>"; };
 		02CBE13E18593D0900B8D16D /* MOBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOBlock.m; sourceTree = "<group>"; };
 		02DCA7FE185677A60047EF92 /* MOFunctionInvocation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionInvocation.h; sourceTree = "<group>"; };
-		02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionInvocation.m; sourceTree = "<group>"; };
+		02DCA7FF185677A60047EF92 /* MOFunctionInvocation.m */ = {isa = PBXFileReference; fileEncoding = 4; indentWidth = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionInvocation.m; sourceTree = "<group>"; };
+		9F54B8D91AEB431400AB4378 /* Model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Model.xcdatamodel; sourceTree = "<group>"; };
+		9F54B8DB1AEB432B00AB4378 /* MochaPropertyTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MochaPropertyTests.m; sourceTree = "<group>"; };
 		EA037E6E1560B4C100D3E7C8 /* MOFunctionArgument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MOFunctionArgument.h; sourceTree = "<group>"; };
 		EA037E6F1560B4C100D3E7C8 /* MOFunctionArgument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MOFunctionArgument.m; sourceTree = "<group>"; };
 		EA1A1231156160F200A1F1A4 /* libffi.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libffi.dylib; path = usr/lib/libffi.dylib; sourceTree = SDKROOT; };
@@ -293,6 +297,8 @@
 		02679ED71A2D381E0027DB63 /* MochaTests */ = {
 			isa = PBXGroup;
 			children = (
+				9F54B8DB1AEB432B00AB4378 /* MochaPropertyTests.m */,
+				9F54B8D81AEB431400AB4378 /* Model.xcdatamodeld */,
 				02679EDA1A2D381E0027DB63 /* MochaTests.m */,
 				02770DC31A2D395D0030D87F /* Tests */,
 				02679ED81A2D381E0027DB63 /* Supporting Files */,
@@ -656,6 +662,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				02679EDB1A2D381E0027DB63 /* MochaTests.m in Sources */,
+				9F54B8DC1AEB432B00AB4378 /* MochaPropertyTests.m in Sources */,
+				9F54B8DA1AEB431400AB4378 /* Model.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1035,6 +1043,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		9F54B8D81AEB431400AB4378 /* Model.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				9F54B8D91AEB431400AB4378 /* Model.xcdatamodel */,
+			);
+			currentVersion = 9F54B8D91AEB431400AB4378 /* Model.xcdatamodel */;
+			path = Model.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = EAA45DF9155CE44B00F93E40 /* Project object */;
 }
